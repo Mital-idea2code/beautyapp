@@ -31,10 +31,10 @@ const RegisterAdmin = async (req, res, next) => {
 const LoginAdmin = async (req, res, next) => {
   try {
     const admin = await Admin.findOne({ email: req.body.email });
-    if (!admin) return queryErrorRelatedResponse(req, res, 401, "Invalid Username!");
+    if (!admin) return queryErrorRelatedResponse(req, res, 401, { email: "Invalid Username!" });
 
     const validatePassword = await bcrypt.compare(req.body.password, admin.password);
-    if (!validatePassword) return queryErrorRelatedResponse(req, res, 401, "Invalid Password!");
+    if (!validatePassword) return queryErrorRelatedResponse(req, res, 401, { password: "Invalid Password!" });
 
     const token = admin.generateAuthToken({ email: req.body.email });
     admin.remember_token = token;
@@ -65,7 +65,7 @@ const RefreshToken = async (req, res, next) => {
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
     const admin = await Admin.findOne({ email: decoded.email });
-    if (!admin) return queryErrorRelatedResponse(req, res, 401, "Invalid Username!");
+    if (!admin) return queryErrorRelatedResponse(req, res, 401, { email: "Invalid Username!" });
 
     const token = admin.generateAuthToken({ email: decoded.email });
     successResponse(res, token);
@@ -78,7 +78,7 @@ const RefreshToken = async (req, res, next) => {
 const CheckEmailId = async (req, res, next) => {
   try {
     const admin = await Admin.findOne({ email: req.body.email });
-    if (!admin) return queryErrorRelatedResponse(req, res, 401, "Invalid Email Id!");
+    if (!admin) return queryErrorRelatedResponse(req, res, 401, { email: "Invalid Email Id!" });
     let resetCode = crypto.randomBytes(32).toString("hex");
 
     const otp = Math.floor(1000 + Math.random() * 9000);
@@ -91,11 +91,12 @@ const CheckEmailId = async (req, res, next) => {
     sendMail({
       from: process.env.EMAIL_USER,
       to: req.body.email,
-      sub: "Fitness - Forgot Password",
+      sub: "Glam Spot - Forgot Password",
       htmlFile: "./emailTemplate/forgotPass.html",
       extraData: {
         OTP: otp,
-        reset_link: process.env.BACKEND_URL + `/fitness-app/backend/reset-password/${resetCode}/${admin._id}`,
+        reset_link: process.env.BACKEND_URL + `/glamspot/reset-password/${resetCode}/${admin._id}`,
+        logo_url: process.env.BASE_URL_IMAGES_PATH + process.env.BASE_URL_LOGO_PATH + "white-logo.svg",
       },
     });
 
@@ -116,10 +117,10 @@ const ResetPassword = async (req, res, next) => {
     }
 
     const checkotp = await Admin.findOne({ otp: req.body.otp, _id: req.body.id });
-    if (!checkotp) return queryErrorRelatedResponse(req, res, 401, "Invalid OTP!");
+    if (!checkotp) return queryErrorRelatedResponse(req, res, 401, { otp: "Invalid OTP!" });
 
     if (req.body.new_password !== req.body.confirm_password) {
-      return queryErrorRelatedResponse(req, res, 401, "Confirm Password does not match!");
+      return queryErrorRelatedResponse(req, res, 401, { confirm_password: "Confirm Password does not match!" });
     }
 
     admin.otp = null;
@@ -175,10 +176,10 @@ const ChangePassword = async (req, res, next) => {
     if (!admin) return queryErrorRelatedResponse(req, res, 404, "Admin not found.");
 
     const valid_pass = await bcrypt.compare(old_password, admin.password);
-    if (!valid_pass) return queryErrorRelatedResponse(req, res, 401, "Invalid Old Password");
+    if (!valid_pass) return queryErrorRelatedResponse(req, res, 401, { old_password: "Invalid Old Password" });
 
     if (new_password != confirm_password) {
-      return queryErrorRelatedResponse(req, res, 404, "Confirm password does not match.");
+      return queryErrorRelatedResponse(req, res, 401, { confirm_password: "Confirm Password does not match!" });
     }
 
     admin.password = new_password;

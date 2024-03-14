@@ -1,0 +1,190 @@
+// Here you can add other styles
+.header-logo-subtitle {
+  font-size: 12px;
+  text-align: center;
+  color: grey;
+}
+.header-logo {
+  padding-right: 4px;
+}
+.sidebar-nav .nav-link.active,
+.sidebar-nav .nav-link:hover {
+  color: white;
+  background: #ea4c89ab;
+}
+.sidebar-nav .nav-link {
+  color: white;
+  background: #ea4c89;
+}
+.w-115 {
+  width: 115px;
+}
+.sidebar-brand {
+  color: #ea4c89;
+  background: #00989900;
+}
+.sidebar-toggler {
+  background-color: #ea4c89;
+}
+.sidebar {
+  --cui-sidebar-bg: #ffe3ee;
+}
+.sidebar-toggler:hover {
+  background-color: #ea4c89;
+}
+.theme-color {
+  color: #ea4c89;
+}
+.breadcrumb-item.active {
+  color: #ea4c89;
+}
+a {
+  color: gray;
+  text-decoration: none;
+}
+.theme-background {
+  background: #ea4c89;
+}
+.theme-btn-background {
+  background: #ea4c89;
+  border-color: #ea4c89;
+  color: white;
+}
+.theme-btn-background:hover {
+  background: #ea4c89;
+  border-color: #ea4c89;
+  color: white;
+}
+.theme-spinner-color {
+  color: #ea4c89;
+}
+.sign-up-btn {
+  border-color: white !important;
+  color: white !important;
+}
+.text-right {
+  text-align: right !important;
+}
+.forgot-link {
+  color: grey;
+  text-decoration: none;
+  text-align: right;
+}
+
+.forgot-link:hover {
+  color: #ea4c89;
+}
+.error-msg {
+  color: red;
+  font-weight: 400;
+}
+
+.success-msg {
+  color: green;
+  font-weight: 400;
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.form-label {
+  font-size: 14px;
+}
+.left-text {
+  text-align: left !important;
+}
+.right-text {
+  text-align: right !important;
+}
+.custom-header {
+  display: flex;
+  flex-wrap: inherit;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.theme-btn {
+  background-color: #ea4c89;
+  border-color: #ea4c89;
+}
+.theme-btn:hover {
+  background-color: #0098998c;
+  border-color: #0098992e;
+}
+.mt-minus-10 {
+  margin-top: -10px;
+}
+.d-fex {
+  display: flex;
+}
+.img-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: 20%;
+  margin-left: 20px;
+  border: 1px solid #80808057;
+}
+.form-header {
+  font-weight: bold;
+  background: #8080803d;
+  padding: 12px;
+}
+.mt-60 {
+  margin-top: 60px;
+}
+.mr-16 {
+  margin-right: 16px;
+}
+.ml-12 {
+  margin-left: 12px;
+}
+.mtop-5 {
+  margin-top: 5px;
+}
+@media (max-width: 469px) {
+  .mt-60 {
+    margin-top: 105px;
+  }
+}
+.form-check-input:checked {
+  background-color: #ea4c89;
+  border-color: #009899 !important;
+}
+.shift-div {
+  border: 1px solid #8080803d;
+  border-radius: 20px;
+  padding: 21px;
+  text-align: center;
+}
+.morning_div {
+  border-top: 1px solid #8080804a;
+  padding-top: 12px;
+}
+.evening_div {
+  border-top: 1px solid #8080804a;
+  padding-top: 12px;
+}
+.display-flex {
+  display: flex;
+}
+@media (max-width: 420px) {
+  .display-flex {
+    display: block;
+  }
+  .ml-12 {
+    margin-left: 0px;
+  }
+}
+.login-bg {
+  background: url("../assets/images/logo/bg-frame.svg") no-repeat;
+  background-size: cover;
+}
+@media (min-width: 1400px) {
+  .container-xxl,
+  .container-xl,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container {
+    max-width: 1550px !important;
+  }
+}

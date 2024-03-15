@@ -5,14 +5,14 @@ const AppFooter = () => {
   return (
     <CFooter>
       <div>
-        <a href="#" target="_blank" rel="noopener noreferrer">
+        <a href="#" target="_blank" rel="noopener noreferrer" className="color-white">
           Glam Spot
         </a>
-        <span className="ms-1">&copy; 2023.</span>
+        <span className="ms-1">&copy; 2024.</span>
       </div>
       <div className="ms-auto">
         <span className="me-1">Powered by</span>
-        <a href="#" target="_blank" rel="noopener noreferrer">
+        <a href="#" target="_blank" rel="noopener noreferrer" className="color-white">
           Glam Spot
         </a>
       </div>

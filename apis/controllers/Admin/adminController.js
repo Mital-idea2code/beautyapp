@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const { createResponse, queryErrorRelatedResponse, successResponse } = require("../../helper/sendResponse");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const deleteFiles = require("../../helper/deleteFiles");
 
 var nodemailer = require("nodemailer");
 var fs = require("fs");
@@ -41,11 +42,15 @@ const LoginAdmin = async (req, res, next) => {
 
     const refresh_token = admin.generateRefreshToken({ email: req.body.email });
 
+    const baseUrl =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+
     const output = await admin.save();
     const tokens = {
       token: token,
       refresh_token: refresh_token,
       admin: admin,
+      baseUrl: baseUrl,
     };
     successResponse(res, tokens);
   } catch (err) {
@@ -88,15 +93,20 @@ const CheckEmailId = async (req, res, next) => {
     admin.expireOtpTime = expireOtpTime;
     await admin.save();
 
+    const emailData = await GeneralSettings.findOne();
+    if (!emailData) return queryErrorRelatedResponse(req, res, 404, "Data not found.");
+
     sendMail({
-      from: process.env.EMAIL_USER,
+      AuthEmail: emailData.email,
+      AuthPass: emailData.password,
+      from: emailData.email,
       to: req.body.email,
       sub: "Glam Spot - Forgot Password",
       htmlFile: "./emailTemplate/forgotPass.html",
       extraData: {
         OTP: otp,
         reset_link: process.env.BACKEND_URL + `/glamspot/reset-password/${resetCode}/${admin._id}`,
-        logo_url: process.env.BASE_URL_IMAGES_PATH + process.env.BASE_URL_LOGO_PATH + "white-logo.svg",
+        logo_url: process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_LOGO_PATH + "white-logo.svg",
       },
     });
 
@@ -161,7 +171,15 @@ const UpdateProfile = async (req, res, next) => {
     admin.name = name;
     const result = await admin.save();
 
-    successResponse(res, result);
+    const baseUrl =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+
+    const latestRes = {
+      admin: result,
+      baseUrl: baseUrl,
+    };
+
+    successResponse(res, latestRes);
   } catch (err) {
     next(err);
   }

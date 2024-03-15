@@ -154,7 +154,6 @@ function updateUser(dispatch, data, setIsLoading) {
             ? response.data.info.baseUrl + response.data.info.admin.image
             : null,
         };
-        console.log(userObject);
         dispatch({
           type: "PROFILE_UPDATE_SUCCESS",
           payload: {

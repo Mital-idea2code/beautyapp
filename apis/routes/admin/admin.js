@@ -25,7 +25,7 @@ router.post("/changePassword", authenticAdmin, ChangePassword);
 router.post(
   "/UpdateProfile",
   authenticAdmin,
-  singleFileUpload("public/images", ["image/png", "image/jpeg", "image/jpg"], 1024 * 1024, "image"),
+  singleFileUpload("public/images/profile", ["image/png", "image/jpeg", "image/jpg"], 1024 * 1024, "image"),
   UpdateProfile
 );
 

@@ -23,14 +23,20 @@ app.use((req, res, next) => {
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(cors());
-// app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use(express.json());
+// Define static files
+app.use("/public/logo", express.static(path.join(__dirname, "./public/images/logo")));
+app.use("/public/profile", express.static(path.join(__dirname, "./public/images/profile")));
 
+//Admin Route
 const adminRoutes = require("./routes/admin");
 app.use(adminRoutes);
+
+//App route
+const userRoute = require("./routes/app/user");
+app.use(userRoute);
 
 // Error handling middleware
 app.use(errorController);

@@ -8,8 +8,8 @@ import { AppSidebarNav } from "./AppSidebarNav";
 
 import { logoNegative } from "src/assets/brand/logo-negative";
 import { sygnet } from "src/assets/brand/sygnet";
-import logo from "src/assets/images/logo/sidebar-logo.svg";
-import logoText from "src/assets/images/logo/sidebar-logo-text.svg";
+import logo from "src/assets/images/logo/sidebar-logo-white.svg";
+import logoText from "src/assets/images/logo/sidebar-text-white.svg";
 
 import SimpleBar from "simplebar-react";
 import "simplebar/dist/simplebar.min.css";

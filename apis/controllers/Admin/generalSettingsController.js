@@ -1,0 +1,119 @@
+const GeneralSettings = require("../../models/GeneralSettings");
+const {
+  createResponse,
+  successResponse,
+  queryErrorRelatedResponse,
+  deleteResponse,
+} = require("../../helper/sendResponse");
+
+//Add General Settings
+const addGeneralSettings = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const newSeetings = await GeneralSettings.create({
+      email,
+      password,
+    });
+    //save Admin and response
+    createResponse(res, newSeetings);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Update General Settings
+const updateGeneralSetting = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const pp = await GeneralSettings.findById(req.params.id);
+    if (!pp) return queryErrorRelatedResponse(req, res, 404, "Data not found.");
+
+    pp.email = email;
+    pp.password = password;
+    let result = await pp.save();
+    return successResponse(res, result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Get  General Settings
+const getGeneralSettings = async (req, res, next) => {
+  try {
+    const pp = await GeneralSettings.findOne();
+    if (!pp) return queryErrorRelatedResponse(req, res, 404, "Data not found.");
+    successResponse(res, pp);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Update Terms &  Conditions
+const updateUserTc = async (req, res, next) => {
+  try {
+    const { description } = req.body;
+    const tc = await GeneralSettings.findById(req.params.id);
+    if (!tc) return queryErrorRelatedResponse(req, res, 404, "Terms & Condition not found.");
+
+    tc.user_tc = description;
+    const result = await tc.save();
+    return successResponse(res, result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Update Terms &  Conditions
+const updateBeauticianTc = async (req, res, next) => {
+  try {
+    const { description } = req.body;
+    const tc = await GeneralSettings.findById(req.params.id);
+    if (!tc) return queryErrorRelatedResponse(req, res, 404, "Terms & Condition not found.");
+
+    tc.beautician_tc = description;
+    const result = await tc.save();
+    return successResponse(res, result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Update Terms &  Conditions
+const updateUserPP = async (req, res, next) => {
+  try {
+    const { description } = req.body;
+    const tc = await GeneralSettings.findById(req.params.id);
+    if (!tc) return queryErrorRelatedResponse(req, res, 404, "Terms & Condition not found.");
+
+    tc.user_pp = description;
+    const result = await tc.save();
+    return successResponse(res, result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Update Terms &  Conditions
+const updateBeauticianPP = async (req, res, next) => {
+  try {
+    const { description } = req.body;
+    const tc = await GeneralSettings.findById(req.params.id);
+    if (!tc) return queryErrorRelatedResponse(req, res, 404, "Terms & Condition not found.");
+
+    tc.beautician_pp = description;
+    const result = await tc.save();
+    return successResponse(res, result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  getGeneralSettings,
+  addGeneralSettings,
+  updateGeneralSetting,
+  updateUserTc,
+  updateBeauticianTc,
+  updateUserPP,
+  updateBeauticianPP,
+};

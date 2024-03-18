@@ -1,14 +1,34 @@
 const mongoose = require("mongoose");
 
-const GeneralSettings = mongoose.Schema({
+const GeneralSettingsSchema = mongoose.Schema({
   email: {
     type: String,
-    default: "",
+    default: "test@gmail.com",
   },
   password: {
     type: String,
-    default: "",
+    default: "test@123",
+  },
+  user_tc: {
+    type: String,
+    required: [true, "Description is required."],
+    default: "User Terms & Conditions",
+  },
+  beautician_tc: {
+    type: String,
+    required: [true, "Description is required."],
+    default: "Beautician Terms & Conditions",
+  },
+  user_pp: {
+    type: String,
+    required: [true, "Description is required."],
+    default: "User Privacy Policy",
+  },
+  beautician_pp: {
+    type: String,
+    required: [true, "Description is required."],
+    default: "Beautician Privacy Policy",
   },
 });
 
-module.exports = GeneralSettings;
+module.exports = mongoose.model("generalSettings", GeneralSettingsSchema);

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const UserSchema = mongoose.Schema(
+const BeauticianSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -29,6 +29,26 @@ const UserSchema = mongoose.Schema(
       type: String,
       default: "",
     },
+    days: {
+      type: Array,
+      default: "",
+    },
+    open_time: {
+      type: String,
+    },
+    close_time: {
+      type: String,
+    },
+    duration: {
+      type: String,
+      default: "30",
+    },
+    services: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "services",
+      },
+    ],
     otp: {
       type: String,
       maxlength: [6, "OTP should be maximum six characters long."],
@@ -52,10 +72,6 @@ const UserSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    noti_status: {
-      type: Boolean,
-      default: true,
-    },
     created: {
       type: Date,
       default: Date.now(),
@@ -67,7 +83,7 @@ const UserSchema = mongoose.Schema(
 );
 
 // Bcrypt password before save
-UserSchema.pre("save", async function (next) {
+BeauticianSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
     user.password = await bcrypt.hash(user.password, 12);
@@ -75,16 +91,16 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-UserSchema.statics.generateAuthToken = function (email) {
+BeauticianSchema.statics.generateAuthToken = function (email) {
   const token = jwt.sign({ email: email }, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: "1d",
   });
   return token;
 };
 
-UserSchema.statics.generateRefreshToken = function (email) {
+BeauticianSchema.statics.generateRefreshToken = function (email) {
   const token = jwt.sign({ email: email }, process.env.REFRESH_TOKEN_SECRET);
   return token;
 };
 
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("beautician", BeauticianSchema);

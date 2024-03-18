@@ -208,3 +208,9 @@ a {
   background: #ea4c89;
   color: white;
 }
+.dropdown-item.active,
+.dropdown-item:active {
+  color: white !important;
+  text-decoration: none;
+  background-color: #ea4c89ad;
+}

@@ -29,6 +29,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Define static files
 app.use("/public/logo", express.static(path.join(__dirname, "./public/images/logo")));
 app.use("/public/profile", express.static(path.join(__dirname, "./public/images/profile")));
+app.use("/public/banner", express.static(path.join(__dirname, "./public/images/banner")));
+app.use("/public/category", express.static(path.join(__dirname, "./public/images/category")));
 
 //Admin Route
 const adminRoutes = require("./routes/admin");

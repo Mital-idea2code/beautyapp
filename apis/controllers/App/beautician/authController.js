@@ -76,6 +76,7 @@ const signinUser = async (req, res, next) => {
 };
 
 //Social Login
+
 const socialLogin = async (req, res, next) => {
   try {
     const accessToken = User.generateAuthToken(req.body.email);

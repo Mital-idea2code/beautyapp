@@ -5,7 +5,7 @@ const { createResponse, queryErrorRelatedResponse, successResponse } = require("
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const deleteFiles = require("../../helper/deleteFiles");
-
+const GeneralSettings = require("../../models/GeneralSettings");
 var nodemailer = require("nodemailer");
 var fs = require("fs");
 var handlebars = require("handlebars");

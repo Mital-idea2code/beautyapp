@@ -21,6 +21,14 @@ const BeauticianSchema = mongoose.Schema(
       type: String,
       default: "",
     },
+    lat: {
+      type: String,
+      default: "",
+    },
+    lng: {
+      type: String,
+      default: "",
+    },
     city: {
       type: String,
       default: "",
@@ -49,6 +57,12 @@ const BeauticianSchema = mongoose.Schema(
         ref: "services",
       },
     ],
+    category: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "category",
+      },
+    ],
     otp: {
       type: String,
       maxlength: [6, "OTP should be maximum six characters long."],
@@ -64,13 +78,16 @@ const BeauticianSchema = mongoose.Schema(
     image: {
       type: String,
     },
+    banner: {
+      type: String,
+    },
     fcm_token: {
       type: String,
       default: "",
     },
     status: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     created: {
       type: Date,

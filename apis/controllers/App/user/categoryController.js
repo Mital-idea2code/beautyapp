@@ -12,7 +12,16 @@ const mongoose = require("mongoose");
 //Get All Active Category
 const getAllCategory = async (req, res, next) => {
   try {
-    const cat = await Category.find({ status: true });
+    const cat = await Category.find({ status: true }).populate({
+      path: "services",
+      match: { status: true },
+      populate: {
+        path: "beautican_id",
+        match: { status: true },
+        model: "beautician", // Replace with your actual Unit model name
+      },
+    });
+
     if (!cat) return queryErrorRelatedResponse(req, res, 404, "Category not found.");
 
     const baseUrl =

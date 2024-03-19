@@ -10,6 +10,12 @@ const CategorySchema = mongoose.Schema(
       type: String,
       required: [true, "Image is required."],
     },
+    services: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "services",
+      },
+    ],
     status: {
       type: Boolean,
       default: true,

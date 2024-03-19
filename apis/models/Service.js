@@ -2,29 +2,30 @@ const mongoose = require("mongoose");
 
 const ServiceSchema = mongoose.Schema(
   {
+    beautican_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "beautician",
+    },
     name: {
       type: String,
-      required: [true, "Image is required."],
+      required: [true, "Name is required."],
     },
-    cat_id: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "category",
-      },
-    ],
+    cat_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "category",
+    },
     price: {
       type: String,
-      required: [true, "Image is required."],
+      required: [true, "Price is required."],
     },
     about: {
-      type: Text,
-      required: [true, "Image is required."],
+      type: String,
+      required: [true, "About is required."],
     },
     display_image: {
       type: String,
-      required: [true, "Image is required."],
     },
-    work_image: {
+    work_images: {
       type: Array,
     },
     status: {

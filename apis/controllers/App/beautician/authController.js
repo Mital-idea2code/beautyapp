@@ -1,5 +1,5 @@
 const express = require("express");
-const User = require("../../../models/User");
+const Beautician = require("../../../models/Beautician");
 const GeneralSettings = require("../../../models/GeneralSettings");
 const { sendMail } = require("../../../helper/emailSender");
 const {
@@ -11,65 +11,66 @@ const {
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const deleteFiles = require("../../../helper/deleteFiles");
+const moment = require("moment");
 
-//User Signup
-const signupUser = async (req, res, next) => {
+//Beautician Signup
+const signupBeautician = async (req, res, next) => {
   try {
-    const accessToken = User.generateAuthToken(req.body.email);
+    const accessToken = Beautician.generateAuthToken(req.body.email);
 
-    const newUser = await new User({
+    const newBeautician = await new Beautician({
       email: req.body.email,
       password: req.body.password,
       fcm_token: req.body.fcm_token,
       remember_token: accessToken,
     });
-    const addedUser = await newUser.save();
+    const addedBeautician = await newBeautician.save();
 
-    const refresh_token = User.generateRefreshToken(req.body.email);
+    const refresh_token = Beautician.generateRefreshToken(req.body.email);
     const baseUrl =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
-    const userWithBaseUrl = {
-      ...newUser.toObject(),
+    const beauticianWithBaseUrl = {
+      ...newBeautician.toObject(),
       baseUrl: baseUrl,
       refresh_token: refresh_token,
     };
 
-    //save User and response
-    createResponse(res, userWithBaseUrl);
+    //save Beautician and response
+    createResponse(res, beauticianWithBaseUrl);
   } catch (err) {
     next(err);
   }
 };
 
-//User Signin
-const signinUser = async (req, res, next) => {
+//Beautician Signin
+const signinBeautician = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) return queryErrorRelatedResponse(req, res, 401, "Invalid Email Id!");
+    const beautician = await Beautician.findOne({ email: req.body.email });
+    if (!beautician) return queryErrorRelatedResponse(req, res, 401, "Invalid Email Id!");
 
-    const validatePassword = await bcrypt.compare(req.body.password, user.password);
+    const validatePassword = await bcrypt.compare(req.body.password, beautician.password);
     if (!validatePassword) return queryErrorRelatedResponse(req, res, 401, "Invalid Password!");
 
-    if (user.status === false)
+    if (beautician.status === false)
       return queryErrorRelatedResponse(req, res, 401, "Your account has been suspended!! Please contact to admin.");
 
-    const accessToken = User.generateAuthToken(user.email);
-    const refresh_token = User.generateRefreshToken(user.email);
+    const accessToken = Beautician.generateAuthToken(beautician.email);
+    const refresh_token = Beautician.generateRefreshToken(beautician.email);
 
-    user.remember_token = accessToken;
-    user.fcm_token = req.body.fcm_token;
-    const output = await user.save();
+    beautician.remember_token = accessToken;
+    beautician.fcm_token = req.body.fcm_token;
+    const output = await beautician.save();
 
     const baseUrl =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
     // Assuming you have a `baseUrl` variable
-    const userWithBaseUrl = {
-      ...user.toObject(),
+    const beauticianWithBaseUrl = {
+      ...beautician.toObject(),
       baseUrl: baseUrl,
       refresh_token: refresh_token,
     };
 
-    successResponse(res, userWithBaseUrl);
+    successResponse(res, beauticianWithBaseUrl);
   } catch (err) {
     next(err);
   }
@@ -79,45 +80,43 @@ const signinUser = async (req, res, next) => {
 
 const socialLogin = async (req, res, next) => {
   try {
-    const accessToken = User.generateAuthToken(req.body.email);
-    const refresh_token = User.generateRefreshToken(req.body.email);
+    const accessToken = Beautician.generateAuthToken(req.body.email);
+    const refresh_token = Beautician.generateRefreshToken(req.body.email);
     const baseUrl =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
 
-    const user = await User.findOne({ email: req.body.email });
+    const beautician = await Beautician.findOne({ email: req.body.email });
 
-    if (!user) {
-      const newUser = await new User({
+    if (!beautician) {
+      const newBeautician = await new Beautician({
         name: req.body.name,
         email: req.body.email,
         fcm_token: req.body.fcm_token,
         remember_token: accessToken,
       });
-      const addedUser = await newUser.save();
+      const addedBeautician = await newBeautician.save();
 
-      const userWithBaseUrl = {
-        ...newUser.toObject(),
+      const beauticianWithBaseUrl = {
+        ...newBeautician.toObject(),
         baseUrl: baseUrl,
         refresh_token: refresh_token,
         loginStatus: 0,
       };
-      createResponse(res, userWithBaseUrl);
+      createResponse(res, beauticianWithBaseUrl);
     } else {
-      user.remember_token = accessToken;
-      user.fcm_token = req.body.fcm_token;
+      beautician.remember_token = accessToken;
+      beautician.fcm_token = req.body.fcm_token;
 
-      await user.save();
+      await beautician.save();
 
-      const userWithBaseUrl = {
-        ...user.toObject(),
+      const beauticianWithBaseUrl = {
+        ...beautician.toObject(),
         baseUrl: baseUrl,
         refresh_token: refresh_token,
         loginStatus: 1,
       };
-      createResponse(res, userWithBaseUrl);
+      createResponse(res, beauticianWithBaseUrl);
     }
-
-    //save User and response
   } catch (err) {
     next(err);
   }
@@ -134,10 +133,10 @@ const RefreshToken = async (req, res, next) => {
   try {
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-    const user = await User.findOne({ email: decoded.email });
-    if (!user) return queryErrorRelatedResponse(req, res, 401, "Invalid Email Id!");
+    const beautician = await Beautician.findOne({ email: decoded.email });
+    if (!beautician) return queryErrorRelatedResponse(req, res, 401, "Invalid Email Id!");
 
-    const token = User.generateAuthToken(decoded.email);
+    const token = Beautician.generateAuthToken(decoded.email);
 
     successResponse(res, token);
   } catch (err) {
@@ -148,13 +147,13 @@ const RefreshToken = async (req, res, next) => {
 //Forgot Password - Check Email Id
 const checkEmailId = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) return queryErrorRelatedResponse(req, res, 401, "Invalid Email Id!");
+    const beautician = await Beautician.findOne({ email: req.body.email });
+    if (!beautician) return queryErrorRelatedResponse(req, res, 401, "Invalid Email Id!");
 
     var otp = Math.floor(1000 + Math.random() * 9000);
-    user.otp = otp;
-    user.expireOtpTime = Date.now() + 300000; //Valid upto 5 min
-    await user.save();
+    beautician.otp = otp;
+    beautician.expireOtpTime = Date.now() + 300000; //Valid upto 5 min
+    await beautician.save();
 
     const emailData = await GeneralSettings.findOne();
     if (!emailData) return queryErrorRelatedResponse(req, res, 404, "Data not found.");
@@ -171,7 +170,7 @@ const checkEmailId = async (req, res, next) => {
       },
     });
 
-    successResponse(res, user);
+    successResponse(res, beautician);
   } catch (err) {
     next(err);
   }
@@ -180,14 +179,14 @@ const checkEmailId = async (req, res, next) => {
 //Forgot Password - Check OTP
 const checkOtp = async (req, res, next) => {
   try {
-    const user = await User.findOne({ otp: req.body.otp, email: req.body.email });
-    if (!user) return queryErrorRelatedResponse(req, res, 401, "Invalid OTP!");
+    const beautician = await Beautician.findOne({ otp: req.body.otp, email: req.body.email });
+    if (!beautician) return queryErrorRelatedResponse(req, res, 401, "Invalid OTP!");
 
-    if (new Date(user.expireOtpTime).toTimeString() <= new Date(Date.now()).toTimeString()) {
+    if (new Date(beautician.expireOtpTime).toTimeString() <= new Date(Date.now()).toTimeString()) {
       return queryErrorRelatedResponse(req, res, 401, "OTP is Expired!");
     }
 
-    successResponse(res, user);
+    successResponse(res, beautician);
   } catch (err) {
     next(err);
   }
@@ -196,16 +195,16 @@ const checkOtp = async (req, res, next) => {
 //Forgot Password - Reset Password
 const resetPassword = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) return queryErrorRelatedResponse(req, res, 401, "Invalid Email Id!");
+    const beautician = await Beautician.findOne({ email: req.body.email });
+    if (!beautician) return queryErrorRelatedResponse(req, res, 401, "Invalid Email Id!");
 
     if (req.body.new_pass !== req.body.confirm_pass) {
       return queryErrorRelatedResponse(req, res, 401, "Confirm Password does not match!");
     }
 
-    user.otp = null;
-    user.password = req.body.new_pass;
-    await user.save();
+    beautician.otp = null;
+    beautician.password = req.body.new_pass;
+    await beautician.save();
 
     successResponse(res, "Your password has been change.");
   } catch (err) {
@@ -213,40 +212,49 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
-//User Profile Photo Update
+//Beautician Profile Photo Update
 const updateProfile = async (req, res, next) => {
   try {
-    //Check user exist or not
-    const user = await User.findById(req.user._id);
-    if (!user) return queryErrorRelatedResponse(req, res, 401, "Invalid User!!");
+    //Check Beautician exist or not
+    const beautician = await Beautician.findById(req.beautician._id);
+    if (!beautician) return queryErrorRelatedResponse(req, res, 401, "Invalid Beautician!!");
+
+    req.body.open_time = moment(req.body.open_time, "h:mm A").valueOf(); //HH:mm
+    req.body.close_time = moment(req.body.close_time, "h:mm A").valueOf();
 
     //If file already exist then it delete first
-    if (req.file) {
-      const filed = deleteFiles("profile/" + user.image);
-      req.body.image = req.file.filename;
+    if (req.files.image) {
+      deleteFiles("beautician/" + beautician.image);
+      req.body.image = req.files.image[0].filename;
     }
 
-    const isUpdate = await User.findByIdAndUpdate(req.user._id, { $set: req.body });
+    //If file already exist then it delete first
+    if (req.files.banner) {
+      deleteFiles("beautician/" + beautician.banner);
+      req.body.banner = req.files.banner[0].filename;
+    }
+
+    const isUpdate = await Beautician.findByIdAndUpdate(req.beautician._id, { $set: req.body });
     if (!isUpdate) return queryErrorRelatedResponse(req, res, 401, "Something Went wrong!!");
-    const updatedUser = await User.findById(req.user._id);
+    const updatedBeautician = await Beautician.findById(req.beautician._id);
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
 
-    const userWithBaseUrl = {
-      ...updatedUser.toObject(),
+    const beauticianWithBaseUrl = {
+      ...updatedBeautician.toObject(),
       baseUrl: baseUrl,
     };
 
-    successResponse(res, userWithBaseUrl);
+    successResponse(res, beauticianWithBaseUrl);
   } catch (err) {
     next(err);
   }
 };
 
 module.exports = {
-  signupUser,
-  signinUser,
+  signupBeautician,
+  signinBeautician,
   socialLogin,
   RefreshToken,
   checkEmailId,

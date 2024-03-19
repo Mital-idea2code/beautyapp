@@ -31,14 +31,20 @@ app.use("/public/logo", express.static(path.join(__dirname, "./public/images/log
 app.use("/public/profile", express.static(path.join(__dirname, "./public/images/profile")));
 app.use("/public/banner", express.static(path.join(__dirname, "./public/images/banner")));
 app.use("/public/category", express.static(path.join(__dirname, "./public/images/category")));
+app.use("/public/beautician", express.static(path.join(__dirname, "./public/images/beautician")));
+app.use("/public/service", express.static(path.join(__dirname, "./public/images/service")));
 
 //Admin Route
 const adminRoutes = require("./routes/admin");
 app.use(adminRoutes);
 
-//App route
+//User App route
 const userRoute = require("./routes/app/user");
 app.use(userRoute);
+
+//Beautician App route
+const beauticianRoute = require("./routes/app/beautician");
+app.use(beauticianRoute);
 
 // Error handling middleware
 app.use(errorController);

@@ -29,8 +29,8 @@ const ServiceSchema = mongoose.Schema(
       type: Array,
     },
     status: {
-      type: Boolean,
-      default: true,
+      type: Number,
+      default: 0,
     },
   },
   {

@@ -1,4 +1,4 @@
-import { getAllDoctors, deleteDoctor, deleteMultDoctor, updateDoctorStatus } from "../../ApiServices";
+import { getAllCategory, deleteCategory, deleteMultCategory, updateCattatus } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,9 +11,8 @@ import Switch from "@mui/material/Switch";
 import { useUserState } from "../../context/UserContext";
 import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
-import noImg from "../../assets/images/avatars/no_img.png";
 
-const Doctor = () => {
+const SpecialistCategory = () => {
   const [datatableData, setdatatableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -22,11 +21,11 @@ const Doctor = () => {
 
   const list = async () => {
     setIsLoading(true);
-    await getAllDoctors()
+    await getAllCategory()
       .then((response) => {
         console.log(response);
         setIsLoading(false);
-        setdatatableData(response.data.info.doctors);
+        setdatatableData(response.data.info.cat);
         setbaseurl(response.data.info.baseUrl);
       })
       .catch((err) => {
@@ -70,40 +69,16 @@ const Doctor = () => {
             <img
               src={baseurl + `${image}`}
               alt={image}
-              style={{ height: "50px", width: "50px", borderRadius: "50%" }}
+              style={{ height: "50px", width: "50px", borderRadius: "50%", textAlign: "center" }}
             />
           ) : (
-            <img src={noImg} alt={image} style={{ height: "50px", width: "50px", borderRadius: "50%" }} />
+            ""
           ),
       },
     },
     {
       name: "name",
       label: "Name",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "email",
-      label: "Email Id",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "mo_no",
-      label: "Mobile No",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "work_place_name",
-      label: "Work Place",
       options: {
         filter: true,
         sort: true,
@@ -123,7 +98,7 @@ const Doctor = () => {
               onChange={() => {
                 if (userRole == 1) {
                   const data = { id: _id, status: !status };
-                  updateDoctorStatus(data, _id)
+                  updateCattatus(data, _id)
                     .then(() => {
                       toast.success("status changed successfully!", {
                         key: data._id,
@@ -150,6 +125,8 @@ const Doctor = () => {
       name: "_id",
       label: "Action",
       options: {
+        sort: false,
+        filter: false,
         customBodyRender: (value) => {
           return (
             <div>
@@ -166,7 +143,7 @@ const Doctor = () => {
                 onClick={() => {
                   if (userRole == 1) {
                     const editdata = datatableData.find((data) => data._id === value);
-                    navigate("/doctor/manage", {
+                    navigate("/specialist-category/manage", {
                       state: { editdata: editdata, baseurl: baseurl },
                     });
                   } else {
@@ -196,7 +173,7 @@ const Doctor = () => {
                       dangerMode: true,
                     });
                     if (confirm) {
-                      deleteDoctor(value)
+                      deleteCategory(value)
                         .then(() => {
                           toast.success("deleted successfully!", {
                             key: value,
@@ -237,7 +214,7 @@ const Doctor = () => {
       });
 
       if (confirm) {
-        deleteMultDoctor(ids)
+        deleteMultCategory(ids)
           .then(() => {
             list();
             toast.success("Deleted successfully!", {
@@ -288,13 +265,13 @@ const Doctor = () => {
               <CBreadcrumbItem>
                 <Link to="/dashboard">Home</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>Doctor</CBreadcrumbItem>
+              <CBreadcrumbItem active>Category</CBreadcrumbItem>
             </CBreadcrumb>
             <CButton
               className="theme-btn mt-minus-10"
               onClick={() => {
                 if (userRole == 1) {
-                  navigate("/doctor/manage");
+                  navigate("/category/manage");
                 } else {
                   toast.error(
                     "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
@@ -302,7 +279,7 @@ const Doctor = () => {
                 }
               }}
             >
-              Add Doctor
+              Add Category
             </CButton>
           </CContainer>
           {isLoading ? (
@@ -318,4 +295,4 @@ const Doctor = () => {
   );
 };
 
-export default Doctor;
+export default SpecialistCategory;

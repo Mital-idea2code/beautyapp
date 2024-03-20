@@ -34,14 +34,15 @@ const addService = async (req, res, next) => {
 
     const result = await newService.save();
 
-    // Add the new subcategory to the category's subcategories array
+    // Add the new service to the beautician array
     beautician.services.push(result);
     beautician.category.push(req.body.cat_id);
-    // Save the category with the new subcategory
+    // Save the beautician with the new service
     await beautician.save();
 
+    // Add the new service to the category array
     cat.services.push(result);
-    // Save the category with the new subcategory
+    // Save the category with the new services
     await cat.save();
 
     const baseUrl =

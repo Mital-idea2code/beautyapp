@@ -57,77 +57,39 @@ export const changePassword = (data) =>
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
 
-//Get All Specialist Category
-export const getAllSpecialistCategory = () =>
-  axios.get(`${mainUrl}/admin/specialistCategory/getAllSpecialistCategory`, {
+//Get All Category
+export const getAllCategory = () =>
+  axios.get(`${mainUrl}/admin/category/getAllCategory`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
 
-//Add Specialist Category
-export const addSpecialistCategory = (data) =>
-  axios.post(`${mainUrl}/admin/specialistCategory/addSpecialistCategory`, data, {
+//Add Category
+export const addCategory = (data) =>
+  axios.post(`${mainUrl}/admin/category/addCategory`, data, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
 
-//Update Specialist Category
-export const updateSpecialistCategory = (data, id) =>
-  axios.put(`${mainUrl}/admin/specialistCategory/updateSpecialistCategory/${id}`, data, {
+//Update Category
+export const updateCategory = (data, id) =>
+  axios.put(`${mainUrl}/admin/category/updateCategory/${id}`, data, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
 
-//Update Specialist Category Status
-export const updateSpeCatStatus = (data, id) =>
-  axios.put(`${mainUrl}/admin/specialistCategory/updateSpeCatStatus/${id}`, data, {
+//Update Category Status
+export const updateCattatus = (data, id) =>
+  axios.put(`${mainUrl}/admin/category/updateCattatus/${id}`, data, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
 
-//Delete Specialist Category
-export const deleteSpecialistCategory = (id) =>
-  axios.delete(`${mainUrl}/admin/specialistCategory/deleteSpecialistCategory/${id}`, {
+//Delete Category
+export const deleteCategory = (id) =>
+  axios.delete(`${mainUrl}/admin/category/deleteCategory/${id}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
 
-//Delete Multiple Specialist Category
-export const deleteMultSpecialistCategory = (data) => {
-  return axios.delete(`${mainUrl}/admin/specialistCategory/deleteMultSpecialistCategory`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-    data: { Ids: data },
-  });
-};
-
-//Get All Doctor
-export const getAllDoctors = () =>
-  axios.get(`${mainUrl}/admin/doctor/getAllDoctors`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-
-//Add Doctor
-export const addDoctor = (data) =>
-  axios.post(`${mainUrl}/admin/doctor/addDoctor`, data, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-
-//Update Doctor
-export const updateDoctor = (data, id) =>
-  axios.put(`${mainUrl}/admin/doctor/updateDoctor/${id}`, data, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-
-//Update Doctor Status
-export const updateDoctorStatus = (data, id) =>
-  axios.put(`${mainUrl}/admin/doctor/updateDoctorStatus/${id}`, data, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-
-//Delete Doctor
-export const deleteDoctor = (id) =>
-  axios.delete(`${mainUrl}/admin/doctor/deleteDoctor/${id}`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  });
-
-//Delete Multiple Doctor
-export const deleteMultDoctor = (data) => {
-  return axios.delete(`${mainUrl}/admin/doctor/deleteMultDoctor`, {
+//Delete Multiple Category
+export const deleteMultCategory = (data) => {
+  return axios.delete(`${mainUrl}/admin/category/deleteMultCategory`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     data: { Ids: data },
   });

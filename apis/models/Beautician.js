@@ -63,6 +63,12 @@ const BeauticianSchema = mongoose.Schema(
         ref: "category",
       },
     ],
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "reviewRating",
+      },
+    ],
     otp: {
       type: String,
       maxlength: [6, "OTP should be maximum six characters long."],

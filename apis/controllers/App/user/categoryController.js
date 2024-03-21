@@ -28,11 +28,22 @@ const getAllCategory = async (req, res, next) => {
       populate: {
         path: "beautican_id",
         match: { status: true },
-        populate: {
-          path: "services",
-          match: { status: true },
-          model: "services", // Replace with your actual Unit model name
-        },
+        populate: [
+          {
+            path: "services",
+            match: { status: true },
+            model: "services",
+          },
+          {
+            path: "reviews",
+            select: { review: 1, rate: 1, user_id: 1 },
+            populate: {
+              path: "user_id",
+              select: { name: 1, image: 1 },
+              model: "user",
+            },
+          },
+        ],
       },
     });
 
@@ -41,17 +52,21 @@ const getAllCategory = async (req, res, next) => {
     const baseUrl_category =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_CATEGORY_PATH;
 
-    const baseUrl_profile =
+    const baseUrl_beauty_profile =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const baseUrl_service =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
 
+    const baseUrl_user_profile =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+
     const AllData = {
       cat: cat,
       baseUrl_category: baseUrl_category,
-      baseUrl_profile: baseUrl_profile,
+      baseUrl_beauty_profile: baseUrl_beauty_profile,
       baseUrl_service: baseUrl_service,
+      baseUrl_user_profile: baseUrl_user_profile,
     };
 
     successResponse(res, AllData);

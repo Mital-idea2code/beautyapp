@@ -1,29 +1,27 @@
 const express = require("express");
 const router = express.Router();
-const { AddBanner, updateBanners } = require("../../controllers/Admin/homeBannerController");
+const {
+  AddBanner,
+  updateBanners,
+  updateBannerStatus,
+  getAllBanner,
+} = require("../../controllers/Admin/homeBannerController");
 const authenticAdmin = require("../../helper/verifyAdminToken");
-const { multiDiffFileUpload } = require("../../helper/imageUpload");
+const { singleFileUpload } = require("../../helper/imageUpload");
 
 router.post(
   "/AddBanner",
   authenticAdmin,
-  multiDiffFileUpload("public/images/banner", [
-    { name: "banner1", maxCount: 1, allowedMimes: ["image/png", "image/jpeg", "image/jpg"] },
-    { name: "banner2", maxCount: 1, allowedMimes: ["image/png", "image/jpeg", "image/jpg"] },
-    { name: "banner3", maxCount: 1, allowedMimes: ["image/png", "image/jpeg", "image/jpg"] },
-  ]),
+  singleFileUpload("public/images/banner", ["image/png", "image/jpeg", "image/jpg"], 1024 * 1024, "image"),
   AddBanner
 );
-
-router.post(
-  "/updateBanners",
+router.put(
+  "/updateBanners/:id",
   authenticAdmin,
-  multiDiffFileUpload("public/images/banner", [
-    { name: "banner1", maxCount: 1, allowedMimes: ["image/png", "image/jpeg", "image/jpg"] },
-    { name: "banner2", maxCount: 1, allowedMimes: ["image/png", "image/jpeg", "image/jpg"] },
-    { name: "banner3", maxCount: 1, allowedMimes: ["image/png", "image/jpeg", "image/jpg"] },
-  ]),
+  singleFileUpload("public/images/banner", ["image/png", "image/jpeg", "image/jpg"], 1024 * 1024, "image"),
   updateBanners
 );
+router.put("/updateBannerStatus/:id", authenticAdmin, updateBannerStatus);
+router.get("/getAllBanner", authenticAdmin, getAllBanner);
 
 module.exports = router;

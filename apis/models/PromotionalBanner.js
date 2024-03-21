@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 
-const HomeBannerSchema = mongoose.Schema(
+const PromotinalBannerSchema = mongoose.Schema(
   {
     image: {
       type: String,
       required: [true, "Image is required."],
     },
     beautican_id: {
-      type: String,
-      default: "0",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "beautician",
     },
     status: {
       type: Boolean,
@@ -20,4 +20,4 @@ const HomeBannerSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("homebanner", HomeBannerSchema);
+module.exports = mongoose.model("promotionalBanner", PromotinalBannerSchema);

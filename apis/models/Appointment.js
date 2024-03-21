@@ -5,39 +5,28 @@ const AppointmentSchema = mongoose.Schema(
     beautican_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "beautician",
+      required: [true, "Beautician ID is required."],
     },
     user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
+      required: [true, "User ID is required."],
     },
-    cat_id: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "category",
-      },
-    ],
-    // calData: [
-    //     {
-    //       unit: String,
-    //       cal: Number,
-    //       qty: Number,
-    //       protein: Number,
-    //       fat: Number,
-    //       carb: Number,
-    //       fiber: Number,
-    //     },
-    //   ],
-    service_id: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "services",
-      },
-    ],
-    date: {
-      type: String,
+    cat_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "category",
+      required: [true, "Category ID is required."],
+    },
+    service_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "services",
+      required: [true, "Service ID is required."],
+    },
+    app_date: {
+      type: Date,
       required: [true, "Date is required."],
     },
-    time: {
+    app_time: {
       type: String,
       required: [true, "Time is required."],
     },
@@ -46,8 +35,12 @@ const AppointmentSchema = mongoose.Schema(
       required: [true, "Amount is required."],
     },
     status: {
-      type: Boolean,
-      default: true,
+      type: Number,
+      default: 0,
+    },
+    cancel_reason: {
+      type: String,
+      default: "",
     },
   },
   {

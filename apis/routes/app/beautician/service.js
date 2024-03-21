@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const verifyToken = require("../../../helper/verifyUserBeautyToken");
+const verifyToken = require("../../../helper/verifyBeautyAppToken");
 const { multiDiffFileUpload } = require("../../../helper/imageUpload");
 const { addService } = require("../../../controllers/App/beautician/serviceController");
 

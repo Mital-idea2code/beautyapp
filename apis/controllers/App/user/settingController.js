@@ -1,5 +1,6 @@
 const GeneralSettings = require("../../../models/GeneralSettings");
 const HomeBanner = require("../../../models/HomeBanner");
+const User = require("../../../models/User");
 const PromotionalBanner = require("../../../models/PromotionalBanner");
 const {
   createResponse,
@@ -7,6 +8,7 @@ const {
   queryErrorRelatedResponse,
   deleteResponse,
 } = require("../../../helper/sendResponse");
+const bcrypt = require("bcrypt");
 
 //Get  General Settings
 const getGeneralSettings = async (req, res, next) => {
@@ -70,7 +72,48 @@ const getBanners = async (req, res, next) => {
   }
 };
 
+// Change Password
+const changePassword = async (req, res, next) => {
+  try {
+    const { old_password, new_password, confirm_password } = req.body;
+
+    const user = await User.findById(req.user._id);
+    if (!user) return queryErrorRelatedResponse(req, res, 404, "User not found.");
+
+    const valid_pass = await bcrypt.compare(old_password, user.password);
+    if (!valid_pass) return queryErrorRelatedResponse(req, res, 401, "Invalid Old Password");
+
+    if (new_password != confirm_password) {
+      return queryErrorRelatedResponse(req, res, 404, "Confirm password does not match.");
+    }
+
+    user.password = new_password;
+    await user.save();
+    successResponse(res, "Password changed successfully!");
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Update Notification Status
+const updateNotitatus = async (req, res, next) => {
+  try {
+    // Convert string is into Object id
+    const user = await User.findById(req.user._id);
+    if (!user) return queryErrorRelatedResponse(req, res, 404, "User not found.");
+
+    user.noti_status = !user.noti_status;
+    const noti_status = user.noti_status;
+    await user.save();
+    return successResponse(res, { noti_status: noti_status });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getGeneralSettings,
   getBanners,
+  changePassword,
+  updateNotitatus,
 };

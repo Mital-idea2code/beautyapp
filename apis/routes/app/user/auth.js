@@ -11,6 +11,7 @@ const {
   checkOtp,
   resetPassword,
   updateProfile,
+  changePassword,
 } = require("../../../controllers/App/user/authController");
 
 router.post("/signup", signupUser);
@@ -26,4 +27,5 @@ router.post(
   singleFileUpload("public/images/profile", ["image/png", "image/jpeg", "image/jpg"], 1024 * 1024, "image"),
   updateProfile
 );
+
 module.exports = router;

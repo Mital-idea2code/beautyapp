@@ -6,7 +6,10 @@ var bodyParser = require("body-parser");
 const cors = require("cors");
 const http = require("http").Server(app);
 const path = require("path");
+const moment = require("moment-timezone");
+
 process.env.TZ = "Asia/Kolkata";
+moment.tz.setDefault("Asia/Kolkata");
 
 // Get error controller
 const errorController = require("./helper/errorController");

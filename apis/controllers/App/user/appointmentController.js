@@ -2,6 +2,7 @@ const express = require("express");
 const Appointment = require("../../../models/Appointment");
 const ReviewRating = require("../../../models/ReviewRating");
 const Beautician = require("../../../models/Beautician");
+const Favourite = require("../../../models/Favourite");
 const {
   createResponse,
   successResponse,
@@ -9,7 +10,7 @@ const {
   deleteResponse,
 } = require("../../../helper/sendResponse");
 const mongoose = require("mongoose");
-const moment = require("moment");
+const moment = require("moment-timezone");
 
 //Add Appointment
 const bookAppointment = async (req, res, next) => {
@@ -17,6 +18,7 @@ const bookAppointment = async (req, res, next) => {
     const addedApp = req.body;
 
     req.body.app_time = moment(req.body.app_time, "h:mm A").valueOf(); //HH:mm
+    req.body.app_date = moment(req.body.app_date).format("YYYY-MM-DD");
 
     const newApp = await new Appointment(addedApp);
 
@@ -62,7 +64,364 @@ const addReview = async (req, res, next) => {
   }
 };
 
+//Filter Reviews based on rate
+const filterReviews = async (req, res, next) => {
+  try {
+    let where = {};
+    if (req.params.id != 0) {
+      where = { rate: req.params.id };
+    }
+
+    const getReviews = await ReviewRating.find(where, "review rate").populate({
+      path: "user_id",
+      model: "user",
+      select: { name: 1, image: 1 },
+    });
+    if (!getReviews) return queryErrorRelatedResponse(req, res, 404, "Data not found.");
+
+    let transformedReviews = [];
+    if (getReviews && getReviews.length > 0) {
+      transformedReviews = getReviews.map((review) => ({
+        _id: review._id,
+        name: review.user_id.name,
+        image: review.user_id.image,
+        review: review.review,
+        rate: review.rate,
+      }));
+    }
+
+    totalReviews = getReviews.length;
+    const baseUrl_user_profile =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+
+    const AllData = {
+      totalReviews: totalReviews,
+      baseUrl_user_profile: baseUrl_user_profile,
+      reviews: transformedReviews,
+    };
+
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Get Upcoming Appointments
+const getUpcomingApp = async (req, res, next) => {
+  try {
+    // Get the current date and time in ISO format and UNIX timestamp
+    const currentDate = moment().format("YYYY-MM-DD");
+    const currentTime = moment().format("x");
+
+    const getApp = await Appointment.find(
+      {
+        user_id: req.user._id,
+        status: 0,
+        app_date: { $gte: currentDate }, // Appointments on or after the current date
+        $or: [
+          { app_date: currentDate, app_time: { $gte: currentTime } }, // Same date but future time
+          { app_date: { $gt: currentDate } }, // Future dates
+        ],
+      },
+      "beautican_id service_id app_date app_time amount"
+    ).populate([
+      {
+        path: "beautican_id",
+        model: "beautician",
+        select: { name: 1, address: 1, image: 1, reviews: 1 },
+        populate: {
+          path: "reviews",
+          select: { review: 1, rate: 1, user_id: 1 },
+        },
+      },
+      {
+        path: "service_id",
+        model: "services",
+        select: { name: 1, about: 1, display_image: 1 },
+      },
+    ]);
+
+    if (!getApp) return queryErrorRelatedResponse(req, res, 404, "Appointments not found.");
+
+    let transformedData = [];
+    if (getApp && getApp.length > 0) {
+      for (let i = 0; i < getApp.length; i++) {
+        const data = getApp[i];
+
+        let like = 0;
+        let averageRating = 0;
+        let transformedReviews = [];
+        if (data.beautican_id.reviews && data.beautican_id.reviews.length > 0) {
+          transformedReviews = data.beautican_id.reviews.map((review) => ({
+            rate: review.rate,
+          }));
+        }
+
+        if (transformedReviews && transformedReviews.length > 0) {
+          totalReviews = transformedReviews.length;
+          totalRatings = transformedReviews.reduce((sum, review) => sum + review.rate, 0);
+          averageRating = totalRatings / totalReviews;
+          averageRating = parseFloat(averageRating.toFixed(1));
+        }
+
+        const fav = await Favourite.findOne({
+          user_id: req.user._id,
+          beautican_id: data.beautican_id._id,
+          service_id: data.service_id._id,
+        });
+
+        if (fav) {
+          like = 1;
+        }
+
+        transformedData.push({
+          _id: data._id,
+          beautician_name: data.beautican_id.name,
+          beautician_address: data.beautican_id.address,
+          beautician_image: data.beautican_id.image,
+          service_name: data.service_id.name,
+          service_about: data.service_id.about,
+          service_image: data.service_id.display_image,
+          app_date: moment(data.app_date).format("MMMM DD, YYYY"),
+          app_time: moment(parseInt(data.app_time)).format("hh:mm A"),
+          amount: data.amount,
+          totalReviews: totalReviews,
+          averageRating: averageRating,
+          like: like,
+        });
+      }
+    }
+
+    const baseUrl_beauty_profile =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const AllData = {
+      appointments: transformedData,
+      baseUrl_beauty_profile: baseUrl_beauty_profile,
+      baseUrl_service: baseUrl_service,
+    };
+
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Get Completed Appointments
+const getCompletedApp = async (req, res, next) => {
+  try {
+    const getApp = await Appointment.find(
+      {
+        user_id: req.user._id,
+        status: 1,
+      },
+      "beautican_id service_id app_date app_time amount"
+    ).populate([
+      {
+        path: "beautican_id",
+        model: "beautician",
+        select: { name: 1, address: 1, image: 1, reviews: 1, banner: 1 },
+        populate: {
+          path: "reviews",
+          select: { review: 1, rate: 1, user_id: 1 },
+        },
+      },
+      {
+        path: "service_id",
+        model: "services",
+        select: { name: 1, about: 1, display_image: 1 },
+      },
+    ]);
+
+    if (!getApp) return queryErrorRelatedResponse(req, res, 404, "Appointments not found.");
+
+    let transformedData = [];
+    if (getApp && getApp.length > 0) {
+      for (let i = 0; i < getApp.length; i++) {
+        const data = getApp[i];
+
+        let like = 0;
+        let averageRating = 0;
+        let transformedReviews = [];
+        if (data.beautican_id.reviews && data.beautican_id.reviews.length > 0) {
+          transformedReviews = data.beautican_id.reviews.map((review) => ({
+            rate: review.rate,
+          }));
+        }
+
+        if (transformedReviews && transformedReviews.length > 0) {
+          totalReviews = transformedReviews.length;
+          totalRatings = transformedReviews.reduce((sum, review) => sum + review.rate, 0);
+          averageRating = totalRatings / totalReviews;
+          averageRating = parseFloat(averageRating.toFixed(1));
+        }
+
+        const fav = await Favourite.findOne({
+          user_id: req.user._id,
+          beautican_id: data.beautican_id._id,
+          service_id: data.service_id._id,
+        });
+
+        if (fav) {
+          like = 1;
+        }
+
+        transformedData.push({
+          _id: data._id,
+          beautician_name: data.beautican_id.name,
+          beautician_address: data.beautican_id.address,
+          beautician_image: data.beautican_id.image,
+          beautician_banner: data.beautican_id.banner,
+          service_name: data.service_id.name,
+          service_about: data.service_id.about,
+          service_image: data.service_id.display_image,
+          app_date: moment(data.app_date).format("MMMM DD, YYYY"),
+          app_time: moment(parseInt(data.app_time)).format("hh:mm A"),
+          amount: data.amount,
+          totalReviews: totalReviews,
+          averageRating: averageRating,
+          like: like,
+        });
+      }
+    }
+
+    const baseUrl_beauty_profile =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const AllData = {
+      appointments: transformedData,
+      baseUrl_beauty_profile: baseUrl_beauty_profile,
+      baseUrl_service: baseUrl_service,
+    };
+
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Get Cancelled Appointments
+const getCancelledApp = async (req, res, next) => {
+  try {
+    const getApp = await Appointment.find(
+      {
+        user_id: req.user._id,
+        status: 1,
+      },
+      "beautican_id service_id app_date app_time amount cat_id"
+    ).populate([
+      {
+        path: "beautican_id",
+        model: "beautician",
+        select: { name: 1, address: 1, image: 1, reviews: 1, banner: 1, open_time: 1, close_time: 1, duration: 1 },
+        populate: {
+          path: "reviews",
+          select: { review: 1, rate: 1, user_id: 1 },
+        },
+      },
+      {
+        path: "service_id",
+        model: "services",
+        select: { name: 1, about: 1, display_image: 1 },
+      },
+    ]);
+
+    if (!getApp) return queryErrorRelatedResponse(req, res, 404, "Appointments not found.");
+
+    let transformedData = [];
+    if (getApp && getApp.length > 0) {
+      for (let i = 0; i < getApp.length; i++) {
+        const data = getApp[i];
+
+        const openTime = parseInt(data.beautican_id.open_time);
+        const closeTime = parseInt(data.beautican_id.close_time);
+        const duration = parseInt(data.beautican_id.duration);
+
+        const startTime = moment(openTime).format("hh:mm A");
+        const endTime = moment(closeTime).format("hh:mm A");
+        const timeSlots = [];
+        let currentTime = moment(startTime, "hh:mm A");
+
+        while (currentTime.isBefore(moment(endTime, "hh:mm A"))) {
+          timeSlots.push(currentTime.format("hh:mm A"));
+          currentTime = currentTime.add(duration, "minutes");
+        }
+
+        let like = 0;
+        let averageRating = 0;
+        let transformedReviews = [];
+        if (data.beautican_id.reviews && data.beautican_id.reviews.length > 0) {
+          transformedReviews = data.beautican_id.reviews.map((review) => ({
+            rate: review.rate,
+          }));
+        }
+
+        if (transformedReviews && transformedReviews.length > 0) {
+          totalReviews = transformedReviews.length;
+          totalRatings = transformedReviews.reduce((sum, review) => sum + review.rate, 0);
+          averageRating = totalRatings / totalReviews;
+          averageRating = parseFloat(averageRating.toFixed(1));
+        }
+
+        const fav = await Favourite.findOne({
+          user_id: req.user._id,
+          beautican_id: data.beautican_id._id,
+          service_id: data.service_id._id,
+        });
+
+        if (fav) {
+          like = 1;
+        }
+
+        transformedData.push({
+          _id: data._id,
+          cat_id: data.cat_id,
+          beautician_id: data.beautican_id._id,
+          beautician_name: data.beautican_id.name,
+          beautician_address: data.beautican_id.address,
+          beautician_image: data.beautican_id.image,
+          beautician_banner: data.beautican_id.banner,
+          service_id: data.service_id._id,
+          service_name: data.service_id.name,
+          service_about: data.service_id.about,
+          service_image: data.service_id.display_image,
+          app_date: moment(data.app_date).format("MMMM DD, YYYY"),
+          app_time: moment(parseInt(data.app_time)).format("hh:mm A"),
+          amount: data.amount,
+          timeSlots: timeSlots,
+          totalReviews: totalReviews,
+          averageRating: averageRating,
+          like: like,
+        });
+      }
+    }
+
+    const baseUrl_beauty_profile =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const AllData = {
+      appointments: transformedData,
+      baseUrl_beauty_profile: baseUrl_beauty_profile,
+      baseUrl_service: baseUrl_service,
+    };
+
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   bookAppointment,
   addReview,
+  filterReviews,
+  getUpcomingApp,
+  getCompletedApp,
+  getCancelledApp,
 };

@@ -29,6 +29,22 @@ const GeneralSettingsSchema = mongoose.Schema({
     required: [true, "Description is required."],
     default: "Beautician Privacy Policy",
   },
+  user_support_email: {
+    type: String,
+    default: "test@gmail.com",
+  },
+  user_support_mono: {
+    type: String,
+    default: "+91 99999 99999",
+  },
+  beautician_support_email: {
+    type: String,
+    default: "test@gmail.com",
+  },
+  beautician_support_mono: {
+    type: String,
+    default: "+91 99999 99999",
+  },
 });
 
 module.exports = mongoose.model("generalSettings", GeneralSettingsSchema);

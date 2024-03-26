@@ -108,6 +108,24 @@ const updateBeauticianPP = async (req, res, next) => {
   }
 };
 
+//Update User Support Data
+const updatSupportData = async (req, res, next) => {
+  try {
+    const { user_support_email, user_support_mono, beautician_support_email, beautician_support_mono } = req.body;
+    const supportData = await GeneralSettings.findById(req.params.id);
+    if (!supportData) return queryErrorRelatedResponse(req, res, 404, "Data not found.");
+
+    supportData.user_support_email = user_support_email;
+    supportData.user_support_mono = user_support_mono;
+    supportData.beautician_support_email = beautician_support_email;
+    supportData.beautician_support_mono = beautician_support_mono;
+    const result = await supportData.save();
+    return successResponse(res, result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getGeneralSettings,
   addGeneralSettings,
@@ -116,4 +134,5 @@ module.exports = {
   updateBeauticianTc,
   updateUserPP,
   updateBeauticianPP,
+  updatSupportData,
 };

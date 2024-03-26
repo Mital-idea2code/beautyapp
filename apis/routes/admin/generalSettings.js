@@ -8,6 +8,7 @@ const {
   updateBeauticianTc,
   updateUserPP,
   updateBeauticianPP,
+  updatSupportData,
 } = require("../../controllers/Admin/generalSettingsController");
 const authenticAdmin = require("../../helper/verifyAdminToken");
 
@@ -18,5 +19,6 @@ router.put("/updateUserTc/:id", authenticAdmin, updateUserTc);
 router.put("/updateBeauticianTc/:id", authenticAdmin, updateBeauticianTc);
 router.put("/updateUserPP/:id", authenticAdmin, updateUserPP);
 router.put("/updateBeauticianPP/:id", authenticAdmin, updateBeauticianPP);
+router.put("/updatSupportData/:id", authenticAdmin, updatSupportData);
 
 module.exports = router;

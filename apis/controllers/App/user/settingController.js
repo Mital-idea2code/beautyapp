@@ -1,4 +1,5 @@
 const GeneralSettings = require("../../../models/GeneralSettings");
+const Faqs = require("../../../models/Faqs");
 const HomeBanner = require("../../../models/HomeBanner");
 const User = require("../../../models/User");
 const PromotionalBanner = require("../../../models/PromotionalBanner");
@@ -16,6 +17,17 @@ const getGeneralSettings = async (req, res, next) => {
     const getSettingsData = await GeneralSettings.findOne({}, "user_tc user_pp"); //beautician_tc beautician_pp
     if (!getSettingsData) return queryErrorRelatedResponse(req, res, 404, "Data not found.");
     successResponse(res, getSettingsData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Get Support Data
+const getSupportData = async (req, res, next) => {
+  try {
+    const getSupportData = await GeneralSettings.findOne({}, "user_support_email user_support_mono"); //beautician_tc beautician_pp
+    if (!getSupportData) return queryErrorRelatedResponse(req, res, 404, "Data not found.");
+    successResponse(res, getSupportData);
   } catch (err) {
     next(err);
   }
@@ -111,9 +123,22 @@ const updateNotitatus = async (req, res, next) => {
   }
 };
 
+//Get  Faqs
+const getFaqs = async (req, res, next) => {
+  try {
+    const getFaqsData = await Faqs.findAll({ status: true }, "question answer");
+    if (!getFaqsData) return queryErrorRelatedResponse(req, res, 404, "Faqs not found.");
+    successResponse(res, getFaqsData);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getGeneralSettings,
+  getSupportData,
   getBanners,
   changePassword,
   updateNotitatus,
+  getFaqs,
 };

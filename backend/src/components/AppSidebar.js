@@ -32,23 +32,22 @@ const AppSidebar = () => {
       }}
     >
       <CSidebarBrand className="d-none d-md-flex" to="/">
-        <img src={logo} height={45} className="header-logo" />
-        <div>
+        <img src={logo} height={45} className="header-logo " />
+        <div className="sidebar-brand-full">
           <h4 className="pb-0 mb-0 mt-2">
             <img src={logoText} className="w-115" />
           </h4>
         </div>
-        {/* <p>Doctor Appointment</p> */}
       </CSidebarBrand>
       <CSidebarNav>
         <SimpleBar>
           <AppSidebarNav items={navigation} />
         </SimpleBar>
       </CSidebarNav>
-      {/* <CSidebarToggler
+      <CSidebarToggler
         className="d-none d-lg-flex"
-        onClick={() => dispatch({ type: 'set', sidebarUnfoldable: !unfoldable })}
-      /> */}
+        onClick={() => dispatch({ type: "set", sidebarUnfoldable: !unfoldable })}
+      />
     </CSidebar>
   );
 };

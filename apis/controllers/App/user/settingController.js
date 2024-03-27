@@ -2,7 +2,7 @@ const GeneralSettings = require("../../../models/GeneralSettings");
 const Faqs = require("../../../models/Faqs");
 const HomeBanner = require("../../../models/HomeBanner");
 const User = require("../../../models/User");
-const PromotionalBanner = require("../../../models/PromotionalBanner");
+const promotionBanner = require("../../../models/PromotionBanner");
 const {
   createResponse,
   successResponse,
@@ -38,7 +38,7 @@ const getBanners = async (req, res, next) => {
   try {
     const getBanners = await HomeBanner.find({ status: true });
 
-    const getProBanners = await PromotionalBanner.find().populate({
+    const getProBanners = await promotionBanner.find().populate({
       path: "beautican_id",
       match: { status: true },
       populate: {

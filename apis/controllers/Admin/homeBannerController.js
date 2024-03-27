@@ -1,5 +1,6 @@
 const express = require("express");
 const HomeBanner = require("../../models/HomeBanner");
+const PromotionBanner = require("../../models/PromotionBanner");
 const {
   createResponse,
   queryErrorRelatedResponse,
@@ -111,19 +112,26 @@ const updateBannerStatus = async (req, res, next) => {
     const banner = await HomeBanner.findById(id);
     if (!banner) return queryErrorRelatedResponse(req, res, 404, "Banner not found.");
 
-    banner.status = !banner.status;
-    const result = await banner.save();
-    return successResponse(res, result);
+    const check_banner = await HomeBanner.findOne({ status: true, _id: { $ne: id } });
+    const check_pro_banner = await PromotionBanner.findOne({ status: true });
+
+    if (!check_banner && !check_pro_banner) {
+      return queryErrorRelatedResponse(req, res, 213, "At least one banner must have the status set to enabled.");
+    } else {
+      banner.status = !banner.status;
+      const result = await banner.save();
+      return successResponse(res, result);
+    }
   } catch (err) {
     next(err);
   }
 };
 
-//Get All Promotional Banner
+//Get All promotion Banner
 const getAllBanner = async (req, res, next) => {
   try {
     const banner = await HomeBanner.find();
-    if (!banner) return queryErrorRelatedResponse(req, res, 404, "Promotional Banner not found.");
+    if (!banner) return queryErrorRelatedResponse(req, res, 404, "promotion Banner not found.");
 
     const baseUrl =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BANNER_PATH;

@@ -3,7 +3,7 @@ const adminRouter = require("../admin/admin");
 const genealSettingsRouter = require("../admin/generalSettings");
 const homeBannerRouter = require("../admin/homeBanner");
 const categoryRouter = require("../admin/category");
-const proBannerRouter = require("../admin/promotinalBanner");
+const proBannerRouter = require("../admin/promotionBanner");
 const faqsRouter = require("../admin/faqs");
 
 // Use router in index

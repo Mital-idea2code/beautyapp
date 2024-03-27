@@ -19,11 +19,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
 import { handleInputChange, handleFileInputChange } from "../../components/formUtils";
-import { addCategory, updateCategory } from "../../ApiServices";
+import { AddBanner, updateBanners } from "../../ApiServices";
 import { toast } from "react-toastify";
 import noImg from "../../assets/images/avatars/no_img.png";
 
-const SpecialistCategoryForm = () => {
+const PromoBannerForm = () => {
   const { state } = useLocation();
 
   const {
@@ -64,11 +64,11 @@ const SpecialistCategoryForm = () => {
     });
 
     isupdate === ""
-      ? addCategory(formData)
+      ? AddBanner(formData)
           .then(() => {
             localStorage.setItem("redirectSuccess", "true");
             localStorage.setItem("redirectMessage", "Added successfully!");
-            navigate("/specialist-category");
+            navigate("/promoBanners");
           })
           .catch((err) => {
             if (!err.response.data.isSuccess) {
@@ -86,11 +86,11 @@ const SpecialistCategoryForm = () => {
             }
             setIsLoading(false);
           })
-      : updateCategory(formData, isupdate)
+      : updateBanners(formData, isupdate)
           .then(() => {
             localStorage.setItem("redirectSuccess", "true");
             localStorage.setItem("redirectMessage", "Updated successfully!");
-            navigate("/specialist-category");
+            navigate("/promoBanners");
           })
           .catch((err) => {
             if (!err.response.data.isSuccess) {
@@ -118,33 +118,20 @@ const SpecialistCategoryForm = () => {
             <Link to="/dashboard">Home</Link>
           </CBreadcrumbItem>
           <CBreadcrumbItem>
-            <Link to="/category">Category</Link>
+            <Link to="/promoBanners">Promotion Banner</Link>
           </CBreadcrumbItem>
-          <CBreadcrumbItem active>{isupdate === "" ? "Add" : "Update"} Category</CBreadcrumbItem>
+          <CBreadcrumbItem active>{isupdate === "" ? "Add" : "Update"} Promotion Banner</CBreadcrumbItem>
         </CBreadcrumb>
       </CContainer>
       <CCol xs={12} md={6}>
         <CCard className="mb-4">
           <CCardBody>
             <CForm className="row g-3 needs-validation" onSubmit={handleSubmit(onSubmit)}>
-              <CCol md={12}>
-                <CustomInput
-                  name="name"
-                  type="text"
-                  label="Name"
-                  {...register("name", { required: "Name is required" })}
-                  error={!!errors.name}
-                  helperText={errors.name && errors.name.message}
-                  defaultValue={getValues("name")}
-                  onChange={(e) => handleInputChange("name", e.target.value, { clearErrors, setValue })}
-                />
-              </CCol>
-
               <CCol md={12} className="d-fex">
                 <CustomInput
                   name="image"
                   type="file"
-                  label="Image"
+                  label="Banner"
                   style={{ width: "100%" }}
                   {...register("image", { required: isupdate ? false : "Image is required" })}
                   error={!!errors.image}
@@ -152,7 +139,7 @@ const SpecialistCategoryForm = () => {
                   defaultValue={getValues("image")}
                   onChange={(e) => handleFileInputChange(e, "image", { clearErrors, setValue, setPreviewImage })}
                 />
-                {previewImage ? <img src={previewImage} className="img-preview" /> : ""}
+                {previewImage ? <img src={previewImage} className="banner-img-preview" /> : ""}
               </CCol>
 
               <CCol xs={12}>
@@ -172,4 +159,4 @@ const SpecialistCategoryForm = () => {
   );
 };
 
-export default SpecialistCategoryForm;
+export default PromoBannerForm;

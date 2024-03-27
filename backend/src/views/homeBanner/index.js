@@ -1,4 +1,4 @@
-import { getAllCategory, deleteCategory, deleteMultCategory, updateCattatus } from "../../ApiServices";
+import { getAllBanner, updateBannerStatus } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,7 +12,7 @@ import { useUserState } from "../../context/UserContext";
 import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
 
-const Category = () => {
+const HomeBanner = () => {
   const [datatableData, setdatatableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -21,11 +21,11 @@ const Category = () => {
 
   const list = async () => {
     setIsLoading(true);
-    await getAllCategory()
+    await getAllBanner()
       .then((response) => {
         console.log(response);
         setIsLoading(false);
-        setdatatableData(response.data.info.cat);
+        setdatatableData(response.data.info.banner);
         setbaseurl(response.data.info.baseUrl);
       })
       .catch((err) => {
@@ -62,26 +62,18 @@ const Category = () => {
   const columns = [
     {
       name: "image",
-      label: "Image",
+      label: "Home Banner",
       options: {
         customBodyRender: (image) =>
           image ? (
             <img
               src={baseurl + `${image}`}
               alt={image}
-              style={{ height: "50px", width: "50px", borderRadius: "50%", textAlign: "center" }}
+              style={{ height: "100px", width: "200px", textAlign: "center" }}
             />
           ) : (
             ""
           ),
-      },
-    },
-    {
-      name: "name",
-      label: "Name",
-      options: {
-        filter: true,
-        sort: true,
       },
     },
     {
@@ -98,14 +90,20 @@ const Category = () => {
               onChange={() => {
                 if (userRole == 1) {
                   const data = { id: _id, status: !status };
-                  updateCattatus(data, _id)
-                    .then(() => {
-                      toast.success("status changed successfully!", {
-                        key: data._id,
-                      });
-                      list();
+                  updateBannerStatus(data, _id)
+                    .then((response) => {
+                      if (response.status == 200) {
+                        toast.success("status changed successfully!", {
+                          key: data._id,
+                        });
+                        list();
+                      } else {
+                        toast.error("At least one banner must have the status set to enabled.", {
+                          key: data._id,
+                        });
+                      }
                     })
-                    .catch(() => {
+                    .catch((err) => {
                       toast.error("something went wrong!", {
                         key: data._id,
                       });
@@ -143,49 +141,9 @@ const Category = () => {
                 onClick={() => {
                   if (userRole == 1) {
                     const editdata = datatableData.find((data) => data._id === value);
-                    navigate("/category/manage", {
+                    navigate("/homebanner/manage", {
                       state: { editdata: editdata, baseurl: baseurl },
                     });
-                  } else {
-                    toast.error(
-                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                    );
-                  }
-                }}
-              />
-              <Icons.Delete
-                style={{
-                  color: "#FF5733",
-                  cursor: "pointer",
-                  border: "1px solid",
-                  borderRadius: "5px",
-                  margin: "0px 6px",
-                  fontSize: "30px",
-                  padding: "4px",
-                }}
-                onClick={async () => {
-                  if (userRole == 1) {
-                    const confirm = await swal({
-                      title: "Are you sure?",
-                      text: "Are you sure that you want to delete this Essential?",
-                      icon: "warning",
-                      buttons: ["No, cancel it!", "Yes, I am sure!"],
-                      dangerMode: true,
-                    });
-                    if (confirm) {
-                      deleteCategory(value)
-                        .then(() => {
-                          toast.success("deleted successfully!", {
-                            key: value,
-                          });
-                          list();
-                        })
-                        .catch(() => {
-                          toast.error("something went wrong!", {
-                            key: value,
-                          });
-                        });
-                    }
                   } else {
                     toast.error(
                       "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
@@ -199,60 +157,8 @@ const Category = () => {
       },
     },
   ];
-
-  const deleteMultiple = async (index) => {
-    if (userRole == 1) {
-      const ids = index.data.map(
-        (index1) => datatableData.find((data, index2) => index2 === index1.dataIndex && data._id)._id
-      );
-      const confirm = await swal({
-        title: "Are you sure?",
-        text: "Are you sure that you want to delete this Essential?",
-        icon: "warning",
-        buttons: ["No, cancel it!", "Yes, I am sure!"],
-        dangerMode: true,
-      });
-
-      if (confirm) {
-        deleteMultCategory(ids)
-          .then(() => {
-            list();
-            toast.success("Deleted successfully!", {
-              key: ids,
-            });
-          })
-          .catch(() => {
-            toast.error("Something went wrong!", {
-              key: ids,
-            });
-          });
-      }
-    } else {
-      toast.error(
-        "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-      );
-    }
-  };
-
-  const SelectedRowsToolbar = ({ selectedRows, data }) => {
-    return (
-      <div>
-        <IconButton onClick={() => deleteMultiple(selectedRows, data)}>
-          <Icons.Delete />
-        </IconButton>
-      </div>
-    );
-  };
-
   const options = {
-    customToolbarSelect: (selectedRows, data) => (
-      <SelectedRowsToolbar selectedRows={selectedRows} data={data} columns={columns} datatableTitle="test" />
-    ),
-  };
-
-  SelectedRowsToolbar.propTypes = {
-    selectedRows: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired,
+    selectableRows: false, // Disable checkbox selection
   };
 
   return (
@@ -265,13 +171,13 @@ const Category = () => {
               <CBreadcrumbItem>
                 <Link to="/dashboard">Home</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>Category</CBreadcrumbItem>
+              <CBreadcrumbItem active>Home Banner</CBreadcrumbItem>
             </CBreadcrumb>
             <CButton
               className="theme-btn mt-minus-10"
               onClick={() => {
                 if (userRole == 1) {
-                  navigate("/category/manage");
+                  navigate("/homebanner/manage");
                 } else {
                   toast.error(
                     "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
@@ -279,7 +185,7 @@ const Category = () => {
                 }
               }}
             >
-              Add Category
+              Add Home Banner
             </CButton>
           </CContainer>
           {isLoading ? (
@@ -295,4 +201,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default HomeBanner;

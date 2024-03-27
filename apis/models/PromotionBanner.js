@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const PromotinalBannerSchema = mongoose.Schema(
+const PromotionBannerSchema = mongoose.Schema(
   {
     image: {
       type: String,
@@ -20,4 +20,4 @@ const PromotinalBannerSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("promotionalBanner", PromotinalBannerSchema);
+module.exports = mongoose.model("promotionBanner", PromotionBannerSchema);

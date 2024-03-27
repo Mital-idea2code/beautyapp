@@ -1,4 +1,9 @@
-import { getAllCategory, deleteCategory, deleteMultCategory, updateCattatus } from "../../ApiServices";
+import {
+  getAllpromotionBanner,
+  deletepromotionBanner,
+  deleteMultpromotionBanner,
+  updateProBannerStatus,
+} from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,7 +17,7 @@ import { useUserState } from "../../context/UserContext";
 import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
 
-const Category = () => {
+const PromoBanners = () => {
   const [datatableData, setdatatableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -21,11 +26,10 @@ const Category = () => {
 
   const list = async () => {
     setIsLoading(true);
-    await getAllCategory()
+    await getAllpromotionBanner()
       .then((response) => {
-        console.log(response);
         setIsLoading(false);
-        setdatatableData(response.data.info.cat);
+        setdatatableData(response.data.info.banner);
         setbaseurl(response.data.info.baseUrl);
       })
       .catch((err) => {
@@ -62,14 +66,14 @@ const Category = () => {
   const columns = [
     {
       name: "image",
-      label: "Image",
+      label: "Banner",
       options: {
         customBodyRender: (image) =>
           image ? (
             <img
               src={baseurl + `${image}`}
               alt={image}
-              style={{ height: "50px", width: "50px", borderRadius: "50%", textAlign: "center" }}
+              style={{ height: "100px", width: "200px", textAlign: "center" }}
             />
           ) : (
             ""
@@ -78,7 +82,15 @@ const Category = () => {
     },
     {
       name: "name",
-      label: "Name",
+      label: "Beautician Name",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "email",
+      label: "Beautician Email",
       options: {
         filter: true,
         sort: true,
@@ -98,14 +110,20 @@ const Category = () => {
               onChange={() => {
                 if (userRole == 1) {
                   const data = { id: _id, status: !status };
-                  updateCattatus(data, _id)
-                    .then(() => {
-                      toast.success("status changed successfully!", {
-                        key: data._id,
-                      });
-                      list();
+                  updateProBannerStatus(data, _id)
+                    .then((response) => {
+                      if (response.status == 200) {
+                        toast.success("status changed successfully!", {
+                          key: data._id,
+                        });
+                        list();
+                      } else {
+                        toast.error("At least one banner must have the status set to enabled.", {
+                          key: data._id,
+                        });
+                      }
                     })
-                    .catch(() => {
+                    .catch((err) => {
                       toast.error("something went wrong!", {
                         key: data._id,
                       });
@@ -143,7 +161,7 @@ const Category = () => {
                 onClick={() => {
                   if (userRole == 1) {
                     const editdata = datatableData.find((data) => data._id === value);
-                    navigate("/category/manage", {
+                    navigate("/promoBanner/manage", {
                       state: { editdata: editdata, baseurl: baseurl },
                     });
                   } else {
@@ -173,7 +191,7 @@ const Category = () => {
                       dangerMode: true,
                     });
                     if (confirm) {
-                      deleteCategory(value)
+                      deletepromotionBanner(value)
                         .then(() => {
                           toast.success("deleted successfully!", {
                             key: value,
@@ -214,7 +232,7 @@ const Category = () => {
       });
 
       if (confirm) {
-        deleteMultCategory(ids)
+        deleteMultpromotionBanner(ids)
           .then(() => {
             list();
             toast.success("Deleted successfully!", {
@@ -265,13 +283,13 @@ const Category = () => {
               <CBreadcrumbItem>
                 <Link to="/dashboard">Home</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>Category</CBreadcrumbItem>
+              <CBreadcrumbItem active>Promotion Banners</CBreadcrumbItem>
             </CBreadcrumb>
             <CButton
               className="theme-btn mt-minus-10"
               onClick={() => {
                 if (userRole == 1) {
-                  navigate("/category/manage");
+                  navigate("/promoBanner/manage");
                 } else {
                   toast.error(
                     "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
@@ -279,7 +297,7 @@ const Category = () => {
                 }
               }}
             >
-              Add Category
+              Add Promotion Banner
             </CButton>
           </CContainer>
           {isLoading ? (
@@ -295,4 +313,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default PromoBanners;

@@ -15,6 +15,16 @@ import {
   cilStar,
   cilUserPlus,
   cilUser,
+  cilUserX,
+  cilUserFollow,
+  cilBookmark,
+  cibFlipboard,
+  cilClock,
+  cilSettings,
+  cilThumbUp,
+  cilImagePlus,
+  cilCalendarCheck,
+  cilAsteriskCircle,
 } from "@coreui/icons";
 import { CNavGroup, CNavItem, CNavTitle } from "@coreui/react";
 
@@ -27,17 +37,96 @@ const _nav = [
   },
   {
     component: CNavItem,
+    name: "Users",
+    to: "/users",
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: "Beauticians",
+    to: "/beauticians",
+    icon: <CIcon icon={cilUserFollow} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
     name: "Category",
     to: "/category",
     icon: <CIcon icon={cilBoltCircle} customClassName="nav-icon" />,
   },
-
-  // {
-  //   component: CNavItem,
-  //   name: 'Colors',
-  //   to: '/theme/colors',
-  //   icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  // },
+  {
+    component: CNavItem,
+    name: "Services",
+    to: "/services",
+    icon: <CIcon icon={cilAsteriskCircle} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavGroup,
+    name: "Appointments",
+    to: "/appointments",
+    icon: <CIcon icon={cilCalendarCheck} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: "Pending",
+        to: "/appointments/pending",
+      },
+      {
+        component: CNavItem,
+        name: "Completed",
+        to: "/appointments/completed",
+      },
+      {
+        component: CNavItem,
+        name: "Cancelled",
+        to: "/appointments/cancelled",
+      },
+    ],
+  },
+  {
+    component: CNavItem,
+    name: "Home Banners",
+    to: "/homebanners",
+    icon: <CIcon icon={cilImagePlus} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: "Promotion Banners",
+    to: "/promoBanners",
+    icon: <CIcon icon={cilThumbUp} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavGroup,
+    name: "Settings",
+    to: "/settings",
+    icon: <CIcon icon={cilSettings} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: "FAQs",
+        to: "/appointments/faqs",
+      },
+      {
+        component: CNavItem,
+        name: "Terms & Conditions",
+        to: "/settings/terms_conditions",
+      },
+      {
+        component: CNavItem,
+        name: "Privacy Policy",
+        to: "/settings/privacy_policy",
+      },
+      {
+        component: CNavItem,
+        name: "Help Center Settings",
+        to: "/settings/help_center_settings",
+      },
+      {
+        component: CNavItem,
+        name: "General Settings",
+        to: "/settings/general_settings",
+      },
+    ],
+  },
   // {
   //   component: CNavItem,
   //   name: 'Typography',

@@ -1,31 +1,31 @@
 const express = require("express");
 const router = express.Router();
 const {
-  addPromotionalBanner,
-  updatePromotionalBanner,
+  addpromotionBanner,
+  updatepromotionBanner,
   updateProBannerStatus,
-  deletePromotionalBanner,
-  deleteMultPromotionalBanner,
-  getAllPromotionalBanner,
-} = require("../../controllers/Admin/promotinalBannerController");
+  deletepromotionBanner,
+  deleteMultpromotionBanner,
+  getAllpromotionBanner,
+} = require("../../controllers/Admin/promotionBannerController");
 const authenticAdmin = require("../../helper/verifyAdminToken");
 const { singleFileUpload } = require("../../helper/imageUpload");
 
 router.post(
-  "/addPromotionalBanner",
+  "/addpromotionBanner",
   authenticAdmin,
   singleFileUpload("public/images/banner", ["image/png", "image/jpeg", "image/jpg"], 1024 * 1024, "image"),
-  addPromotionalBanner
+  addpromotionBanner
 );
 router.put(
-  "/updatePromotionalBanner/:id",
+  "/updatepromotionBanner/:id",
   authenticAdmin,
   singleFileUpload("public/images/banner", ["image/png", "image/jpeg", "image/jpg"], 1024 * 1024, "image"),
-  updatePromotionalBanner
+  updatepromotionBanner
 );
 router.put("/updateProBannerStatus/:id", authenticAdmin, updateProBannerStatus);
-router.delete("/deletePromotionalBanner/:id", authenticAdmin, deletePromotionalBanner);
-router.delete("/deleteMultPromotionalBanner", authenticAdmin, deleteMultPromotionalBanner);
-router.get("/getAllPromotionalBanner", authenticAdmin, getAllPromotionalBanner);
+router.delete("/deletepromotionBanner/:id", authenticAdmin, deletepromotionBanner);
+router.delete("/deleteMultpromotionBanner", authenticAdmin, deleteMultpromotionBanner);
+router.get("/getAllpromotionBanner", authenticAdmin, getAllpromotionBanner);
 
 module.exports = router;

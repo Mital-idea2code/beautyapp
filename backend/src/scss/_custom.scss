@@ -1,4 +1,16 @@
 // Here you can add other styles
+a.nav-link {
+  font-family: Source Sans Pro !important;
+}
+a.dropdown-item,
+.dropdown-header {
+  font-family: Source Sans Pro !important;
+}
+.body {
+  background: white !important;
+  padding-top: 30px !important;
+  font-family: Source Sans Pro !important;
+}
 .header-logo-subtitle {
   font-size: 12px;
   text-align: center;
@@ -7,18 +19,26 @@
 .header-logo {
   padding-right: 10px;
 }
+.sidebar-nav .nav-group.show {
+  background: #ea4c89;
+  color: white;
+}
 .sidebar-nav .nav-link.active,
 .sidebar-nav .nav-link:hover {
-  color: #ea4c89;
+  color: #ea4c89 !important;
   background: white;
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
 }
-
 .sidebar-nav .nav-link {
   color: white;
+  background: #ea4c89f2;
+}
+
+.sidebar-nav .show {
   background: #ea4c89;
 }
+
 .sidebar-nav .nav-link.active .nav-icon,
 .sidebar-nav .nav-link:hover .nav-icon {
   color: #ea4c89 !important;
@@ -117,8 +137,8 @@ a {
   border-color: #ea4c89;
 }
 .theme-btn:hover {
-  background-color: #0098998c;
-  border-color: #0098992e;
+  background-color: #ea4c89;
+  border-color: #ea4c89;
 }
 .mt-minus-10 {
   margin-top: -10px;
@@ -130,6 +150,13 @@ a {
   width: 80px;
   height: 80px;
   border-radius: 20%;
+  margin-left: 20px;
+  border: 1px solid #80808057;
+}
+
+.banner-img-preview {
+  width: 150px;
+  height: 100px;
   margin-left: 20px;
   border: 1px solid #80808057;
 }
@@ -207,6 +234,7 @@ a {
 .footer {
   background: #ea4c89;
   color: white;
+  font-family: Source Sans Pro;
 }
 .dropdown-item.active,
 .dropdown-item:active {

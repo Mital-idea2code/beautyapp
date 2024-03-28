@@ -1,12 +1,12 @@
-import React from 'react'
-import { CFormLabel, CFormSelect, CFormFeedback } from '@coreui/react'
-import PropTypes from 'prop-types'
+import React from "react";
+import { CFormLabel, CFormSelect, CFormFeedback } from "@coreui/react";
+import PropTypes from "prop-types";
 const CustomSelectInput = ({ label, options, onChange, value, error, helperText, ...rest }) => {
   return (
     <>
       <CFormLabel>{label}</CFormLabel>
       <CFormSelect
-        className={`form-control ${error ? 'is-invalid' : ''}`}
+        className={`form-control ${error ? "is-invalid" : ""}`}
         aria-label={label}
         onChange={(e) => onChange(e.target.value)}
         value={value}
@@ -21,8 +21,8 @@ const CustomSelectInput = ({ label, options, onChange, value, error, helperText,
       </CFormSelect>
       {error && <CFormFeedback invalid>{helperText}</CFormFeedback>}
     </>
-  )
-}
+  );
+};
 
 CustomSelectInput.propTypes = {
   label: PropTypes.string.isRequired,
@@ -30,12 +30,12 @@ CustomSelectInput.propTypes = {
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
       title: PropTypes.string.isRequired,
-    }),
+    })
   ).isRequired,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   error: PropTypes.bool,
   helperText: PropTypes.string,
-}
+};
 
-export default CustomSelectInput
+export default CustomSelectInput;

@@ -57,6 +57,44 @@ export const changePassword = (data) =>
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
 
+//Get All User
+export const getAllUser = () =>
+  axios.get(`${mainUrl}/admin/user/getAllUser`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Add User
+export const addUser = (data) =>
+  axios.post(`${mainUrl}/admin/user/addUser`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update User
+export const updateUser = (data, id) =>
+  axios.put(`${mainUrl}/admin/user/updateUser/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update User Status
+export const updateUserStatus = (data, id) =>
+  axios.put(`${mainUrl}/admin/user/updateUserStatus/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Delete User
+export const deleteUser = (id) =>
+  axios.delete(`${mainUrl}/admin/user/deleteUser/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Delete Multiple User
+export const deleteMultUser = (data) => {
+  return axios.delete(`${mainUrl}/admin/user/deleteMultUser`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    data: { Ids: data },
+  });
+};
+
 //Get All Category
 export const getAllCategory = () =>
   axios.get(`${mainUrl}/admin/category/getAllCategory`, {
@@ -156,3 +194,83 @@ export const deleteMultpromotionBanner = (data) => {
     data: { Ids: data },
   });
 };
+
+//Add Faq
+export const addfaqs = (data) =>
+  axios.post(`${mainUrl}/admin/faqs/addfaqs`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get Faq
+export const getAllFaqs = () =>
+  axios.get(`${mainUrl}/admin/faqs/getAllFaqs`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update Faq
+export const updateFaq = (data, id) =>
+  axios.put(`${mainUrl}/admin/faqs/updateFaq/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update Faq Status
+export const updateFaqStatus = (data, id) =>
+  axios.put(`${mainUrl}/admin/faqs/updateFaqStatus/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Delete Faq
+export const deletefaq = (id) =>
+  axios.delete(`${mainUrl}/admin/faqs/deletefaq/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Delete Multiple Faq
+export const deleteMultFaq = (data) => {
+  return axios.delete(`${mainUrl}/admin/faqs/deleteMultFaq`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    data: { Ids: data },
+  });
+};
+
+//Get General Settings
+export const getGeneralSettings = () =>
+  axios.get(`${mainUrl}/admin/generalSettings/getGeneralSettings`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update General Settings
+export const updateGeneralSetting = (data, id) =>
+  axios.put(`${mainUrl}/admin/generalSettings/updateGeneralSetting/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update Support Data
+export const updatSupportData = (data, id) =>
+  axios.put(`${mainUrl}/admin/generalSettings/updatSupportData/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update User T&C
+export const updateUserTc = (data, id) =>
+  axios.put(`${mainUrl}/admin/generalSettings/updateUserTc/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update Beautician T&C
+export const updateBeauticianTc = (data, id) =>
+  axios.put(`${mainUrl}/admin/generalSettings/updateBeauticianTc/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update User Privacy Policy
+export const updateUserPP = (data, id) =>
+  axios.put(`${mainUrl}/admin/generalSettings/updateUserPP/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update Beautician Privacy Policy
+export const updateBeauticianPP = (data, id) =>
+  axios.put(`${mainUrl}/admin/generalSettings/updateBeauticianPP/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });

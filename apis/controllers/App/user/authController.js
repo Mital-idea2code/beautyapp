@@ -15,6 +15,9 @@ const deleteFiles = require("../../../helper/deleteFiles");
 //User Signup
 const signupUser = async (req, res, next) => {
   try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) return queryErrorRelatedResponse(req, res, 401, "Email Id already exist!");
+
     const accessToken = User.generateAuthToken(req.body.email);
 
     const newUser = await new User({
@@ -102,6 +105,9 @@ const socialLogin = async (req, res, next) => {
       };
       createResponse(res, userWithBaseUrl);
     } else {
+      if (user.status === false)
+        return queryErrorRelatedResponse(req, res, 401, "Your account has been suspended!! Please contact to admin.");
+
       user.remember_token = accessToken;
       user.fcm_token = req.body.fcm_token;
 

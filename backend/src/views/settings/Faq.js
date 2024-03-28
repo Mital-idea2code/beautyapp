@@ -1,9 +1,4 @@
-import {
-  getAllpromotionBanner,
-  deletepromotionBanner,
-  deleteMultpromotionBanner,
-  updateProBannerStatus,
-} from "../../ApiServices";
+import { getAllFaqs, deletefaq, deleteMultFaq, updateFaqStatus } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
@@ -17,7 +12,7 @@ import { useUserState } from "../../context/UserContext";
 import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
 
-const PromoBanners = () => {
+const Faq = () => {
   const [datatableData, setdatatableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -26,11 +21,10 @@ const PromoBanners = () => {
 
   const list = async () => {
     setIsLoading(true);
-    await getAllpromotionBanner()
+    await getAllFaqs()
       .then((response) => {
         setIsLoading(false);
-        setdatatableData(response.data.info.banner);
-        setbaseurl(response.data.info.baseUrl);
+        setdatatableData(response.data.info);
       })
       .catch((err) => {
         if (!err.response.data.isSuccess) {
@@ -65,35 +59,29 @@ const PromoBanners = () => {
   }, []);
   const columns = [
     {
-      name: "image",
-      label: "Banner",
-      options: {
-        customBodyRender: (image) =>
-          image ? (
-            <img
-              src={baseurl + `${image}`}
-              alt={image}
-              style={{ height: "100px", width: "200px", textAlign: "center" }}
-            />
-          ) : (
-            ""
-          ),
-      },
-    },
-    {
-      name: "name",
-      label: "Beautician Name",
+      name: "question",
+      label: "Question",
       options: {
         filter: true,
         sort: true,
       },
     },
     {
-      name: "email",
-      label: "Beautician Email",
+      name: "answer",
+      label: "Answer",
       options: {
         filter: true,
         sort: true,
+      },
+    },
+    {
+      name: "role",
+      label: "Role",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (role) =>
+          role == 1 ? <p className="user-role"> User</p> : <p className="beauti-role">Beautician</p>,
       },
     },
     {
@@ -110,7 +98,7 @@ const PromoBanners = () => {
               onChange={() => {
                 if (userRole == 1) {
                   const data = { id: _id, status: !status };
-                  updateProBannerStatus(data, _id)
+                  updateFaqStatus(data, _id)
                     .then((response) => {
                       if (response.status == 200) {
                         toast.success("status changed successfully!", {
@@ -161,7 +149,7 @@ const PromoBanners = () => {
                 onClick={() => {
                   if (userRole == 1) {
                     const editdata = datatableData.find((data) => data._id === value);
-                    navigate("/promoBanner/manage", {
+                    navigate("/settings/faqs/manage", {
                       state: { editdata: editdata, baseurl: baseurl },
                     });
                   } else {
@@ -185,13 +173,13 @@ const PromoBanners = () => {
                   if (userRole == 1) {
                     const confirm = await swal({
                       title: "Are you sure?",
-                      text: "Are you sure that you want to delete this Promotion Banner?",
+                      text: "Are you sure that you want to delete this Faq?",
                       icon: "warning",
                       buttons: ["No, cancel it!", "Yes, I am sure!"],
                       dangerMode: true,
                     });
                     if (confirm) {
-                      deletepromotionBanner(value)
+                      deletefaq(value)
                         .then(() => {
                           toast.success("deleted successfully!", {
                             key: value,
@@ -225,14 +213,14 @@ const PromoBanners = () => {
       );
       const confirm = await swal({
         title: "Are you sure?",
-        text: "Are you sure that you want to delete this  Promotion Banner?",
+        text: "Are you sure that you want to delete this Faqs?",
         icon: "warning",
         buttons: ["No, cancel it!", "Yes, I am sure!"],
         dangerMode: true,
       });
 
       if (confirm) {
-        deleteMultpromotionBanner(ids)
+        deleteMultFaq(ids)
           .then(() => {
             list();
             toast.success("Deleted successfully!", {
@@ -283,13 +271,14 @@ const PromoBanners = () => {
               <CBreadcrumbItem>
                 <Link to="/dashboard">Home</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>Promotion Banners</CBreadcrumbItem>
+              <CBreadcrumbItem>Settings</CBreadcrumbItem>
+              <CBreadcrumbItem active>FAQs</CBreadcrumbItem>
             </CBreadcrumb>
             <CButton
               className="theme-btn mt-minus-10"
               onClick={() => {
                 if (userRole == 1) {
-                  navigate("/promoBanner/manage");
+                  navigate("/settings/faqs/manage");
                 } else {
                   toast.error(
                     "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
@@ -297,7 +286,7 @@ const PromoBanners = () => {
                 }
               }}
             >
-              Add Promotion Banner
+              Add FAQ
             </CButton>
           </CContainer>
           {isLoading ? (
@@ -313,4 +302,4 @@ const PromoBanners = () => {
   );
 };
 
-export default PromoBanners;
+export default Faq;

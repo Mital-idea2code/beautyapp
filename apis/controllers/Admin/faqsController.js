@@ -37,12 +37,13 @@ const getAllFaqs = async (req, res, next) => {
 //Update FAQs
 const updateFaq = async (req, res, next) => {
   try {
-    const { question, answer } = req.body;
+    const { question, answer, role } = req.body;
     const faqs = await Faqs.findById(req.params.id);
     if (!faqs) return queryErrorRelatedResponse(req, res, 404, "FAQs not found.");
 
     faqs.question = question;
     faqs.answer = answer;
+    faqs.role = role;
     const result = await faqs.save();
     return successResponse(res, result);
   } catch (err) {

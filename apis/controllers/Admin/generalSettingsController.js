@@ -51,11 +51,11 @@ const getGeneralSettings = async (req, res, next) => {
 //Update Terms &  Conditions
 const updateUserTc = async (req, res, next) => {
   try {
-    const { description } = req.body;
+    const { user_tc } = req.body;
     const tc = await GeneralSettings.findById(req.params.id);
     if (!tc) return queryErrorRelatedResponse(req, res, 404, "Terms & Condition not found.");
 
-    tc.user_tc = description;
+    tc.user_tc = user_tc;
     const result = await tc.save();
     return successResponse(res, result);
   } catch (err) {
@@ -66,11 +66,11 @@ const updateUserTc = async (req, res, next) => {
 //Update Terms &  Conditions
 const updateBeauticianTc = async (req, res, next) => {
   try {
-    const { description } = req.body;
+    const { beautician_tc } = req.body;
     const tc = await GeneralSettings.findById(req.params.id);
     if (!tc) return queryErrorRelatedResponse(req, res, 404, "Terms & Condition not found.");
 
-    tc.beautician_tc = description;
+    tc.beautician_tc = beautician_tc;
     const result = await tc.save();
     return successResponse(res, result);
   } catch (err) {
@@ -78,14 +78,14 @@ const updateBeauticianTc = async (req, res, next) => {
   }
 };
 
-//Update Terms &  Conditions
+//Update Privacy Policy
 const updateUserPP = async (req, res, next) => {
   try {
-    const { description } = req.body;
+    const { user_pp } = req.body;
     const tc = await GeneralSettings.findById(req.params.id);
-    if (!tc) return queryErrorRelatedResponse(req, res, 404, "Terms & Condition not found.");
+    if (!tc) return queryErrorRelatedResponse(req, res, 404, "Privacy Policy not found.");
 
-    tc.user_pp = description;
+    tc.user_pp = user_pp;
     const result = await tc.save();
     return successResponse(res, result);
   } catch (err) {
@@ -93,14 +93,14 @@ const updateUserPP = async (req, res, next) => {
   }
 };
 
-//Update Terms &  Conditions
+//Update Privacy Policy
 const updateBeauticianPP = async (req, res, next) => {
   try {
-    const { description } = req.body;
+    const { beautician_pp } = req.body;
     const tc = await GeneralSettings.findById(req.params.id);
-    if (!tc) return queryErrorRelatedResponse(req, res, 404, "Terms & Condition not found.");
+    if (!tc) return queryErrorRelatedResponse(req, res, 404, "Privacy Policy not found.");
 
-    tc.beautician_pp = description;
+    tc.beautician_pp = beautician_pp;
     const result = await tc.save();
     return successResponse(res, result);
   } catch (err) {

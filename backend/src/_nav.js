@@ -103,7 +103,7 @@ const _nav = [
       {
         component: CNavItem,
         name: "FAQs",
-        to: "/appointments/faqs",
+        to: "/settings/faqs",
       },
       {
         component: CNavItem,

@@ -80,9 +80,10 @@ a {
   border-color: #ea4c89;
   color: white;
 }
+
 .theme-btn-background:hover {
-  background: #ea4c89;
-  border-color: #ea4c89;
+  background: #ea4c89 !important;
+  border-color: #ea4c89 !important;
   color: white;
 }
 .theme-spinner-color {
@@ -153,10 +154,23 @@ a {
   margin-left: 20px;
   border: 1px solid #80808057;
 }
-
+.beauti-role {
+  background: #8a2be238;
+  width: 40%;
+  padding: 10px 30px;
+  text-align: center;
+  text-transform: uppercase;
+}
+.user-role {
+  background: #5f9ea04f;
+  width: 40%;
+  padding: 10px 30px;
+  text-align: center;
+  text-transform: uppercase;
+}
 .banner-img-preview {
-  width: 150px;
-  height: 100px;
+  width: 300px;
+  height: 200px;
   margin-left: 20px;
   border: 1px solid #80808057;
 }

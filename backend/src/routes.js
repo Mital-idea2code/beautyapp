@@ -22,6 +22,14 @@ const homeBannerForm = React.lazy(() => import("./views/homeBanner/HomeBannerFor
 const promoBanner = React.lazy(() => import("./views/promoBanner"));
 const promoBannerForm = React.lazy(() => import("./views/promoBanner/PromoBannerForm"));
 
+const faq = React.lazy(() => import("./views/settings/Faq"));
+const faqForm = React.lazy(() => import("./views/settings/FaqForm"));
+
+const generalSettingForm = React.lazy(() => import("./views/settings/GeneralSettingForm"));
+const HelpCenterInfoSettingForm = React.lazy(() => import("./views/settings/HelpCenterInfoSettingForm"));
+const tcForm = React.lazy(() => import("./views/settings/TcForm"));
+const privacyPolicyForm = React.lazy(() => import("./views/settings/PrivacyPolicyForm"));
+
 const routes = [
   { path: "/", exact: true, name: "Home" },
   { path: "/profile", name: "Profile", element: Profile },
@@ -63,6 +71,16 @@ const routes = [
     name: "Manage Promotion Banner",
     element: promoBannerForm,
   },
+  { path: "/settings/faqs", name: "FAQs", element: faq },
+  {
+    path: "/settings/faqs/manage",
+    name: "Manage FAQ",
+    element: faqForm,
+  },
+  { path: "/settings/general_settings", name: "General Settings", element: generalSettingForm },
+  { path: "/settings/help_center_settings", name: "Help Center Info Setiings", element: HelpCenterInfoSettingForm },
+  { path: "/settings/terms_conditions", name: "Terms & Conditions", element: tcForm },
+  { path: "/settings/privacy_policy", name: "Privacy Policy", element: privacyPolicyForm },
 ];
 
 export default routes;

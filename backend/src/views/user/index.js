@@ -1,4 +1,4 @@
-import { getAllCategory, deleteCategory, deleteMultCategory, updateCattatus } from "../../ApiServices";
+import { getAllUser, deleteUser, deleteMultUser, updateUserStatus } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,7 +12,7 @@ import { useUserState } from "../../context/UserContext";
 import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
 
-const Category = () => {
+const User = () => {
   const [datatableData, setdatatableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -21,11 +21,10 @@ const Category = () => {
 
   const list = async () => {
     setIsLoading(true);
-    await getAllCategory()
+    await getAllUser()
       .then((response) => {
-        console.log(response);
         setIsLoading(false);
-        setdatatableData(response.data.info.cat);
+        setdatatableData(response.data.info.user);
         setbaseurl(response.data.info.baseUrl);
       })
       .catch((err) => {
@@ -85,6 +84,30 @@ const Category = () => {
       },
     },
     {
+      name: "email",
+      label: "Email ID",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "mo_no",
+      label: "Mobile Number",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "city",
+      label: "City",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
       name: "status",
       label: "Status",
       options: {
@@ -98,7 +121,7 @@ const Category = () => {
               onChange={() => {
                 if (userRole == 1) {
                   const data = { id: _id, status: !status };
-                  updateCattatus(data, _id)
+                  updateUserStatus(data, _id)
                     .then(() => {
                       toast.success("status changed successfully!", {
                         key: data._id,
@@ -143,7 +166,7 @@ const Category = () => {
                 onClick={() => {
                   if (userRole == 1) {
                     const editdata = datatableData.find((data) => data._id === value);
-                    navigate("/category/manage", {
+                    navigate("/user/manage", {
                       state: { editdata: editdata, baseurl: baseurl },
                     });
                   } else {
@@ -167,13 +190,13 @@ const Category = () => {
                   if (userRole == 1) {
                     const confirm = await swal({
                       title: "Are you sure?",
-                      text: "Are you sure that you want to delete this Essential?",
+                      text: "Are you sure that you want to delete this User?",
                       icon: "warning",
                       buttons: ["No, cancel it!", "Yes, I am sure!"],
                       dangerMode: true,
                     });
                     if (confirm) {
-                      deleteCategory(value)
+                      deleteUser(value)
                         .then(() => {
                           toast.success("deleted successfully!", {
                             key: value,
@@ -207,14 +230,14 @@ const Category = () => {
       );
       const confirm = await swal({
         title: "Are you sure?",
-        text: "Are you sure that you want to delete this Essential?",
+        text: "Are you sure that you want to delete this User?",
         icon: "warning",
         buttons: ["No, cancel it!", "Yes, I am sure!"],
         dangerMode: true,
       });
 
       if (confirm) {
-        deleteMultCategory(ids)
+        deleteMultUser(ids)
           .then(() => {
             list();
             toast.success("Deleted successfully!", {
@@ -265,13 +288,13 @@ const Category = () => {
               <CBreadcrumbItem>
                 <Link to="/dashboard">Home</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>Category</CBreadcrumbItem>
+              <CBreadcrumbItem active>Users</CBreadcrumbItem>
             </CBreadcrumb>
             <CButton
               className="theme-btn mt-minus-10"
               onClick={() => {
                 if (userRole == 1) {
-                  navigate("/category/manage");
+                  navigate("/user/manage");
                 } else {
                   toast.error(
                     "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
@@ -279,7 +302,7 @@ const Category = () => {
                 }
               }}
             >
-              Add Category
+              Add User
             </CButton>
           </CContainer>
           {isLoading ? (
@@ -295,4 +318,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default User;

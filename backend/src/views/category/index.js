@@ -167,7 +167,7 @@ const Category = () => {
                   if (userRole == 1) {
                     const confirm = await swal({
                       title: "Are you sure?",
-                      text: "Are you sure that you want to delete this Essential?",
+                      text: "Are you sure that you want to delete this Categort?",
                       icon: "warning",
                       buttons: ["No, cancel it!", "Yes, I am sure!"],
                       dangerMode: true,
@@ -207,7 +207,7 @@ const Category = () => {
       );
       const confirm = await swal({
         title: "Are you sure?",
-        text: "Are you sure that you want to delete this Essential?",
+        text: "Are you sure that you want to delete this Categort?",
         icon: "warning",
         buttons: ["No, cancel it!", "Yes, I am sure!"],
         dangerMode: true,

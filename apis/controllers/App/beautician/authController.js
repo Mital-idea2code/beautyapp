@@ -62,7 +62,7 @@ const signinBeautician = async (req, res, next) => {
     const output = await beautician.save();
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
     // Assuming you have a `baseUrl` variable
     const beauticianWithBaseUrl = {
       ...beautician.toObject(),

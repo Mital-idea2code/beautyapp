@@ -95,6 +95,44 @@ export const deleteMultUser = (data) => {
   });
 };
 
+//Get All Beautician
+export const getAllBeautician = () =>
+  axios.get(`${mainUrl}/admin/beautician/getAllBeautician`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Add Beautician
+export const addBeautician = (data) =>
+  axios.post(`${mainUrl}/admin/beautician/addBeautician`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update Beautician
+export const updateBeautician = (data, id) =>
+  axios.put(`${mainUrl}/admin/beautician/updateBeautician/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Update Beautician Status
+export const updateBeauticianStatus = (data, id) =>
+  axios.put(`${mainUrl}/admin/beautician/updateBeauticianStatus/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Delete Beautician
+export const deleteBeautician = (id) =>
+  axios.delete(`${mainUrl}/admin/beautician/deleteBeautician/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Delete Multiple Beautician
+export const deleteMultBeautician = (data) => {
+  return axios.delete(`${mainUrl}/admin/beautician/deleteMultBeautician`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    data: { Ids: data },
+  });
+};
+
 //Get All Category
 export const getAllCategory = () =>
   axios.get(`${mainUrl}/admin/category/getAllCategory`, {

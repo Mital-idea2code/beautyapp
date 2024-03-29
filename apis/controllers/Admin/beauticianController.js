@@ -49,6 +49,10 @@ const updateBeautician = async (req, res, next) => {
     const updatedData = req.body;
     updatedData.image = beautician.image;
     updatedData.banner = beautician.banner;
+
+    updatedData.open_time = moment(req.body.open_time, "h:mm A").valueOf(); //HH:mm
+    updatedData.close_time = moment(req.body.close_time, "h:mm A").valueOf();
+
     //If file already exist then it delete first
     if (req.files.image) {
       deleteFiles("beautician/" + beautician.image);
@@ -89,10 +93,10 @@ const updateBeauticianStatus = async (req, res, next) => {
 const deleteBeautician = async (req, res, next) => {
   try {
     const beautician = await Beautician.findById(req.params.id);
-    if (!beautician) return queryErrorRelatedResponse(req, res, 404, "User not found.");
+    if (!beautician) return queryErrorRelatedResponse(req, res, 404, "Beautician not found.");
     deleteFiles("beautician/" + beautician.image);
     deleteFiles("beautician/" + beautician.banner);
-    await Beautician.deleteOne({ _id: id });
+    await Beautician.deleteOne({ _id: req.params.id });
     deleteResponse(res, "Beautician deleted successfully.");
   } catch (err) {
     next(err);
@@ -105,11 +109,12 @@ const deleteMultBeautician = async (req, res, next) => {
     const { Ids } = req.body;
     Ids.map(async (item) => {
       const beautician = await Beautician.findById(item);
-      if (!beautician) return queryErrorRelatedResponse(req, res, 404, "Beautician not found.");
-      deleteFiles("beautician/" + beautician.image);
-      deleteFiles("beautician/" + beautician.banner);
+      if (beautician) {
+        deleteFiles("beautician/" + beautician.image);
+        deleteFiles("beautician/" + beautician.banner);
 
-      await Beautician.deleteOne({ _id: item });
+        await Beautician.deleteOne({ _id: item });
+      }
     });
     deleteResponse(res, "All selected records deleted successfully.");
   } catch (err) {

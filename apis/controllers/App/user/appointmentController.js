@@ -53,8 +53,23 @@ const addReview = async (req, res, next) => {
 
     const result = await newReview.save();
 
+    let totalReviews = 0;
+    let totalRatings = 0;
+    let averageRating = 0;
+    const allRatings = await ReviewRating.find({ beautican_id: req.body.beautican_id });
+    if (allRatings && allRatings.length > 0) {
+      totalReviews = allRatings.length;
+      totalRatings = allRatings.reduce((sum, review) => sum + review.rate, 0);
+      averageRating = totalRatings / totalReviews;
+      averageRating = parseFloat(averageRating.toFixed(1));
+    }
+
     // Add the new service to the category array
     beautician.reviews.push(result);
+    beautician.totalReviews = totalReviews;
+    beautician.totalRatings = totalRatings;
+    beautician.averageRating = averageRating;
+
     // Save the category with the new services
     await beautician.save();
 

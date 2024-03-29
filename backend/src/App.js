@@ -31,7 +31,7 @@ const App = () => {
   };
 
   return (
-    <BrowserRouter basename="/glamspot">
+    <BrowserRouter basename="/glamspot/backend">
       <Suspense fallback={loading}>
         <Routes>
           <Route path="/" element={<PublicRoute />}>

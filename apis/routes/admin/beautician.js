@@ -21,7 +21,7 @@ router.post(
   addBeautician
 );
 
-router.post(
+router.put(
   "/updateBeautician/:id",
   authenticAdmin,
   multiDiffFileUpload("public/images/beautician", [

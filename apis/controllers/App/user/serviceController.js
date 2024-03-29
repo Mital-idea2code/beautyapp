@@ -11,7 +11,11 @@ const {
 } = require("../../../helper/sendResponse");
 const mongoose = require("mongoose");
 const moment = require("moment");
-
+const {
+  transformServices,
+  getServicesWithBeauticians,
+  transformServiceInfo,
+} = require("../../../helper/commonServices");
 //Like/Dislike Beautician services
 const favService = async (req, res, next) => {
   try {
@@ -212,4 +216,91 @@ const favServiceList = async (req, res, next) => {
   }
 };
 
-module.exports = { favService, favServiceList };
+//Get All Active Services
+const getServicesByCatid = async (req, res, next) => {
+  try {
+    const services = await getServicesWithBeauticians(req.params.id);
+
+    const transformedServices = await transformServices(services, req);
+
+    const baseUrl_category =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_CATEGORY_PATH;
+
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const AllData = {
+      services: transformedServices,
+      baseUrl_category: baseUrl_category,
+      baseUrl_service: baseUrl_service,
+    };
+
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Get Services Info By id
+const getServiceInfoByid = async (req, res, next) => {
+  try {
+    const serviceInfo = await Service.findOne(
+      { status: true, _id: req.params.id },
+      "name beautican_id cat_id price about display_image work_images "
+    ).populate({
+      path: "beautican_id",
+      match: { status: true },
+      populate: [
+        {
+          path: "services",
+          match: { status: true },
+          model: "services",
+        },
+        {
+          path: "reviews",
+          select: { review: 1, rate: 1, user_id: 1 },
+          populate: {
+            path: "user_id",
+            select: { name: 1, image: 1 },
+            model: "user",
+          },
+        },
+      ],
+    });
+    if (!serviceInfo) return queryErrorRelatedResponse(req, res, 401, "Invalid Service!");
+
+    const fav = await Favourite.findOne({
+      user_id: req.user._id,
+      beautican_id: serviceInfo.beautican_id._id,
+      service_id: serviceInfo._id,
+    });
+
+    const transformedService = transformServiceInfo(serviceInfo, req, fav);
+
+    const baseUrl_category =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_CATEGORY_PATH;
+
+    const baseUrl_beauty_profile =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const baseUrl_user_profile =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+
+    const AllData = {
+      serviceinfo: transformedService,
+      baseUrl_category: baseUrl_category,
+      baseUrl_beauty_profile: baseUrl_beauty_profile,
+      baseUrl_service: baseUrl_service,
+      baseUrl_user_profile: baseUrl_user_profile,
+    };
+
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { favService, favServiceList, getServicesByCatid, getServiceInfoByid };

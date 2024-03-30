@@ -12,7 +12,7 @@ const {
 
 router.post("/bookAppointment", verifyUserAppToken, bookAppointment);
 router.post("/addReview", verifyUserAppToken, addReview);
-router.get("/filterReviews/:id", verifyUserAppToken, filterReviews);
+router.post("/filterReviews", verifyUserAppToken, filterReviews);
 router.get("/getUpcomingApp", verifyUserAppToken, getUpcomingApp);
 router.get("/getCompletedApp", verifyUserAppToken, getCompletedApp);
 router.get("/getCancelledApp", verifyUserAppToken, getCancelledApp);

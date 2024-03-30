@@ -82,9 +82,9 @@ const addReview = async (req, res, next) => {
 //Filter Reviews based on rate
 const filterReviews = async (req, res, next) => {
   try {
-    let where = {};
-    if (req.params.id != 0) {
-      where = { rate: req.params.id };
+    let where = { beautican_id: req.body.beautican_id };
+    if (req.body.rate != 0) {
+      where = { rate: req.body.rate };
     }
 
     const getReviews = await ReviewRating.find(where, "review rate").populate({

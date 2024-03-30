@@ -18,6 +18,10 @@ const signupUser = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
     if (user) return queryErrorRelatedResponse(req, res, 401, "Email Id already exist!");
 
+    if (req.body.password !== req.body.confirm_pass) {
+      return queryErrorRelatedResponse(req, res, 401, "Confirm Password does not match!");
+    }
+
     const accessToken = User.generateAuthToken(req.body.email);
 
     const newUser = await new User({

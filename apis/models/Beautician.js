@@ -103,6 +103,10 @@ const BeauticianSchema = mongoose.Schema(
       type: String,
       default: "",
     },
+    noti_status: {
+      type: Boolean,
+      default: true,
+    },
     status: {
       type: Boolean,
       default: false,

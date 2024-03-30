@@ -15,6 +15,6 @@ router.get("/getSupportData", getSupportData);
 router.get("/getBanners", verifyUserAppToken, getBanners);
 router.post("/updateNotitatus", verifyUserAppToken, updateNotitatus);
 router.post("/changePassword", verifyUserAppToken, changePassword);
-router.get("/getFaqs", verifyUserAppToken, getFaqs);
+router.get("/getFaqs", getFaqs);
 
 module.exports = router;

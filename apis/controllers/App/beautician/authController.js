@@ -16,6 +16,13 @@ const moment = require("moment");
 //Beautician Signup
 const signupBeautician = async (req, res, next) => {
   try {
+    const beauti = await Beautician.findOne({ email: req.body.email });
+    if (beauti) return queryErrorRelatedResponse(req, res, 401, "Email Id already exist!");
+
+    if (req.body.password !== req.body.confirm_pass) {
+      return queryErrorRelatedResponse(req, res, 401, "Confirm Password does not match!");
+    }
+
     const accessToken = Beautician.generateAuthToken(req.body.email);
 
     const newBeautician = await new Beautician({
@@ -30,7 +37,10 @@ const signupBeautician = async (req, res, next) => {
     const baseUrl =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
     const beauticianWithBaseUrl = {
-      ...newBeautician.toObject(),
+      _id: newBeautician._id,
+      name: newBeautician.name,
+      email: newBeautician.email,
+      remember_token: newBeautician.remember_token,
       baseUrl: baseUrl,
       refresh_token: refresh_token,
     };
@@ -61,12 +71,31 @@ const signinBeautician = async (req, res, next) => {
     beautician.fcm_token = req.body.fcm_token;
     const output = await beautician.save();
 
+    console.log(beautician.services.length);
     const baseUrl =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
     // Assuming you have a `baseUrl` variable
     const beauticianWithBaseUrl = {
-      ...beautician.toObject(),
+      _id: beautician._id,
+      name: beautician.name,
+      email: beautician.email,
+      address: beautician.address,
+      lat: beautician.lat,
+      lng: beautician.lng,
+      city: beautician.city,
+      days: beautician.days,
+      duration: beautician.duration,
+      open_time: moment(parseInt(beautician.open_time)).format("hh:mm A"),
+      close_time: moment(parseInt(beautician.close_time)).format("hh:mm A"),
+      image: beautician.image,
+      banner: beautician.banner,
+      averageRating: beautician.averageRating,
+      totalReviews: beautician.totalReviews,
+      totalRatings: beautician.totalRatings,
+      noti_status: beautician.noti_status,
+      serviceFlag: beautician.services.length > 0 ? 1 : 0,
       baseUrl: baseUrl,
+      remember_token: beautician.remember_token,
       refresh_token: refresh_token,
     };
 
@@ -97,8 +126,26 @@ const socialLogin = async (req, res, next) => {
       const addedBeautician = await newBeautician.save();
 
       const beauticianWithBaseUrl = {
-        ...newBeautician.toObject(),
+        _id: newBeautician._id,
+        name: newBeautician.name,
+        email: newBeautician.email,
+        address: newBeautician.address,
+        lat: newBeautician.lat,
+        lng: newBeautician.lng,
+        city: newBeautician.city,
+        days: newBeautician.days,
+        duration: newBeautician.duration,
+        open_time: moment(parseInt(newBeautician.open_time)).format("hh:mm A"),
+        close_time: moment(parseInt(newBeautician.close_time)).format("hh:mm A"),
+        image: newBeautician.image,
+        banner: newBeautician.banner,
+        averageRating: newBeautician.averageRating,
+        totalReviews: newBeautician.totalReviews,
+        totalRatings: newBeautician.totalRatings,
+        noti_status: newBeautician.noti_status,
+        serviceFlag: newBeautician.services.length > 0 ? 1 : 0,
         baseUrl: baseUrl,
+        remember_token: newBeautician.remember_token,
         refresh_token: refresh_token,
         loginStatus: 0,
       };
@@ -110,8 +157,26 @@ const socialLogin = async (req, res, next) => {
       await beautician.save();
 
       const beauticianWithBaseUrl = {
-        ...beautician.toObject(),
+        _id: beautician._id,
+        name: beautician.name,
+        email: beautician.email,
+        address: beautician.address,
+        lat: beautician.lat,
+        lng: beautician.lng,
+        city: beautician.city,
+        days: beautician.days,
+        duration: beautician.duration,
+        open_time: moment(parseInt(beautician.open_time)).format("hh:mm A"),
+        close_time: moment(parseInt(beautician.close_time)).format("hh:mm A"),
+        image: beautician.image,
+        banner: beautician.banner,
+        averageRating: beautician.averageRating,
+        totalReviews: beautician.totalReviews,
+        totalRatings: beautician.totalRatings,
+        noti_status: beautician.noti_status,
+        serviceFlag: beautician.services.length > 0 ? 1 : 0,
         baseUrl: baseUrl,
+        remember_token: beautician.remember_token,
         refresh_token: refresh_token,
         loginStatus: 1,
       };

@@ -126,7 +126,7 @@ const updateNotitatus = async (req, res, next) => {
 //Get  Faqs
 const getFaqs = async (req, res, next) => {
   try {
-    const getFaqsData = await Faqs.findAll({ status: true }, "question answer");
+    const getFaqsData = await Faqs.find({ status: true, role: 1 }, "question answer");
     if (!getFaqsData) return queryErrorRelatedResponse(req, res, 404, "Faqs not found.");
     successResponse(res, getFaqsData);
   } catch (err) {

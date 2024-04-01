@@ -303,4 +303,80 @@ const getServiceInfoByid = async (req, res, next) => {
   }
 };
 
-module.exports = { favService, favServiceList, getServicesByCatid, getServiceInfoByid };
+//Serch Services Data
+const searchServices = async (req, res, next) => {
+  try {
+    const regexSearch = new RegExp(req.params.search, "i"); // Create a case-insensitive regex
+    const searchQuery = req.params.search;
+
+    const services = await Service.aggregate([
+      // Match services with status true
+      { $match: { status: true } },
+      // Lookup to join with beautician collection and filter based on beautician status
+      {
+        $lookup: {
+          from: "beauticians",
+          localField: "beautican_id",
+          foreignField: "_id",
+          as: "beautican_id",
+        },
+      },
+      // Unwind the beautician array
+      { $unwind: "$beautican_id" },
+      // Match beauticians with status true
+      { $match: { "beautican_id.status": true } },
+      // Project only the fields you want to return
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          cat_id: 1,
+          price: 1,
+          about: 1,
+          display_image: 1,
+          work_images: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          __v: 1,
+          beautican_id: {
+            _id: 1,
+            name: 1,
+            address: 1,
+            averageRating: 1,
+          },
+        },
+      },
+      // Match based on your search criteria
+      {
+        $match: {
+          $or: [
+            { "beautican_id.name": { $regex: searchQuery, $options: "i" } }, // Match beautician name
+            { "beautican_id.address": { $regex: searchQuery, $options: "i" } }, // Match beautician address
+            { name: { $regex: searchQuery, $options: "i" } }, // Match service name
+            { price: { $regex: searchQuery, $options: "i" } }, // Match service price
+          ],
+        },
+      },
+    ]);
+
+    const transformedServices = await transformServices(services, req);
+
+    const baseUrl_category =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_CATEGORY_PATH;
+
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const AllData = {
+      services: transformedServices,
+      baseUrl_category: baseUrl_category,
+      baseUrl_service: baseUrl_service,
+    };
+
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { favService, favServiceList, getServicesByCatid, getServiceInfoByid, searchServices };

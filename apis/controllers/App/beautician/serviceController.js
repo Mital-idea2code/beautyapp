@@ -59,6 +59,89 @@ const addService = async (req, res, next) => {
   }
 };
 
+//Get Service List
+const serviceList = async (req, res, next) => {
+  try {
+    const services = await Service.find({ beautican_id: req.beautician._id });
+    if (!services) return queryErrorRelatedResponse(req, res, 404, "Services not found.");
+
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const AllData = {
+      services: services,
+      baseUrl_service: baseUrl_service,
+    };
+
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Update Service Status
+const updateServiceStatus = async (req, res, next) => {
+  try {
+    const service = await Service.findById(req.params.id);
+    if (!service) return queryErrorRelatedResponse(req, res, 404, "Service not found.");
+
+    service.status = !service.status;
+    const result = await service.save();
+
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const AllData = {
+      services: result,
+      baseUrl_service: baseUrl_service,
+    };
+
+    return successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Update Service
+const updateService = async (req, res, next) => {
+  try {
+    const service = await Service.findById(req.params.id);
+    if (!service) return queryErrorRelatedResponse(req, res, 404, "Service not found.");
+
+    const updatedData = req.body;
+
+    if (req.files.display_image) {
+      deleteFiles("service/" + service.display_image);
+      updatedData.display_image = req.files.display_image[0].filename;
+    }
+
+    if (req.files.work_images) {
+      deleteFiles("service/" + service.work_images);
+      updatedData.work_images = req.files.work_images.map((file) => file.filename);
+    }
+
+    const isUpdate = await Service.findByIdAndUpdate(req.params.id, { $set: updatedData });
+    if (!isUpdate) return queryErrorRelatedResponse(req, res, 401, "Something Went wrong!!");
+
+    const result = await Service.findById(req.params.id);
+
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const AllData = {
+      services: result,
+      baseUrl_service: baseUrl_service,
+    };
+
+    return successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   addService,
+  serviceList,
+  updateServiceStatus,
+  updateService,
 };

@@ -312,3 +312,21 @@ export const updateBeauticianPP = (data, id) =>
   axios.put(`${mainUrl}/admin/generalSettings/updateBeauticianPP/${id}`, data, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
+
+//Update Service Status
+export const updateServiceStatus = (data, id) =>
+  axios.put(`${mainUrl}/admin/service/updateServiceStatus/${id}`, data, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get All Services
+export const getAllService = () =>
+  axios.get(`${mainUrl}/admin/service/getAllService`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get beautician Service
+export const getBeauticianServices = (id) =>
+  axios.get(`${mainUrl}/admin/service/getBeauticianServices/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });

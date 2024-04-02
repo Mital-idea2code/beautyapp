@@ -9,6 +9,7 @@ const userForm = React.lazy(() => import("./views/user/UserForm"));
 
 const beautician = React.lazy(() => import("./views/beautician"));
 const beauticianForm = React.lazy(() => import("./views/beautician/BeauticianForm"));
+const beauticianServices = React.lazy(() => import("./views/beautician/Services"));
 
 const category = React.lazy(() => import("./views/category"));
 const categoryForm = React.lazy(() => import("./views/category/CategoryForm"));
@@ -47,6 +48,7 @@ const routes = [
     name: "Manage Beautician",
     element: beauticianForm,
   },
+  { path: "/beauticians/services", name: "Beautician Services", element: beauticianServices },
   { path: "/category", name: "Category", element: category },
   {
     path: "/category/manage",

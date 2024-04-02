@@ -1,31 +1,41 @@
-import { getAllBanner, updateBannerStatus } from "../../ApiServices";
+import { getBeauticianServices, updateServiceStatus } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Icons from "@mui/icons-material";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Grid, CircularProgress, IconButton } from "@mui/material";
-import swal from "sweetalert";
 import Switch from "@mui/material/Switch";
 import { useUserState } from "../../context/UserContext";
-import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
+import GalleryDialog from "./GalleryDialog";
 
-const HomeBanner = () => {
+const Services = () => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+
   const [datatableData, setdatatableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [baseurl, setbaseurl] = useState([]);
   const { userRole } = useUserState();
 
+  const { state } = useLocation();
+  const beautician_id = state.beautician_id;
+  const beautician_name = state.beautician_name;
+
+  const handleGalleryButtonClick = (images) => {
+    setSelectedImages(images);
+    setDialogOpen(true);
+  };
+
   const list = async () => {
     setIsLoading(true);
-    await getAllBanner()
+    await getBeauticianServices(beautician_id)
       .then((response) => {
-        console.log(response);
         setIsLoading(false);
-        setdatatableData(response.data.info.banner);
+        setdatatableData(response.data.info.service);
         setbaseurl(response.data.info.baseUrl);
       })
       .catch((err) => {
@@ -59,23 +69,54 @@ const HomeBanner = () => {
     }
     list();
   }, []);
+
+  const handleImageClick = (imageUrl) => {
+    window.open(imageUrl, "_blank");
+  };
   const columns = [
     {
-      name: "image",
-      label: "Home Banner",
+      name: "display_image",
+      label: "Image",
       options: {
-        customBodyRender: (image) =>
-          image ? (
+        customBodyRender: (display_image) =>
+          display_image ? (
             <img
-              src={baseurl + `${image}`}
-              alt={image}
-              style={{ height: "100px", width: "200px", textAlign: "center" }}
+              onClick={() => handleImageClick(baseurl + display_image)}
+              src={baseurl + `${display_image}`}
+              alt={display_image}
+              style={{ height: "50px", width: "50px", borderRadius: "50%", textAlign: "center" }}
             />
           ) : (
             ""
           ),
       },
     },
+    {
+      name: "cat_name",
+      label: "Category",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "name",
+      label: "Name",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+
+    {
+      name: "price",
+      label: "Price",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+
     {
       name: "status",
       label: "STATUS",
@@ -90,20 +131,14 @@ const HomeBanner = () => {
               onChange={() => {
                 if (userRole == 1) {
                   const data = { id: _id, status: !status };
-                  updateBannerStatus(data, _id)
-                    .then((response) => {
-                      if (response.status == 200) {
-                        toast.success("status changed successfully!", {
-                          key: data._id,
-                        });
-                        list();
-                      } else {
-                        toast.error("At least one banner must have the status set to enabled.", {
-                          key: data._id,
-                        });
-                      }
+                  updateServiceStatus(data, _id)
+                    .then(() => {
+                      toast.success("status changed successfully!", {
+                        key: data._id,
+                      });
+                      list();
                     })
-                    .catch((err) => {
+                    .catch(() => {
                       toast.error("something went wrong!", {
                         key: data._id,
                       });
@@ -123,40 +158,40 @@ const HomeBanner = () => {
       name: "_id",
       label: "ACTION",
       options: {
-        sort: false,
-        filter: false,
+        filter: true,
+        sort: true,
         customBodyRender: (value) => {
+          const rowData = datatableData.find((data) => data._id === value);
+          const gallary_img = rowData.work_images;
+          console.log(gallary_img);
           return (
-            <div>
-              <Icons.Edit
-                style={{
-                  color: "#6495ED",
-                  cursor: "pointer",
-                  border: "1px solid",
-                  borderRadius: "5px",
-                  margin: "0px 6px",
-                  fontSize: "30px",
-                  padding: "4px",
-                }}
-                onClick={() => {
-                  if (userRole == 1) {
-                    const editdata = datatableData.find((data) => data._id === value);
-                    navigate("/homebanner/manage", {
-                      state: { editdata: editdata, baseurl: baseurl },
-                    });
-                  } else {
-                    toast.error(
-                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                    );
-                  }
-                }}
+            <>
+              {/* Your existing code here */}
+
+              {/* Gallery Images Button */}
+              <CButton
+                color="primary"
+                variant="outline"
+                className="action-btn mr-5"
+                onClick={() => handleGalleryButtonClick(gallary_img)}
+              >
+                Gallery Images
+              </CButton>
+
+              {/* Gallery Dialog */}
+              <GalleryDialog
+                open={dialogOpen}
+                handleClose={() => setDialogOpen(false)}
+                images={selectedImages}
+                baseurl={baseurl}
               />
-            </div>
+            </>
           );
         },
       },
     },
   ];
+
   const options = {
     selectableRows: false, // Disable checkbox selection
   };
@@ -171,22 +206,11 @@ const HomeBanner = () => {
               <CBreadcrumbItem>
                 <Link to="/dashboard">Home</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>Home Banner</CBreadcrumbItem>
+              <CBreadcrumbItem>
+                <Link to="/beauticians">Beauticians</Link>
+              </CBreadcrumbItem>
+              <CBreadcrumbItem active>{beautician_name}'s Services</CBreadcrumbItem>
             </CBreadcrumb>
-            <CButton
-              className="theme-btn mt-minus-10"
-              onClick={() => {
-                if (userRole == 1) {
-                  navigate("/homebanner/manage");
-                } else {
-                  toast.error(
-                    "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                  );
-                }
-              }}
-            >
-              Add Home Banner
-            </CButton>
           </CContainer>
           {isLoading ? (
             <Grid item xs={12} style={{ textAlign: "center" }}>
@@ -200,5 +224,4 @@ const HomeBanner = () => {
     </div>
   );
 };
-
-export default HomeBanner;
+export default Services;

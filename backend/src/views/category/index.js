@@ -86,7 +86,7 @@ const Category = () => {
     },
     {
       name: "status",
-      label: "Status",
+      label: "STATUS",
       options: {
         filter: true,
         sort: false,
@@ -123,7 +123,7 @@ const Category = () => {
     },
     {
       name: "_id",
-      label: "Action",
+      label: "ACTION",
       options: {
         sort: false,
         filter: false,

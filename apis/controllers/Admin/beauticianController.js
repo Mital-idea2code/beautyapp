@@ -1,5 +1,6 @@
 const express = require("express");
 const Beautician = require("../../models/Beautician");
+const Appointment = require("../../models/Appointment");
 const deleteFiles = require("../../helper/deleteFiles");
 const {
   createResponse,
@@ -97,6 +98,7 @@ const deleteBeautician = async (req, res, next) => {
     deleteFiles("beautician/" + beautician.image);
     deleteFiles("beautician/" + beautician.banner);
     await Beautician.deleteOne({ _id: req.params.id });
+    await Appointment.deleteOne({ beautican_id: req.params.id });
     deleteResponse(res, "Beautician deleted successfully.");
   } catch (err) {
     next(err);
@@ -114,6 +116,7 @@ const deleteMultBeautician = async (req, res, next) => {
         deleteFiles("beautician/" + beautician.banner);
 
         await Beautician.deleteOne({ _id: item });
+        await Appointment.deleteOne({ beautican_id: item });
       }
     });
     deleteResponse(res, "All selected records deleted successfully.");
@@ -125,14 +128,23 @@ const deleteMultBeautician = async (req, res, next) => {
 //Get All Beautician
 const getAllBeautician = async (req, res, next) => {
   try {
-    const beautician = await Beautician.find();
-    if (!beautician) return queryErrorRelatedResponse(req, res, 404, "Beautician not found.");
+    const beauticians = await Beautician.find();
+    if (!beauticians) return queryErrorRelatedResponse(req, res, 404, "Beautician not found.");
 
     const baseUrl =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
 
+    // Iterate through each beautician object
+    for (const beautician of beauticians) {
+      // Convert open_time to a human-readable format
+      beautician.open_time = beautician.open_time ? moment(parseInt(beautician.open_time)).format("h:mm A") : "";
+
+      // Convert close_time to a human-readable format
+      beautician.close_time = beautician.close_time ? moment(parseInt(beautician.close_time)).format("h:mm A") : "";
+    }
+
     const AllData = {
-      beautician: beautician,
+      beautician: beauticians,
       baseUrl: baseUrl,
     };
 

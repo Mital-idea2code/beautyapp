@@ -86,7 +86,7 @@ const Faq = () => {
     },
     {
       name: "status",
-      label: "Status",
+      label: "STATUS",
       options: {
         filter: true,
         sort: false,
@@ -129,7 +129,7 @@ const Faq = () => {
     },
     {
       name: "_id",
-      label: "Action",
+      label: "ACTION",
       options: {
         sort: false,
         filter: false,

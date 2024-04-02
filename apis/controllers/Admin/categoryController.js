@@ -1,5 +1,7 @@
 const express = require("express");
 const Category = require("../../models/Category");
+const Service = require("../../models/Service");
+const Appointment = require("../../models/Appointment");
 const deleteFiles = require("../../helper/deleteFiles");
 const {
   createResponse,
@@ -72,6 +74,9 @@ const deleteCategory = async (req, res, next) => {
     if (!cat) return queryErrorRelatedResponse(req, res, 404, "Category not found.");
     deleteFiles("category/" + cat.image);
     await Category.deleteOne({ _id: id });
+    await Service.deleteOne({ cat_id: id });
+    await Appointment.deleteOne({ cat_id: id });
+
     deleteResponse(res, "Category deleted successfully.");
   } catch (err) {
     next(err);
@@ -88,6 +93,8 @@ const deleteMultCategory = async (req, res, next) => {
       deleteFiles("category/" + cat.image);
 
       await Category.deleteOne({ _id: item });
+      await Service.deleteOne({ cat_id: item });
+      await Appointment.deleteOne({ cat_id: item });
     });
     deleteResponse(res, "All selected records deleted successfully.");
   } catch (err) {

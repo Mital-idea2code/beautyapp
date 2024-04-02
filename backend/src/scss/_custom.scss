@@ -188,6 +188,9 @@ a {
 .ml-12 {
   margin-left: 12px;
 }
+.mr-5 {
+  margin-right: 5px;
+}
 .mtop-5 {
   margin-top: 5px;
 }
@@ -255,4 +258,35 @@ a {
   color: white !important;
   text-decoration: none;
   background-color: #ea4c89ad;
+}
+@media (max-width: 900px) {
+  .MuiTableHead-root {
+    display: none !important;
+  }
+  .MuiTableCell-sizeMedium {
+    display: inline-block !important;
+  }
+  .MuiTableCell-paddingCheckbox {
+    display: table-cell !important;
+  }
+}
+tbody {
+  font-family: Source Sans Pro !important;
+}
+.MuiTableCell-head {
+  background: #ea4c89 !important;
+  color: White !important;
+}
+.MuiTableCell-head .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
+  color: White !important;
+}
+@media (max-width: 426px) {
+  .tss-1vd39vz-MUIDataTableBodyCell-stackedCommon {
+    font-size: 10px !important;
+  }
+}
+.action-btn {
+  padding: 4px 10px;
+  margin: 0 6px;
+  font-size: 14px;
 }

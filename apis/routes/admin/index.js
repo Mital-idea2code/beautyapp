@@ -7,6 +7,7 @@ const proBannerRouter = require("../admin/promotionBanner");
 const faqsRouter = require("../admin/faqs");
 const userRouter = require("../admin/user");
 const beauticianRouter = require("../admin/beautician");
+const serviceRouter = require("../admin/service");
 
 // Use router in index
 router.use("/admin", adminRouter);
@@ -17,5 +18,6 @@ router.use("/admin/proBanner", proBannerRouter);
 router.use("/admin/faqs", faqsRouter);
 router.use("/admin/user", userRouter);
 router.use("/admin/beautician", beauticianRouter);
+router.use("/admin/service", serviceRouter);
 
 module.exports = router;

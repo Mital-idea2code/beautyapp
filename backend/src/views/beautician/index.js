@@ -11,6 +11,7 @@ import Switch from "@mui/material/Switch";
 import { useUserState } from "../../context/UserContext";
 import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
+import star from "../../assets/images/logo/star.png";
 
 const Beautician = () => {
   const [datatableData, setdatatableData] = useState([]);
@@ -18,6 +19,10 @@ const Beautician = () => {
   const navigate = useNavigate();
   const [baseurl, setbaseurl] = useState([]);
   const { userRole } = useUserState();
+
+  const handleImageClick = (imageUrl) => {
+    window.open(imageUrl, "_blank");
+  };
 
   const list = async () => {
     setIsLoading(true);
@@ -66,6 +71,7 @@ const Beautician = () => {
         customBodyRender: (image) =>
           image ? (
             <img
+              onClick={() => handleImageClick(baseurl + image)}
               src={baseurl + `${image}`}
               alt={image}
               style={{ height: "50px", width: "50px", borderRadius: "50%", textAlign: "center" }}
@@ -100,8 +106,53 @@ const Beautician = () => {
       },
     },
     {
+      name: "_id",
+      label: "TIMING",
+      options: {
+        filter: true,
+        sort: false,
+        customBodyRender: (value) => {
+          const rowData = datatableData.find((data) => data._id === value);
+          if (!rowData) {
+            return null; // Handle case where rowData is undefined
+          }
+          return (
+            <div>
+              <p className="mb-0">
+                {rowData.open_time} {rowData.open_time ? "to" : ""} {rowData.close_time}
+              </p>
+            </div>
+          );
+        },
+      },
+    },
+    {
+      name: "_id",
+      label: "Rating",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const rowData = datatableData.find((data) => data._id === value);
+          if (!rowData) {
+            return null; // Handle case where rowData is undefined
+          }
+
+          return (
+            <div>
+              <p className="mb-0 text-center">
+                {rowData.averageRating}&nbsp;
+                <img src={star} />
+                <br /> ({rowData.totalReviews} Reviews)
+              </p>
+            </div>
+          );
+        },
+      },
+    },
+    {
       name: "status",
-      label: "Status",
+      label: "STATUS",
       options: {
         filter: true,
         sort: false,
@@ -138,36 +189,14 @@ const Beautician = () => {
     },
     {
       name: "_id",
-      label: "Action",
+      label: "ACTION",
       options: {
         sort: false,
         filter: false,
         customBodyRender: (value) => {
+          const rowData = datatableData.find((data) => data._id === value);
           return (
             <div>
-              <Icons.Edit
-                style={{
-                  color: "#6495ED",
-                  cursor: "pointer",
-                  border: "1px solid",
-                  borderRadius: "5px",
-                  margin: "0px 6px",
-                  fontSize: "30px",
-                  padding: "4px",
-                }}
-                onClick={() => {
-                  if (userRole == 1) {
-                    const editdata = datatableData.find((data) => data._id === value);
-                    navigate("/beautician/manage", {
-                      state: { editdata: editdata, baseurl: baseurl },
-                    });
-                  } else {
-                    toast.error(
-                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                    );
-                  }
-                }}
-              />
               <Icons.Delete
                 style={{
                   color: "#FF5733",
@@ -208,6 +237,41 @@ const Beautician = () => {
                   }
                 }}
               />
+
+              <CButton
+                color="primary"
+                variant="outline"
+                className="action-btn mr-5"
+                onClick={() => {
+                  if (userRole == 1) {
+                    navigate("/beauticians/services", {
+                      state: { beautician_id: rowData._id, beautician_name: rowData.name },
+                    });
+                  } else {
+                    toast.error(
+                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
+                    );
+                  }
+                }}
+              >
+                Services ({rowData.services.length})
+              </CButton>
+              <CButton
+                color="success"
+                variant="outline"
+                className="action-btn"
+                onClick={() => {
+                  if (userRole == 1) {
+                    navigate("/beautician/manage");
+                  } else {
+                    toast.error(
+                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
+                    );
+                  }
+                }}
+              >
+                Reviews({rowData.totalReviews})
+              </CButton>
             </div>
           );
         },
@@ -282,20 +346,6 @@ const Beautician = () => {
               </CBreadcrumbItem>
               <CBreadcrumbItem active>Beauticians</CBreadcrumbItem>
             </CBreadcrumb>
-            <CButton
-              className="theme-btn mt-minus-10"
-              onClick={() => {
-                if (userRole == 1) {
-                  navigate("/beautician/manage");
-                } else {
-                  toast.error(
-                    "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                  );
-                }
-              }}
-            >
-              Add Beautician
-            </CButton>
           </CContainer>
           {isLoading ? (
             <Grid item xs={12} style={{ textAlign: "center" }}>

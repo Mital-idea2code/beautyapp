@@ -98,7 +98,7 @@ const PromoBanners = () => {
     },
     {
       name: "status",
-      label: "Status",
+      label: "STATUS",
       options: {
         filter: true,
         sort: false,
@@ -141,7 +141,7 @@ const PromoBanners = () => {
     },
     {
       name: "_id",
-      label: "Action",
+      label: "ACTION",
       options: {
         sort: false,
         filter: false,

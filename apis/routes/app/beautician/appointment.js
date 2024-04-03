@@ -14,10 +14,10 @@ const {
 
 router.put("/updateApptatus/:id", verifyToken, updateApptatus);
 router.get("/getHomeCount", verifyToken, getHomeCount);
-router.get("/upcomingAppList", verifyToken, upcomingAppList);
-router.get("/pendingAppList", verifyToken, pendingAppList);
-router.get("/completedAppList", verifyToken, completedAppList);
-router.get("/cancelledAppList", verifyToken, cancelledAppList);
+router.post("/upcomingAppList", verifyToken, upcomingAppList);
+router.post("/pendingAppList", verifyToken, pendingAppList);
+router.post("/completedAppList", verifyToken, completedAppList);
+router.post("/cancelledAppList", verifyToken, cancelledAppList);
 router.post("/datewiseAppList", verifyToken, datewiseAppList);
 router.get("/filterReviews/:id", verifyToken, filterReviews);
 

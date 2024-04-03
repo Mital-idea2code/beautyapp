@@ -11,6 +11,7 @@ import Switch from "@mui/material/Switch";
 import { useUserState } from "../../context/UserContext";
 import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
+import no_profile from "../../assets/images/avatars/no_profile.jpeg";
 
 const User = () => {
   const [datatableData, setdatatableData] = useState([]);
@@ -71,7 +72,7 @@ const User = () => {
               style={{ height: "50px", width: "50px", borderRadius: "50%", textAlign: "center" }}
             />
           ) : (
-            ""
+            <img src={no_profile} alt={image} style={{ height: "50px", width: "50px", borderRadius: "50%" }} />
           ),
       },
     },
@@ -176,7 +177,7 @@ const User = () => {
                   }
                 }}
               />
-              <Icons.Delete
+              {/* <Icons.Delete
                 style={{
                   color: "#FF5733",
                   cursor: "pointer",
@@ -215,7 +216,7 @@ const User = () => {
                     );
                   }
                 }}
-              />
+              /> */}
             </div>
           );
         },
@@ -268,10 +269,14 @@ const User = () => {
   };
 
   const options = {
-    customToolbarSelect: (selectedRows, data) => (
-      <SelectedRowsToolbar selectedRows={selectedRows} data={data} columns={columns} datatableTitle="test" />
-    ),
+    selectableRows: false, // Disable checkbox selection
   };
+
+  // const options = {
+  //   customToolbarSelect: (selectedRows, data) => (
+  //     <SelectedRowsToolbar selectedRows={selectedRows} data={data} columns={columns} datatableTitle="test" />
+  //   ),
+  // };
 
   SelectedRowsToolbar.propTypes = {
     selectedRows: PropTypes.object.isRequired,

@@ -7,6 +7,8 @@ const {
   deleteBeautician,
   deleteMultBeautician,
   getAllBeautician,
+  getAllReviews,
+  deleteReview,
 } = require("../../controllers/Admin/beauticianController");
 const authenticAdmin = require("../../helper/verifyAdminToken");
 const { multiDiffFileUpload } = require("../../helper/imageUpload");
@@ -35,5 +37,7 @@ router.put("/updateBeauticianStatus/:id", authenticAdmin, updateBeauticianStatus
 router.delete("/deleteBeautician/:id", authenticAdmin, deleteBeautician);
 router.delete("/deleteMultBeautician", authenticAdmin, deleteMultBeautician);
 router.get("/getAllBeautician", authenticAdmin, getAllBeautician);
+router.get("/getAllReviews/:id", authenticAdmin, getAllReviews);
+router.delete("/deleteReview/:id", authenticAdmin, deleteReview);
 
 module.exports = router;

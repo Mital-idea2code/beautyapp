@@ -39,7 +39,7 @@ const addReview = async (req, res, next) => {
     if (!app)
       return queryErrorRelatedResponse(req, res, 404, "You can't leave a review before completing the appointment.");
 
-    const added = await ReviewRating.findOne({ appointment_id: req.body.appointment_id });
+    const added = await ReviewRating.findOne({ appointment_id: req.body.appointment_id, user_id: req.body.user_id });
     if (added)
       return queryErrorRelatedResponse(
         req,

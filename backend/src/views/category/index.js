@@ -153,7 +153,7 @@ const Category = () => {
                   }
                 }}
               />
-              <Icons.Delete
+              {/* <Icons.Delete
                 style={{
                   color: "#FF5733",
                   cursor: "pointer",
@@ -192,7 +192,7 @@ const Category = () => {
                     );
                   }
                 }}
-              />
+              /> */}
             </div>
           );
         },
@@ -245,10 +245,14 @@ const Category = () => {
   };
 
   const options = {
-    customToolbarSelect: (selectedRows, data) => (
-      <SelectedRowsToolbar selectedRows={selectedRows} data={data} columns={columns} datatableTitle="test" />
-    ),
+    selectableRows: false, // Disable checkbox selection
   };
+
+  // const options = {
+  //   customToolbarSelect: (selectedRows, data) => (
+  //     <SelectedRowsToolbar selectedRows={selectedRows} data={data} columns={columns} datatableTitle="test" />
+  //   ),
+  // };
 
   SelectedRowsToolbar.propTypes = {
     selectedRows: PropTypes.object.isRequired,

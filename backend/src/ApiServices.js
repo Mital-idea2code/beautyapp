@@ -330,3 +330,15 @@ export const getBeauticianServices = (id) =>
   axios.get(`${mainUrl}/admin/service/getBeauticianServices/${id}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
+
+//Get beautician Reviews
+export const getAllReviews = (id) =>
+  axios.get(`${mainUrl}/admin/beautician/getAllReviews/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Delete Reviews
+export const deleteReview = (id) =>
+  axios.delete(`${mainUrl}/admin/beautician/deleteReview/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });

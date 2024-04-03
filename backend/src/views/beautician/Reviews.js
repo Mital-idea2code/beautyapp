@@ -1,16 +1,15 @@
-import { getBeauticianServices, updateServiceStatus } from "../../ApiServices";
+import { getAllReviews, deleteReview } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import * as Icons from "@mui/icons-material";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Grid, CircularProgress, IconButton } from "@mui/material";
-import Switch from "@mui/material/Switch";
 import { useUserState } from "../../context/UserContext";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
-import GalleryDialog from "./GalleryDialog";
 import no_profile from "../../assets/images/avatars/no_profile.jpeg";
+import star from "../../assets/images/logo/star.png";
+import * as Icons from "@mui/icons-material";
 
 const Services = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -33,10 +32,10 @@ const Services = () => {
 
   const list = async () => {
     setIsLoading(true);
-    await getBeauticianServices(beautician_id)
+    await getAllReviews(beautician_id)
       .then((response) => {
         setIsLoading(false);
-        setdatatableData(response.data.info.service);
+        setdatatableData(response.data.info.reviews);
         setbaseurl(response.data.info.baseUrl);
       })
       .catch((err) => {
@@ -76,117 +75,106 @@ const Services = () => {
   };
   const columns = [
     {
-      name: "display_image",
+      name: "user_image",
       label: "Image",
       options: {
-        customBodyRender: (display_image) =>
-          display_image ? (
+        customBodyRender: (user_image) =>
+          user_image ? (
             <img
-              onClick={() => handleImageClick(baseurl + display_image)}
-              src={baseurl + `${display_image}`}
-              alt={display_image}
+              onClick={() => handleImageClick(baseurl + user_image)}
+              src={baseurl + `${user_image}`}
+              alt={user_image}
               style={{ height: "50px", width: "50px", borderRadius: "50%", textAlign: "center" }}
             />
           ) : (
-            <img src={no_profile} alt={display_image} style={{ height: "50px", width: "50px", borderRadius: "50%" }} />
+            <img src={no_profile} alt={image} style={{ height: "50px", width: "50px", borderRadius: "50%" }} />
           ),
       },
     },
     {
-      name: "cat_name",
-      label: "Category",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
-      name: "name",
+      name: "user_name",
       label: "Name",
       options: {
         filter: true,
         sort: true,
       },
     },
-
     {
-      name: "price",
-      label: "Price",
+      name: "rate",
+      label: "Rate",
       options: {
         filter: true,
         sort: true,
-      },
-    },
-
-    {
-      name: "status",
-      label: "STATUS",
-      options: {
-        filter: true,
-        sort: false,
-        customBodyRender: (_, { rowIndex }) => {
-          const { status, _id } = datatableData[rowIndex];
+        customBodyRender: (value, tableMeta, updateValue) => {
           return (
-            <Switch
-              checked={status}
-              onChange={() => {
-                if (userRole == 1) {
-                  const data = { id: _id, status: !status };
-                  updateServiceStatus(data, _id)
-                    .then(() => {
-                      toast.success("status changed successfully!", {
-                        key: data._id,
-                      });
-                      list();
-                    })
-                    .catch(() => {
-                      toast.error("something went wrong!", {
-                        key: data._id,
-                      });
-                    });
-                } else {
-                  toast.error(
-                    "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                  );
-                }
-              }}
-            />
+            <div>
+              <p className="pb-0">
+                {value}&nbsp;
+                <img src={star} />
+              </p>
+            </div>
           );
         },
+      },
+    },
+    {
+      name: "review",
+      label: "Reviews",
+      options: {
+        filter: true,
+        sort: true,
       },
     },
     {
       name: "_id",
       label: "ACTION",
       options: {
-        filter: true,
-        sort: true,
+        sort: false,
+        filter: false,
         customBodyRender: (value) => {
-          const rowData = datatableData.find((data) => data._id === value);
-          const gallary_img = rowData.work_images;
-          console.log(gallary_img);
           return (
-            <>
-              {/* Your existing code here */}
-
-              {/* Gallery Images Button */}
-              <CButton
-                color="primary"
-                variant="outline"
-                className="action-btn mr-5"
-                onClick={() => handleGalleryButtonClick(gallary_img)}
-              >
-                Gallery Images
-              </CButton>
-
-              {/* Gallery Dialog */}
-              <GalleryDialog
-                open={dialogOpen}
-                handleClose={() => setDialogOpen(false)}
-                images={selectedImages}
-                baseurl={baseurl}
+            <div>
+              <Icons.Delete
+                style={{
+                  color: "#FF5733",
+                  cursor: "pointer",
+                  border: "1px solid",
+                  borderRadius: "5px",
+                  margin: "0px 6px",
+                  fontSize: "30px",
+                  padding: "4px",
+                }}
+                onClick={async () => {
+                  if (userRole == 1) {
+                    const confirm = await swal({
+                      title: "Are you sure?",
+                      text: "Are you sure that you want to delete this Review?",
+                      icon: "warning",
+                      buttons: ["No, cancel it!", "Yes, I am sure!"],
+                      dangerMode: true,
+                    });
+                    if (confirm) {
+                      deleteReview(value)
+                        .then(() => {
+                          toast.success("deleted successfully!", {
+                            key: value,
+                          });
+                          list();
+                        })
+                        .catch(() => {
+                          toast.error("something went wrong!", {
+                            key: value,
+                          });
+                        });
+                    }
+                  } else {
+                    toast.error(
+                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
+                    );
+                  }
+                }}
               />
-            </>
+            </div>
           );
         },
       },
@@ -210,7 +198,7 @@ const Services = () => {
               <CBreadcrumbItem>
                 <Link to="/beauticians">Beauticians</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>{beautician_name}'s Services</CBreadcrumbItem>
+              <CBreadcrumbItem active>{beautician_name}'s Reviews</CBreadcrumbItem>
             </CBreadcrumb>
           </CContainer>
           {isLoading ? (

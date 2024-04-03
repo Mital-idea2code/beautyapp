@@ -12,6 +12,7 @@ import { useUserState } from "../../context/UserContext";
 import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
 import star from "../../assets/images/logo/star.png";
+import no_profile from "../../assets/images/avatars/no_profile.jpeg";
 
 const Beautician = () => {
   const [datatableData, setdatatableData] = useState([]);
@@ -77,7 +78,7 @@ const Beautician = () => {
               style={{ height: "50px", width: "50px", borderRadius: "50%", textAlign: "center" }}
             />
           ) : (
-            ""
+            <img src={no_profile} alt={image} style={{ height: "50px", width: "50px", borderRadius: "50%" }} />
           ),
       },
     },
@@ -197,7 +198,26 @@ const Beautician = () => {
           const rowData = datatableData.find((data) => data._id === value);
           return (
             <div>
-              <Icons.Delete
+              <CButton
+                color="info"
+                variant="outline"
+                className="action-btn mr-5"
+                onClick={() => {
+                  if (userRole == 1) {
+                    navigate("/beauticians/info", {
+                      state: { beauticianInfo: rowData, baseurl: baseurl },
+                    });
+                  } else {
+                    toast.error(
+                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
+                    );
+                  }
+                }}
+              >
+                Info
+              </CButton>
+
+              {/* <Icons.Delete
                 style={{
                   color: "#FF5733",
                   cursor: "pointer",
@@ -236,7 +256,7 @@ const Beautician = () => {
                     );
                   }
                 }}
-              />
+              /> */}
 
               <CButton
                 color="primary"
@@ -262,7 +282,9 @@ const Beautician = () => {
                 className="action-btn"
                 onClick={() => {
                   if (userRole == 1) {
-                    navigate("/beautician/manage");
+                    navigate("/beauticians/reviews", {
+                      state: { beautician_id: rowData._id, beautician_name: rowData.name },
+                    });
                   } else {
                     toast.error(
                       "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
@@ -323,10 +345,13 @@ const Beautician = () => {
     );
   };
 
+  // const options = {
+  //   customToolbarSelect: (selectedRows, data) => (
+  //     <SelectedRowsToolbar selectedRows={selectedRows} data={data} columns={columns} datatableTitle="test" />
+  //   ),
+  // };
   const options = {
-    customToolbarSelect: (selectedRows, data) => (
-      <SelectedRowsToolbar selectedRows={selectedRows} data={data} columns={columns} datatableTitle="test" />
-    ),
+    selectableRows: false, // Disable checkbox selection
   };
 
   SelectedRowsToolbar.propTypes = {

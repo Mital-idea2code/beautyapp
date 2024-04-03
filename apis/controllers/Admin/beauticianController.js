@@ -1,6 +1,7 @@
 const express = require("express");
 const Beautician = require("../../models/Beautician");
 const Appointment = require("../../models/Appointment");
+const ReviewRating = require("../../models/ReviewRating");
 const deleteFiles = require("../../helper/deleteFiles");
 const {
   createResponse,
@@ -98,7 +99,8 @@ const deleteBeautician = async (req, res, next) => {
     deleteFiles("beautician/" + beautician.image);
     deleteFiles("beautician/" + beautician.banner);
     await Beautician.deleteOne({ _id: req.params.id });
-    await Appointment.deleteOne({ beautican_id: req.params.id });
+    await Appointment.deleteMany({ beautican_id: req.params.id });
+    await ReviewRating.deleteMany({ beautican_id: req.params.id });
     deleteResponse(res, "Beautician deleted successfully.");
   } catch (err) {
     next(err);
@@ -116,7 +118,8 @@ const deleteMultBeautician = async (req, res, next) => {
         deleteFiles("beautician/" + beautician.banner);
 
         await Beautician.deleteOne({ _id: item });
-        await Appointment.deleteOne({ beautican_id: item });
+        await Appointment.deleteMany({ beautican_id: item });
+        await ReviewRating.deleteMany({ beautican_id: item });
       }
     });
     deleteResponse(res, "All selected records deleted successfully.");
@@ -141,6 +144,19 @@ const getAllBeautician = async (req, res, next) => {
 
       // Convert close_time to a human-readable format
       beautician.close_time = beautician.close_time ? moment(parseInt(beautician.close_time)).format("h:mm A") : "";
+
+      const originalReviews = await ReviewRating.find({ beautican_id: beautician._id });
+
+      beautician.totalReviews = 0;
+      beautician.totalRatings = 0;
+      beautician.averageRating = 0;
+
+      if (originalReviews && originalReviews.length > 0) {
+        beautician.totalReviews = originalReviews.length;
+        beautician.totalRatings = originalReviews.reduce((sum, review) => sum + review.rate, 0);
+        averageRating = beautician.totalRatings / beautician.totalReviews;
+        beautician.averageRating = parseFloat(averageRating.toFixed(1));
+      }
     }
 
     const AllData = {
@@ -154,6 +170,82 @@ const getAllBeautician = async (req, res, next) => {
   }
 };
 
+//Get All Reviews
+const getAllReviews = async (req, res, next) => {
+  try {
+    const reviews = await ReviewRating.find({ beautican_id: req.params.id }, "appointment_id review rate").populate(
+      "user_id"
+    );
+    if (!reviews) return queryErrorRelatedResponse(req, res, 404, "Reviews not found.");
+
+    let convertedData = [];
+
+    for (let i = 0; i < reviews.length; i++) {
+      let item = reviews[i];
+      let convertedItem = {
+        _id: item._id,
+        user_id: item.user_id._id,
+        user_name: item.user_id.name,
+        user_image: item.user_id.image,
+        appointment_id: item.appointment_id,
+        review: item.review,
+        rate: item.rate,
+      };
+      convertedData.push(convertedItem);
+    }
+
+    const baseUrl =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+
+    const AllData = {
+      reviews: convertedData,
+      baseUrl: baseUrl,
+    };
+
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Delete Single Review
+const deleteReview = async (req, res, next) => {
+  try {
+    const reviews = await ReviewRating.findById(req.params.id);
+    if (!reviews) return queryErrorRelatedResponse(req, res, 404, "Review not found.");
+
+    const beautician = await Beautician.findOne({ _id: reviews.beautican_id });
+    await ReviewRating.deleteOne({ _id: req.params.id });
+
+    let totalReviews = 0;
+    let totalRatings = 0;
+    let averageRating = 0;
+    const allRatings = await ReviewRating.find({ beautican_id: beautician._id });
+    if (allRatings && allRatings.length > 0) {
+      totalReviews = allRatings.length;
+      totalRatings = allRatings.reduce((sum, review) => sum + review.rate, 0);
+      averageRating = totalRatings / totalReviews;
+      averageRating = parseFloat(averageRating.toFixed(1));
+    }
+
+    // Remove the deleted review ID from beautician's reviews array (if it exists)
+    beautician.reviews = beautician.reviews.filter((review) => review._id.toString() !== req.params.id);
+
+    // Add the new service to the category array
+    // beautician.reviews.push(allRatings);
+    beautician.totalReviews = totalReviews;
+    beautician.totalRatings = totalRatings;
+    beautician.averageRating = averageRating;
+
+    // Save the category with the new services
+    await beautician.save();
+
+    deleteResponse(res, "Beautician deleted successfully.");
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   addBeautician,
   updateBeautician,
@@ -161,4 +253,6 @@ module.exports = {
   deleteBeautician,
   deleteMultBeautician,
   getAllBeautician,
+  getAllReviews,
+  deleteReview,
 };

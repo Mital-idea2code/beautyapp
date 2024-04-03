@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../../models/User");
 const Appointment = require("../../models/Appointment");
+const ReviewRating = require("../../models/ReviewRating");
 const deleteFiles = require("../../helper/deleteFiles");
 const {
   createResponse,
@@ -74,7 +75,9 @@ const deleteUser = async (req, res, next) => {
     if (!user) return queryErrorRelatedResponse(req, res, 404, "User not found.");
     deleteFiles("profile/" + user.image);
     await User.deleteOne({ _id: id });
-    await Appointment.deleteOne({ user_id: id });
+    await Appointment.deleteMany({ user_id: id });
+    await ReviewRating.deleteMany({ user_id: id });
+
     deleteResponse(res, "User deleted successfully.");
   } catch (err) {
     next(err);
@@ -91,7 +94,8 @@ const deleteMultUser = async (req, res, next) => {
       deleteFiles("profile/" + user.image);
 
       await User.deleteOne({ _id: item });
-      await Appointment.deleteOne({ user_id: item });
+      await Appointment.deleteMany({ user_id: item });
+      await ReviewRating.deleteMany({ user_id: item });
     });
     deleteResponse(res, "All selected records deleted successfully.");
   } catch (err) {

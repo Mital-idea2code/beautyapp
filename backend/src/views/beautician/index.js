@@ -199,9 +199,8 @@ const Beautician = () => {
           return (
             <div>
               <CButton
-                color="info"
                 variant="outline"
-                className="action-btn mr-5"
+                className="action-btn mr-5 info-btn"
                 onClick={() => {
                   if (userRole == 1) {
                     navigate("/beauticians/info", {
@@ -259,9 +258,8 @@ const Beautician = () => {
               /> */}
 
               <CButton
-                color="primary"
                 variant="outline"
-                className="action-btn mr-5"
+                className="action-btn mr-5 service-btn"
                 onClick={() => {
                   if (userRole == 1) {
                     navigate("/beauticians/services", {
@@ -277,9 +275,8 @@ const Beautician = () => {
                 Services ({rowData.services.length})
               </CButton>
               <CButton
-                color="success"
                 variant="outline"
-                className="action-btn"
+                className="action-btn review-btn"
                 onClick={() => {
                   if (userRole == 1) {
                     navigate("/beauticians/reviews", {

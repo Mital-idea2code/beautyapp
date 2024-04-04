@@ -1,19 +1,9 @@
 // CustomInput.js
-import React from 'react'
-import PropTypes from 'prop-types'
-import { CInputGroup, CFormLabel, CFormInput, CFormFeedback } from '@coreui/react'
+import React from "react";
+import PropTypes from "prop-types";
+import { CInputGroup, CFormLabel, CFormInput, CFormFeedback } from "@coreui/react";
 
-const CustomInput = ({
-  name,
-  id,
-  type,
-  label,
-  error,
-  helperText,
-  defaultValue,
-  onChange,
-  ...rest
-}) => {
+const CustomInput = ({ name, id, type, label, error, helperText, defaultValue, onChange, ...rest }) => {
   return (
     <div>
       <CFormLabel htmlFor={id}>{label}</CFormLabel>
@@ -23,7 +13,7 @@ const CustomInput = ({
           id={id}
           name={name}
           // placeholder={label}
-          className={`form-control ${error ? 'is-invalid' : ''}`}
+          className={`form-control ${error ? "is-invalid" : ""}`}
           defaultValue={defaultValue}
           onChange={onChange} // Pass the onChange prop
           {...rest}
@@ -31,8 +21,8 @@ const CustomInput = ({
         {error && <CFormFeedback invalid>{helperText}</CFormFeedback>}
       </CInputGroup>
     </div>
-  )
-}
+  );
+};
 
 CustomInput.propTypes = {
   name: PropTypes.string.isRequired,
@@ -44,6 +34,6 @@ CustomInput.propTypes = {
   defaultValue: PropTypes.string,
   onChange: PropTypes.func, // Add the onChange prop
   // Add any other props you expect to receive
-}
+};
 
-export default CustomInput
+export default CustomInput;

@@ -162,4 +162,47 @@ const transformAppointmentData = (appointments) => {
   return transformedInfo;
 };
 
-module.exports = { getServicesWithBeauticians, transformServices, transformServiceInfo, transformAppointmentData };
+const transformAdminAppointmentData = (appointments) => {
+  const transformedInfo = [];
+
+  for (const item of appointments) {
+    const user = item.user_id;
+    const beautician = item.beautican_id;
+    const service = item.service_id;
+    const category = item.cat_id;
+
+    const transformedItem = {
+      _id: item._id,
+      user_name: user.name,
+      user_address: user.address,
+      user_email: user.email,
+      user_mo_no: user.mo_no,
+      user_image: user.image,
+      beautician_name: beautician.name,
+      beautician_address: beautician.address,
+      beautician_email: beautician.email,
+      category_name: category.name,
+      service_name: service.name,
+      service_about: service.about,
+      service_display_image: service.display_image,
+      app_date: moment(item.app_date).format("MMMM DD, YYYY"),
+      app_time: moment(parseInt(item.app_time)).format("hh:mm A"),
+      amount: item.amount,
+      status: item.status,
+      cancel_reason: item.cancel_reason,
+      createdAt: item.createdAt,
+    };
+
+    transformedInfo.push(transformedItem);
+  }
+
+  return transformedInfo;
+};
+
+module.exports = {
+  getServicesWithBeauticians,
+  transformServices,
+  transformServiceInfo,
+  transformAppointmentData,
+  transformAdminAppointmentData,
+};

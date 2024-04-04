@@ -4,6 +4,7 @@ import { FaPhone, FaWhatsapp, FaEnvelope, FaUser, FaMapMarked, FaBuilding, FaCal
 import { useNavigate, useLocation } from "react-router-dom";
 import star from "../../assets/images/logo/star.png";
 import noImg from "../../assets/images/avatars/no_img.png";
+import no_profile from "../../assets/images/avatars/no_profile.jpeg";
 
 const Info = () => {
   var [defaultLoading, setdefaultLoading] = useState(true);
@@ -14,7 +15,7 @@ const Info = () => {
   const { state } = useLocation();
 
   useEffect(() => {
-    const user_Img = state.beauticianInfo.image ? `${state.baseurl}/${state.beauticianInfo.image}` : noImg;
+    const user_Img = state.beauticianInfo.image ? `${state.baseurl}/${state.beauticianInfo.image}` : no_profile;
     const banner_Img = state.beauticianInfo.banner ? `${state.baseurl}/${state.beauticianInfo.banner}` : noImg;
     setImage(user_Img);
     setBannerImage(banner_Img);

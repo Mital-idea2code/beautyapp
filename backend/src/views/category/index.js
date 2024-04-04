@@ -128,6 +128,7 @@ const Category = () => {
         sort: false,
         filter: false,
         customBodyRender: (value) => {
+          const rowData = datatableData.find((data) => data._id === value);
           return (
             <div>
               <Icons.Edit
@@ -153,6 +154,24 @@ const Category = () => {
                   }
                 }}
               />
+              <CButton
+                variant="outline"
+                className="action-btn mr-5 service-btn"
+                onClick={() => {
+                  if (userRole == 1) {
+                    navigate("/category/services", {
+                      state: { cat_id: rowData._id, cat_name: rowData.name },
+                    });
+                  } else {
+                    toast.error(
+                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
+                    );
+                  }
+                }}
+              >
+                Services ({rowData.services.length})
+              </CButton>
+
               {/* <Icons.Delete
                 style={{
                   color: "#FF5733",

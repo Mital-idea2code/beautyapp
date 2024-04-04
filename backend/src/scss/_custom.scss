@@ -299,3 +299,38 @@ tbody {
 .mt-minus-4 {
   margin-top: -4px;
 }
+.service-btn {
+  color: darkcyan !important;
+  border: 1px solid darkcyan !important;
+  background: white !important;
+}
+
+.service-btn:hover {
+  color: white !important;
+  border: 1px solid darkcyan !important;
+  background: darkcyan !important;
+}
+
+.review-btn {
+  color: blueviolet !important;
+  border: 1px solid blueviolet !important;
+  background: white !important;
+}
+
+.review-btn:hover {
+  color: white !important;
+  border: 1px solid blueviolet !important;
+  background: blueviolet !important;
+}
+
+.info-btn {
+  color: #bf860c;
+  border: 1px solid #bf860c !important;
+  background: white !important;
+}
+
+.info-btn:hover {
+  color: white !important;
+  border: 1px solid #bf860c !important;
+  background: #bf860c !important;
+}

@@ -122,6 +122,48 @@ const getAllCategory = async (req, res, next) => {
   }
 };
 
+//Get Services By Category ID
+const getCategoryServices = async (req, res, next) => {
+  try {
+    const services = await Service.find({ cat_id: req.params.id }).populate("beautican_id");
+    if (!services) return queryErrorRelatedResponse(req, res, 404, "Services not found.");
+
+    const transformedData = [];
+    for (const item of services) {
+      transformedData.push({
+        _id: item._id,
+        beautican_id: item.beautican_id._id,
+        beautican_name: item.beautican_id.name,
+        beautican_email: item.beautican_id.email,
+        name: item.name,
+        cat_id: item.cat_id,
+        price: item.price,
+        about: item.about,
+        display_image: item.display_image,
+        work_images: item.work_images,
+        status: item.status,
+        createdAt: item.createdAt,
+      });
+    }
+
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const baseUrl_user =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+
+    const AllData = {
+      service: transformedData,
+      baseUrl_service: baseUrl_service,
+      baseUrl_user: baseUrl_user,
+    };
+
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   addCategory,
   updateCategory,
@@ -129,4 +171,5 @@ module.exports = {
   deleteCategory,
   deleteMultCategory,
   getAllCategory,
+  getCategoryServices,
 };

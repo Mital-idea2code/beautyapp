@@ -7,6 +7,7 @@ const {
   deleteCategory,
   deleteMultCategory,
   getAllCategory,
+  getCategoryServices,
 } = require("../../controllers/Admin/categoryController");
 const authenticAdmin = require("../../helper/verifyAdminToken");
 const { singleFileUpload } = require("../../helper/imageUpload");
@@ -27,5 +28,6 @@ router.put("/updateCattatus/:id", authenticAdmin, updateCattatus);
 router.delete("/deleteCategory/:id", authenticAdmin, deleteCategory);
 router.delete("/deleteMultCategory", authenticAdmin, deleteMultCategory);
 router.get("/getAllCategory", authenticAdmin, getAllCategory);
+router.get("/getCategoryServices/:id", authenticAdmin, getCategoryServices);
 
 module.exports = router;

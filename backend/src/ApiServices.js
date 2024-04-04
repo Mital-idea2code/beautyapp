@@ -171,6 +171,12 @@ export const deleteMultCategory = (data) => {
   });
 };
 
+//Get Category Services
+export const getCategoryServices = (id) =>
+  axios.get(`${mainUrl}/admin/category/getCategoryServices/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
 //Get All home Banner
 export const getAllBanner = () =>
   axios.get(`${mainUrl}/admin/homeBanner/getAllBanner`, {

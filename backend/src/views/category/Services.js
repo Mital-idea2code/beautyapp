@@ -1,4 +1,4 @@
-import { getBeauticianServices, updateServiceStatus } from "../../ApiServices";
+import { getCategoryServices, updateServiceStatus } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,7 +9,7 @@ import { Grid, CircularProgress, IconButton } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import { useUserState } from "../../context/UserContext";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
-import GalleryDialog from "./GalleryDialog";
+import GalleryDialog from "../beautician/GalleryDialog";
 import no_profile from "../../assets/images/avatars/no_profile.jpeg";
 import CIcon from "@coreui/icons-react";
 import { cilDollar } from "@coreui/icons";
@@ -25,8 +25,8 @@ const Services = () => {
   const { userRole } = useUserState();
 
   const { state } = useLocation();
-  const beautician_id = state.beautician_id;
-  const beautician_name = state.beautician_name;
+  const cat_id = state.cat_id;
+  const cat_name = state.cat_name;
 
   const handleGalleryButtonClick = (images) => {
     setSelectedImages(images);
@@ -35,11 +35,11 @@ const Services = () => {
 
   const list = async () => {
     setIsLoading(true);
-    await getBeauticianServices(beautician_id)
+    await getCategoryServices(cat_id)
       .then((response) => {
         setIsLoading(false);
         setdatatableData(response.data.info.service);
-        setbaseurl(response.data.info.baseUrl);
+        setbaseurl(response.data.info.baseUrl_service);
       })
       .catch((err) => {
         if (!err.response.data.isSuccess) {
@@ -95,14 +95,6 @@ const Services = () => {
       },
     },
     {
-      name: "cat_name",
-      label: "Category",
-      options: {
-        filter: true,
-        sort: true,
-      },
-    },
-    {
       name: "name",
       label: "Name",
       options: {
@@ -110,7 +102,22 @@ const Services = () => {
         sort: true,
       },
     },
-
+    {
+      name: "beautican_name",
+      label: "Beautican Name",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "beautican_email",
+      label: "Beautican Email",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
     {
       name: "price",
       label: "Price",
@@ -218,9 +225,9 @@ const Services = () => {
                 <Link to="/dashboard">Home</Link>
               </CBreadcrumbItem>
               <CBreadcrumbItem>
-                <Link to="/beauticians">Beauticians</Link>
+                <Link to="/category">Category</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>{beautician_name}'s Services</CBreadcrumbItem>
+              <CBreadcrumbItem active>{cat_name}'s Services</CBreadcrumbItem>
             </CBreadcrumb>
           </CContainer>
           {isLoading ? (

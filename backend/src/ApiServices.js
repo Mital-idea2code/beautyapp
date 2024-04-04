@@ -348,3 +348,27 @@ export const deleteReview = (id) =>
   axios.delete(`${mainUrl}/admin/beautician/deleteReview/${id}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
+
+//Get All Upcoming Appointments
+export const upcomingAppList = () =>
+  axios.get(`${mainUrl}/admin/appointment/upcomingAppList`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get All Pending Appointments
+export const pendingAppList = () =>
+  axios.get(`${mainUrl}/admin/appointment/pendingAppList`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get All Completed Appointments
+export const completedAppList = () =>
+  axios.get(`${mainUrl}/admin/appointment/completedAppList`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get All Cancelled Appointments
+export const cancelledAppList = () =>
+  axios.get(`${mainUrl}/admin/appointment/cancelledAppList`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });

@@ -34,6 +34,11 @@ const HelpCenterInfoSettingForm = React.lazy(() => import("./views/settings/Help
 const tcForm = React.lazy(() => import("./views/settings/TcForm"));
 const privacyPolicyForm = React.lazy(() => import("./views/settings/PrivacyPolicyForm"));
 
+const upcomingApp = React.lazy(() => import("./views/appointment/Upcoming"));
+const pendingApp = React.lazy(() => import("./views/appointment/Pending"));
+const completedApp = React.lazy(() => import("./views/appointment/Completed"));
+const cancelledApp = React.lazy(() => import("./views/appointment/Cancelled"));
+
 const routes = [
   { path: "/", exact: true, name: "Home" },
   { path: "/profile", name: "Profile", element: Profile },
@@ -61,6 +66,11 @@ const routes = [
     element: categoryForm,
   },
   { path: "/category/services", name: "Category Services", element: categoryServices },
+
+  { path: "/appointments/upcoming", name: "Upcoming Apponitments", element: upcomingApp },
+  { path: "/appointments/pending", name: "Pending Apponitments", element: pendingApp },
+  { path: "/appointments/completed", name: "Completed Apponitments", element: completedApp },
+  { path: "/appointments/cancelled", name: "Cancelled Apponitments", element: cancelledApp },
   // { path: "/services", name: "Services", element: service },
   // {
   //   path: "/service/manage",

@@ -149,15 +149,7 @@ const PromoBanners = () => {
           return (
             <div>
               <Icons.Edit
-                style={{
-                  color: "#6495ED",
-                  cursor: "pointer",
-                  border: "1px solid",
-                  borderRadius: "5px",
-                  margin: "0px 6px",
-                  fontSize: "30px",
-                  padding: "4px",
-                }}
+                className="editIcon"
                 onClick={() => {
                   if (userRole == 1) {
                     const editdata = datatableData.find((data) => data._id === value);
@@ -172,15 +164,7 @@ const PromoBanners = () => {
                 }}
               />
               <Icons.Delete
-                style={{
-                  color: "#FF5733",
-                  cursor: "pointer",
-                  border: "1px solid",
-                  borderRadius: "5px",
-                  margin: "0px 6px",
-                  fontSize: "30px",
-                  padding: "4px",
-                }}
+                className="deleteIcon"
                 onClick={async () => {
                   if (userRole == 1) {
                     const confirm = await swal({

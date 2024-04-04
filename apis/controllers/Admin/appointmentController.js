@@ -20,7 +20,7 @@ const upcomingAppList = async (req, res, next) => {
 
     const app = await Appointment.find({
       //   beautican_id: req.beautician._id,
-      status: 0,
+      $or: [{ status: 0 }, { status: 3 }],
       app_date: { $gte: currentDate }, // Appointments on or after the current date
       $or: [
         { app_date: currentDate, app_time: { $gte: currentTime } }, // Same date but future time

@@ -8,7 +8,7 @@ const {
 } = require("../../controllers/Admin/appointmentController");
 const authenticAdmin = require("../../helper/verifyAdminToken");
 
-router.post("/upcomingAppList", authenticAdmin, upcomingAppList);
+router.get("/upcomingAppList", authenticAdmin, upcomingAppList);
 router.get("/pendingAppList", authenticAdmin, pendingAppList);
 router.get("/completedAppList", authenticAdmin, completedAppList);
 router.get("/cancelledAppList", authenticAdmin, cancelledAppList);

@@ -334,3 +334,67 @@ tbody {
   border: 1px solid #bf860c !important;
   background: #bf860c !important;
 }
+
+.pending_app {
+  font-weight: bold;
+  background: #f9b115;
+  color: white;
+  padding: 7px 14px;
+  text-align: center;
+}
+.completed_app {
+  font-weight: bold;
+  background: green;
+  color: white;
+  padding: 7px 14px;
+  text-align: center;
+}
+.cancelled_app {
+  font-weight: bold;
+  background: #ff0000e0;
+  color: white;
+  padding: 7px 14px;
+  text-align: center;
+}
+.accepted_app {
+  font-weight: bold;
+  background: cornflowerblue;
+  color: white;
+  padding: 7px 14px;
+  text-align: center;
+}
+.editIcon {
+  color: #6495ed;
+  cursor: pointer;
+  border: 1px solid;
+  border-radius: 5px;
+  margin: 0px 6px;
+  font-size: 30px !important;
+  padding: 4px;
+}
+.completedIcon {
+  color: green;
+  cursor: pointer;
+  border: 1px solid;
+  border-radius: 5px;
+  margin: 0px 6px;
+  font-size: 30px !important;
+  padding: 4px;
+}
+
+.viewIcon {
+  color: rgb(24, 152, 187);
+  cursor: pointer;
+  border: 1px solid;
+  border-radius: 5px;
+  margin: 0px 6px;
+  font-size: 30px !important;
+  padding: 4px;
+}
+.appid-div {
+  font-weight: bold;
+  background: #ea4c8921;
+  color: #ea4c89;
+  padding: 10px;
+  text-align: center;
+}

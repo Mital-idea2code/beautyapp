@@ -217,15 +217,7 @@ const Beautician = () => {
               </CButton>
 
               {/* <Icons.Delete
-                style={{
-                  color: "#FF5733",
-                  cursor: "pointer",
-                  border: "1px solid",
-                  borderRadius: "5px",
-                  margin: "0px 6px",
-                  fontSize: "30px",
-                  padding: "4px",
-                }}
+                  className="deleteIcon" 
                 onClick={async () => {
                   if (userRole == 1) {
                     const confirm = await swal({

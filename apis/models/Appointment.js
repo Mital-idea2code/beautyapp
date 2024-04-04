@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const AppointmentSchema = mongoose.Schema(
   {
+    appointment_id: {
+      type: String,
+      required: [true, "Apponitment ID is required."],
+    },
     beautican_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "beautician",
@@ -36,7 +40,7 @@ const AppointmentSchema = mongoose.Schema(
     },
     status: {
       type: Number,
-      default: 0,
+      default: 0, //0-Pending,1-Completed,2-Cancelled,3-Accepted
     },
     cancel_reason: {
       type: String,

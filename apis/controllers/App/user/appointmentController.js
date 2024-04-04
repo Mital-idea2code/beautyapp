@@ -11,7 +11,7 @@ const {
 } = require("../../../helper/sendResponse");
 const mongoose = require("mongoose");
 const moment = require("moment-timezone");
-
+const { generateUniqueID } = require("../../../helper/uniqueId");
 //Add Appointment
 const bookAppointment = async (req, res, next) => {
   try {
@@ -19,7 +19,7 @@ const bookAppointment = async (req, res, next) => {
 
     req.body.app_time = moment(req.body.app_time, "h:mm A").valueOf(); //HH:mm
     req.body.app_date = moment(req.body.app_date).format("YYYY-MM-DD");
-
+    req.body.appointment_id = generateUniqueID();
     const newApp = await new Appointment(addedApp);
 
     const result = await newApp.save();
@@ -131,14 +131,14 @@ const getUpcomingApp = async (req, res, next) => {
     const getApp = await Appointment.find(
       {
         user_id: req.user._id,
-        status: 0,
+        $or: [{ status: 0 }, { status: 3 }],
         app_date: { $gte: currentDate }, // Appointments on or after the current date
         $or: [
           { app_date: currentDate, app_time: { $gte: currentTime } }, // Same date but future time
           { app_date: { $gt: currentDate } }, // Future dates
         ],
       },
-      "beautican_id service_id app_date app_time amount"
+      "beautican_id service_id app_date app_time amount appointment_id status"
     ).populate([
       {
         path: "beautican_id",
@@ -191,6 +191,8 @@ const getUpcomingApp = async (req, res, next) => {
 
         transformedData.push({
           _id: data._id,
+          appointment_id: data.appointment_id,
+          status: data.status,
           beautician_name: data.beautican_id.name,
           beautician_address: data.beautican_id.address,
           beautician_image: data.beautican_id.image,
@@ -232,7 +234,7 @@ const getCompletedApp = async (req, res, next) => {
         user_id: req.user._id,
         status: 1,
       },
-      "beautican_id service_id app_date app_time amount"
+      "beautican_id service_id app_date app_time amount appointment_id status"
     ).populate([
       {
         path: "beautican_id",
@@ -285,6 +287,8 @@ const getCompletedApp = async (req, res, next) => {
 
         transformedData.push({
           _id: data._id,
+          appointment_id: data.appointment_id,
+          status: data.status,
           beautician_name: data.beautican_id.name,
           beautician_address: data.beautican_id.address,
           beautician_image: data.beautican_id.image,
@@ -327,7 +331,7 @@ const getCancelledApp = async (req, res, next) => {
         user_id: req.user._id,
         status: 1,
       },
-      "beautican_id service_id app_date app_time amount cat_id"
+      "beautican_id service_id app_date app_time amount cat_id appointment_id status"
     ).populate([
       {
         path: "beautican_id",
@@ -394,6 +398,8 @@ const getCancelledApp = async (req, res, next) => {
 
         transformedData.push({
           _id: data._id,
+          appointment_id: data.appointment_id,
+          status: data.status,
           cat_id: data.cat_id,
           beautician_id: data.beautican_id._id,
           beautician_name: data.beautican_id.name,

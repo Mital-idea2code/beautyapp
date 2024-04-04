@@ -1,4 +1,4 @@
-import { getAllBanner, updateBannerStatus } from "../../ApiServices";
+import { pendingAppList } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,8 +11,10 @@ import Switch from "@mui/material/Switch";
 import { useUserState } from "../../context/UserContext";
 import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cilDollar } from "@coreui/icons";
 
-const HomeBanner = () => {
+const Pending = () => {
   const [datatableData, setdatatableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -21,12 +23,11 @@ const HomeBanner = () => {
 
   const list = async () => {
     setIsLoading(true);
-    await getAllBanner()
+    await pendingAppList()
       .then((response) => {
-        console.log(response);
         setIsLoading(false);
-        setdatatableData(response.data.info.banner);
-        setbaseurl(response.data.info.baseUrl);
+        setdatatableData(response.data.info.appointments);
+        setbaseurl(response.data.info.baseUrl_user_profile);
       })
       .catch((err) => {
         if (!err.response.data.isSuccess) {
@@ -61,19 +62,78 @@ const HomeBanner = () => {
   }, []);
   const columns = [
     {
-      name: "image",
-      label: "Home Banner",
+      name: "appointment_id",
+      label: "Appointment ID",
       options: {
-        customBodyRender: (image) =>
-          image ? (
-            <img
-              src={baseurl + `${image}`}
-              alt={image}
-              style={{ height: "100px", width: "200px", textAlign: "center" }}
-            />
-          ) : (
-            ""
-          ),
+        filter: true,
+        sort: true,
+        customBodyRender: (appointment_id) => {
+          return <p className="appid-div">#{appointment_id}</p>;
+        },
+      },
+    },
+    {
+      name: "user_name",
+      label: "USER",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "beautician_name",
+      label: "BEAUTICIAN",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "category_name",
+      label: "CATEGORY",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "service_name",
+      label: "SERVICE",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "app_date",
+      label: "Appointment Date",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "app_time",
+      label: "Appointment Time",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "amount",
+      label: "Amount",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (price) => {
+          return (
+            <p>
+              <CIcon icon={cilDollar} />
+              {price}
+            </p>
+          );
+        },
       },
     },
     {
@@ -83,38 +143,30 @@ const HomeBanner = () => {
         filter: true,
         sort: false,
         customBodyRender: (_, { rowIndex }) => {
-          const { status, _id } = datatableData[rowIndex];
+          const { status } = datatableData[rowIndex];
           return (
-            <Switch
-              checked={status}
-              onChange={() => {
-                if (userRole == 1) {
-                  const data = { id: _id, status: !status };
-                  updateBannerStatus(data, _id)
-                    .then((response) => {
-                      if (response.status == 200) {
-                        toast.success("status changed successfully!", {
-                          key: data._id,
-                        });
-                        list();
-                      } else {
-                        toast.error("At least one banner must have the status set to enabled.", {
-                          key: data._id,
-                        });
-                      }
-                    })
-                    .catch((err) => {
-                      toast.error("something went wrong!", {
-                        key: data._id,
-                      });
-                    });
-                } else {
-                  toast.error(
-                    "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                  );
-                }
-              }}
-            />
+            <div>
+              {status === 0 && (
+                <p className="pending_app">
+                  <b>PENDING</b>
+                </p>
+              )}
+              {status === 1 && (
+                <p className="completed_app">
+                  <b>COMPLETED</b>
+                </p>
+              )}
+              {status === 2 && (
+                <p className="cancelled_app">
+                  <b>CANCELLED</b>
+                </p>
+              )}
+              {status === 3 && (
+                <p className="accepted_app">
+                  <b>ACCEPTED</b>
+                </p>
+              )}
+            </div>
           );
         },
       },
@@ -128,19 +180,14 @@ const HomeBanner = () => {
         customBodyRender: (value) => {
           return (
             <div>
-              <Icons.Edit
-                className="editIcon"
+              {" "}
+              <Icons.RemoveRedEye
+                className="viewIcon"
                 onClick={() => {
-                  if (userRole == 1) {
-                    const editdata = datatableData.find((data) => data._id === value);
-                    navigate("/homebanner/manage", {
-                      state: { editdata: editdata, baseurl: baseurl },
-                    });
-                  } else {
-                    toast.error(
-                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                    );
-                  }
+                  const appointmentData = datatableData.find((data) => data.id === value);
+                  navigate("/appointment/info", {
+                    state: { app_id: value },
+                  });
                 }}
               />
             </div>
@@ -149,6 +196,7 @@ const HomeBanner = () => {
       },
     },
   ];
+
   const options = {
     selectableRows: false, // Disable checkbox selection
   };
@@ -163,22 +211,8 @@ const HomeBanner = () => {
               <CBreadcrumbItem>
                 <Link to="/dashboard">Home</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>Home Banner</CBreadcrumbItem>
+              <CBreadcrumbItem active>Pending Appointments</CBreadcrumbItem>
             </CBreadcrumb>
-            <CButton
-              className="theme-btn mt-minus-10"
-              onClick={() => {
-                if (userRole == 1) {
-                  navigate("/homebanner/manage");
-                } else {
-                  toast.error(
-                    "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                  );
-                }
-              }}
-            >
-              Add Home Banner
-            </CButton>
           </CContainer>
           {isLoading ? (
             <Grid item xs={12} style={{ textAlign: "center" }}>
@@ -193,4 +227,4 @@ const HomeBanner = () => {
   );
 };
 
-export default HomeBanner;
+export default Pending;

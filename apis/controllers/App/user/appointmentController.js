@@ -12,6 +12,8 @@ const {
 const mongoose = require("mongoose");
 const moment = require("moment-timezone");
 const { generateUniqueID } = require("../../../helper/uniqueId");
+const { transformUserAppointmentData } = require("../../../helper/commonServices");
+
 //Add Appointment
 const bookAppointment = async (req, res, next) => {
   try {
@@ -158,56 +160,59 @@ const getUpcomingApp = async (req, res, next) => {
 
     if (!getApp) return queryErrorRelatedResponse(req, res, 404, "Appointments not found.");
 
-    let transformedData = [];
-    if (getApp && getApp.length > 0) {
-      for (let i = 0; i < getApp.length; i++) {
-        const data = getApp[i];
+    // let transformedData = [];
+    // if (getApp && getApp.length > 0) {
+    //   for (let i = 0; i < getApp.length; i++) {
+    //     const data = getApp[i];
 
-        let like = 0;
-        let averageRating = 0;
-        let transformedReviews = [];
-        if (data.beautican_id.reviews && data.beautican_id.reviews.length > 0) {
-          transformedReviews = data.beautican_id.reviews.map((review) => ({
-            rate: review.rate,
-          }));
-        }
+    //     let like = 0;
+    //     let averageRating = 0;
+    //     let transformedReviews = [];
+    //     if (data.beautican_id.reviews && data.beautican_id.reviews.length > 0) {
+    //       transformedReviews = data.beautican_id.reviews.map((review) => ({
+    //         rate: review.rate,
+    //       }));
+    //     }
 
-        if (transformedReviews && transformedReviews.length > 0) {
-          totalReviews = transformedReviews.length;
-          totalRatings = transformedReviews.reduce((sum, review) => sum + review.rate, 0);
-          averageRating = totalRatings / totalReviews;
-          averageRating = parseFloat(averageRating.toFixed(1));
-        }
+    //     if (transformedReviews && transformedReviews.length > 0) {
+    //       totalReviews = transformedReviews.length;
+    //       totalRatings = transformedReviews.reduce((sum, review) => sum + review.rate, 0);
+    //       averageRating = totalRatings / totalReviews;
+    //       averageRating = parseFloat(averageRating.toFixed(1));
+    //     }
 
-        const fav = await Favourite.findOne({
-          user_id: req.user._id,
-          beautican_id: data.beautican_id._id,
-          service_id: data.service_id._id,
-        });
+    //     const fav = await Favourite.findOne({
+    //       user_id: req.user._id,
+    //       beautican_id: data.beautican_id._id,
+    //       service_id: data.service_id._id,
+    //     });
 
-        if (fav) {
-          like = 1;
-        }
+    //     if (fav) {
+    //       like = 1;
+    //     }
 
-        transformedData.push({
-          _id: data._id,
-          appointment_id: data.appointment_id,
-          status: data.status,
-          beautician_name: data.beautican_id.name,
-          beautician_address: data.beautican_id.address,
-          beautician_image: data.beautican_id.image,
-          service_name: data.service_id.name,
-          service_about: data.service_id.about,
-          service_image: data.service_id.display_image,
-          app_date: moment(data.app_date).format("MMMM DD, YYYY"),
-          app_time: moment(parseInt(data.app_time)).format("hh:mm A"),
-          amount: data.amount,
-          totalReviews: totalReviews,
-          averageRating: averageRating,
-          like: like,
-        });
-      }
-    }
+    //     transformedData.push({
+    //       _id: data._id,
+    //       appointment_id: data.appointment_id,
+    //       status: data.status,
+    //       beautician_name: data.beautican_id.name,
+    //       beautician_address: data.beautican_id.address,
+    //       beautician_image: data.beautican_id.image,
+    //       service_name: data.service_id.name,
+    //       service_about: data.service_id.about,
+    //       service_image: data.service_id.display_image,
+    //       app_date: moment(data.app_date).format("MMMM DD, YYYY"),
+    //       app_time: moment(parseInt(data.app_time)).format("hh:mm A"),
+    //       amount: data.amount,
+    //       totalReviews: totalReviews,
+    //       averageRating: averageRating,
+    //       like: like,
+    //     });
+    //   }
+    // }
+
+    // Call the transformUserAppointmentData function
+    const transformedData = transformUserAppointmentData(getApp, req);
 
     const baseUrl_beauty_profile =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
@@ -254,57 +259,60 @@ const getCompletedApp = async (req, res, next) => {
 
     if (!getApp) return queryErrorRelatedResponse(req, res, 404, "Appointments not found.");
 
-    let transformedData = [];
-    if (getApp && getApp.length > 0) {
-      for (let i = 0; i < getApp.length; i++) {
-        const data = getApp[i];
+    // let transformedData = [];
+    // if (getApp && getApp.length > 0) {
+    //   for (let i = 0; i < getApp.length; i++) {
+    //     const data = getApp[i];
 
-        let like = 0;
-        let averageRating = 0;
-        let transformedReviews = [];
-        if (data.beautican_id.reviews && data.beautican_id.reviews.length > 0) {
-          transformedReviews = data.beautican_id.reviews.map((review) => ({
-            rate: review.rate,
-          }));
-        }
+    //     let like = 0;
+    //     let averageRating = 0;
+    //     let transformedReviews = [];
+    //     if (data.beautican_id.reviews && data.beautican_id.reviews.length > 0) {
+    //       transformedReviews = data.beautican_id.reviews.map((review) => ({
+    //         rate: review.rate,
+    //       }));
+    //     }
 
-        if (transformedReviews && transformedReviews.length > 0) {
-          totalReviews = transformedReviews.length;
-          totalRatings = transformedReviews.reduce((sum, review) => sum + review.rate, 0);
-          averageRating = totalRatings / totalReviews;
-          averageRating = parseFloat(averageRating.toFixed(1));
-        }
+    //     if (transformedReviews && transformedReviews.length > 0) {
+    //       totalReviews = transformedReviews.length;
+    //       totalRatings = transformedReviews.reduce((sum, review) => sum + review.rate, 0);
+    //       averageRating = totalRatings / totalReviews;
+    //       averageRating = parseFloat(averageRating.toFixed(1));
+    //     }
 
-        const fav = await Favourite.findOne({
-          user_id: req.user._id,
-          beautican_id: data.beautican_id._id,
-          service_id: data.service_id._id,
-        });
+    //     const fav = await Favourite.findOne({
+    //       user_id: req.user._id,
+    //       beautican_id: data.beautican_id._id,
+    //       service_id: data.service_id._id,
+    //     });
 
-        if (fav) {
-          like = 1;
-        }
+    //     if (fav) {
+    //       like = 1;
+    //     }
 
-        transformedData.push({
-          _id: data._id,
-          appointment_id: data.appointment_id,
-          status: data.status,
-          beautician_name: data.beautican_id.name,
-          beautician_address: data.beautican_id.address,
-          beautician_image: data.beautican_id.image,
-          beautician_banner: data.beautican_id.banner,
-          service_name: data.service_id.name,
-          service_about: data.service_id.about,
-          service_image: data.service_id.display_image,
-          app_date: moment(data.app_date).format("MMMM DD, YYYY"),
-          app_time: moment(parseInt(data.app_time)).format("hh:mm A"),
-          amount: data.amount,
-          totalReviews: totalReviews,
-          averageRating: averageRating,
-          like: like,
-        });
-      }
-    }
+    //     transformedData.push({
+    //       _id: data._id,
+    //       appointment_id: data.appointment_id,
+    //       status: data.status,
+    //       beautician_name: data.beautican_id.name,
+    //       beautician_address: data.beautican_id.address,
+    //       beautician_image: data.beautican_id.image,
+    //       beautician_banner: data.beautican_id.banner,
+    //       service_name: data.service_id.name,
+    //       service_about: data.service_id.about,
+    //       service_image: data.service_id.display_image,
+    //       app_date: moment(data.app_date).format("MMMM DD, YYYY"),
+    //       app_time: moment(parseInt(data.app_time)).format("hh:mm A"),
+    //       amount: data.amount,
+    //       totalReviews: totalReviews,
+    //       averageRating: averageRating,
+    //       like: like,
+    //     });
+    //   }
+    // }
+
+    // Call the transformUserAppointmentData function
+    const transformedData = transformUserAppointmentData(getApp, req);
 
     const baseUrl_beauty_profile =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
@@ -329,7 +337,7 @@ const getCancelledApp = async (req, res, next) => {
     const getApp = await Appointment.find(
       {
         user_id: req.user._id,
-        status: 1,
+        status: 2,
       },
       "beautican_id service_id app_date app_time amount cat_id appointment_id status"
     ).populate([
@@ -351,75 +359,56 @@ const getCancelledApp = async (req, res, next) => {
 
     if (!getApp) return queryErrorRelatedResponse(req, res, 404, "Appointments not found.");
 
-    let transformedData = [];
-    if (getApp && getApp.length > 0) {
-      for (let i = 0; i < getApp.length; i++) {
-        const data = getApp[i];
+    // Call the transformUserAppointmentData function
+    const transformedData = transformUserAppointmentData(getApp, req);
 
-        const openTime = parseInt(data.beautican_id.open_time);
-        const closeTime = parseInt(data.beautican_id.close_time);
-        const duration = parseInt(data.beautican_id.duration);
+    const baseUrl_beauty_profile =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
 
-        const startTime = moment(openTime).format("hh:mm A");
-        const endTime = moment(closeTime).format("hh:mm A");
-        const timeSlots = [];
-        let currentTime = moment(startTime, "hh:mm A");
+    const AllData = {
+      appointments: transformedData,
+      baseUrl_beauty_profile: baseUrl_beauty_profile,
+      baseUrl_service: baseUrl_service,
+    };
 
-        while (currentTime.isBefore(moment(endTime, "hh:mm A"))) {
-          timeSlots.push(currentTime.format("hh:mm A"));
-          currentTime = currentTime.add(duration, "minutes");
-        }
+    successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
 
-        let like = 0;
-        let averageRating = 0;
-        let transformedReviews = [];
-        if (data.beautican_id.reviews && data.beautican_id.reviews.length > 0) {
-          transformedReviews = data.beautican_id.reviews.map((review) => ({
-            rate: review.rate,
-          }));
-        }
+//Get Pending Appointments
+const getPendingApp = async (req, res, next) => {
+  try {
+    const getApp = await Appointment.find(
+      {
+        user_id: req.user._id,
+        $or: [{ status: 0 }, { status: 3 }],
+      },
+      "beautican_id service_id app_date app_time amount cat_id appointment_id status"
+    ).populate([
+      {
+        path: "beautican_id",
+        model: "beautician",
+        select: { name: 1, address: 1, image: 1, reviews: 1, banner: 1, open_time: 1, close_time: 1, duration: 1 },
+        populate: {
+          path: "reviews",
+          select: { review: 1, rate: 1, user_id: 1 },
+        },
+      },
+      {
+        path: "service_id",
+        model: "services",
+        select: { name: 1, about: 1, display_image: 1 },
+      },
+    ]);
 
-        if (transformedReviews && transformedReviews.length > 0) {
-          totalReviews = transformedReviews.length;
-          totalRatings = transformedReviews.reduce((sum, review) => sum + review.rate, 0);
-          averageRating = totalRatings / totalReviews;
-          averageRating = parseFloat(averageRating.toFixed(1));
-        }
+    if (!getApp) return queryErrorRelatedResponse(req, res, 404, "Appointments not found.");
 
-        const fav = await Favourite.findOne({
-          user_id: req.user._id,
-          beautican_id: data.beautican_id._id,
-          service_id: data.service_id._id,
-        });
-
-        if (fav) {
-          like = 1;
-        }
-
-        transformedData.push({
-          _id: data._id,
-          appointment_id: data.appointment_id,
-          status: data.status,
-          cat_id: data.cat_id,
-          beautician_id: data.beautican_id._id,
-          beautician_name: data.beautican_id.name,
-          beautician_address: data.beautican_id.address,
-          beautician_image: data.beautican_id.image,
-          beautician_banner: data.beautican_id.banner,
-          service_id: data.service_id._id,
-          service_name: data.service_id.name,
-          service_about: data.service_id.about,
-          service_image: data.service_id.display_image,
-          app_date: moment(data.app_date).format("MMMM DD, YYYY"),
-          app_time: moment(parseInt(data.app_time)).format("hh:mm A"),
-          amount: data.amount,
-          timeSlots: timeSlots,
-          totalReviews: totalReviews,
-          averageRating: averageRating,
-          like: like,
-        });
-      }
-    }
+    // Call the transformUserAppointmentData function
+    const transformedData = transformUserAppointmentData(getApp, req);
 
     const baseUrl_beauty_profile =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
@@ -445,4 +434,5 @@ module.exports = {
   getUpcomingApp,
   getCompletedApp,
   getCancelledApp,
+  getPendingApp,
 };

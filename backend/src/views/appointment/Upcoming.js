@@ -186,7 +186,7 @@ const Upcoming = () => {
                 className="viewIcon"
                 onClick={() => {
                   const appointmentData = datatableData.find((data) => data.id === value);
-                  navigate("/appointment/info", {
+                  navigate("/appointments/info", {
                     state: { app_id: value },
                   });
                 }}

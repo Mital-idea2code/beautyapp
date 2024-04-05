@@ -372,3 +372,15 @@ export const cancelledAppList = () =>
   axios.get(`${mainUrl}/admin/appointment/cancelledAppList`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
+
+//Get All Accepted Appointments
+export const acceptedAppList = () =>
+  axios.get(`${mainUrl}/admin/appointment/acceptedAppList`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get Appointment Info
+export const AppInfo = (id) =>
+  axios.get(`${mainUrl}/admin/appointment/AppInfo/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });

@@ -77,6 +77,11 @@ const _nav = [
       },
       {
         component: CNavItem,
+        name: "Accepted",
+        to: "/appointments/accepted",
+      },
+      {
+        component: CNavItem,
         name: "Completed",
         to: "/appointments/completed",
       },

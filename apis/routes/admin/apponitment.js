@@ -5,6 +5,8 @@ const {
   completedAppList,
   cancelledAppList,
   upcomingAppList,
+  acceptedAppList,
+  AppInfo,
 } = require("../../controllers/Admin/appointmentController");
 const authenticAdmin = require("../../helper/verifyAdminToken");
 
@@ -12,5 +14,7 @@ router.get("/upcomingAppList", authenticAdmin, upcomingAppList);
 router.get("/pendingAppList", authenticAdmin, pendingAppList);
 router.get("/completedAppList", authenticAdmin, completedAppList);
 router.get("/cancelledAppList", authenticAdmin, cancelledAppList);
+router.get("/acceptedAppList", authenticAdmin, acceptedAppList);
+router.get("/AppInfo/:id", authenticAdmin, AppInfo);
 
 module.exports = router;

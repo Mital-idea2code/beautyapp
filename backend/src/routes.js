@@ -36,8 +36,10 @@ const privacyPolicyForm = React.lazy(() => import("./views/settings/PrivacyPolic
 
 const upcomingApp = React.lazy(() => import("./views/appointment/Upcoming"));
 const pendingApp = React.lazy(() => import("./views/appointment/Pending"));
+const acceptedApp = React.lazy(() => import("./views/appointment/Accepted"));
 const completedApp = React.lazy(() => import("./views/appointment/Completed"));
 const cancelledApp = React.lazy(() => import("./views/appointment/Cancelled"));
+const infoApp = React.lazy(() => import("./views/appointment/Info"));
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
@@ -69,8 +71,10 @@ const routes = [
 
   { path: "/appointments/upcoming", name: "Upcoming Apponitments", element: upcomingApp },
   { path: "/appointments/pending", name: "Pending Apponitments", element: pendingApp },
+  { path: "/appointments/accepted", name: "Accepted Apponitments", element: acceptedApp },
   { path: "/appointments/completed", name: "Completed Apponitments", element: completedApp },
   { path: "/appointments/cancelled", name: "Cancelled Apponitments", element: cancelledApp },
+  { path: "/appointments/info", name: "Apponitment Info", element: infoApp },
   // { path: "/services", name: "Services", element: service },
   // {
   //   path: "/service/manage",

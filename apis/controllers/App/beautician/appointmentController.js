@@ -136,7 +136,7 @@ const pendingAppList = async (req, res, next) => {
   try {
     const app = await Appointment.find({
       beautican_id: req.beautician._id,
-      status: 0,
+      $or: [{ status: 0 }, { status: 3 }],
     }).populate([
       {
         path: "user_id",

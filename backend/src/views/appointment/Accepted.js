@@ -1,4 +1,4 @@
-import { cancelledAppList } from "../../ApiServices";
+import { acceptedAppList } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
@@ -14,7 +14,7 @@ import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react
 import CIcon from "@coreui/icons-react";
 import { cilDollar } from "@coreui/icons";
 
-const Cancelled = () => {
+const Accepted = () => {
   const [datatableData, setdatatableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const Cancelled = () => {
 
   const list = async () => {
     setIsLoading(true);
-    await cancelledAppList()
+    await acceptedAppList()
       .then((response) => {
         setIsLoading(false);
         setdatatableData(response.data.info.appointments);
@@ -211,7 +211,7 @@ const Cancelled = () => {
               <CBreadcrumbItem>
                 <Link to="/dashboard">Home</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>Cancelled Appointments</CBreadcrumbItem>
+              <CBreadcrumbItem active>Accepted Appointments</CBreadcrumbItem>
             </CBreadcrumb>
           </CContainer>
           {isLoading ? (
@@ -227,4 +227,4 @@ const Cancelled = () => {
   );
 };
 
-export default Cancelled;
+export default Accepted;

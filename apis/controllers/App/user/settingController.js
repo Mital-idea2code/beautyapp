@@ -38,15 +38,7 @@ const getBanners = async (req, res, next) => {
   try {
     const getBanners = await HomeBanner.find({ status: true });
 
-    const getProBanners = await promotionBanner.find().populate({
-      path: "beautican_id",
-      match: { status: true },
-      populate: {
-        path: "services",
-        match: { status: true },
-        model: "services",
-      },
-    });
+    const getProBanners = await promotionBanner.find({ status: true });
 
     // Merge the two arrays
     const mergedBanners = getBanners.concat(getProBanners);

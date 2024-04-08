@@ -195,7 +195,9 @@ const Accepted = () => {
                         </CCol>
                         <CCol md={8}>
                           <CCardBody>
-                            <CCardTitle>{appointment.user_name}</CCardTitle>
+                            <CCardTitle>
+                              <b>{appointment.user_name}</b>
+                            </CCardTitle>
                             <CCardText className="mb-0">
                               <p className="mb-0">{appointment.user_email}</p>
                               <p>{appointment.user_mo_no}</p>
@@ -223,7 +225,9 @@ const Accepted = () => {
                         </CCol>
                         <CCol md={8}>
                           <CCardBody>
-                            <CCardTitle>{appointment.beautician_name}</CCardTitle>
+                            <CCardTitle>
+                              <b>{appointment.beautician_name}</b>
+                            </CCardTitle>
                             <CCardText className="mb-0">
                               <p className="mb-0">{appointment.beautician_email}</p>
                               <p>{appointment.beautician_address}</p>

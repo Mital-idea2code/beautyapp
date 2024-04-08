@@ -106,10 +106,16 @@ const deleteMultpromotionBanner = async (req, res, next) => {
 //Get All promotion Banner
 const getAllpromotionBanner = async (req, res, next) => {
   try {
-    const banner = await promotionBanner.find().populate({
-      path: "beautican_id",
-      select: "name email", // Specify the fields you want to select from the beautican_id document
-    });
+    const banner = await promotionBanner.find().populate([
+      {
+        path: "beautican_id",
+        select: "name email",
+      },
+      {
+        path: "service_id",
+        select: "name",
+      },
+    ]);
     if (!banner) return queryErrorRelatedResponse(req, res, 404, "promotion Banner not found.");
 
     // Transform the data using a for loop
@@ -118,8 +124,12 @@ const getAllpromotionBanner = async (req, res, next) => {
       transformedData.push({
         _id: item._id,
         image: item.image,
+        beautican_id: item.beautican_id._id ? item.beautican_id._id : "Null",
         name: item.beautican_id.name ? item.beautican_id.name : "Null",
         email: item.beautican_id.email ? item.beautican_id.email : "Null",
+        email: item.beautican_id.email ? item.beautican_id.email : "Null",
+        service_id: item.service_id._id ? item.service_id._id : "Null",
+        service_name: item.service_id.name ? item.service_id.name : "Null",
         status: item.status,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,

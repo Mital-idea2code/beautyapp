@@ -247,7 +247,7 @@ const transformAdminAppointmentData = (appointments) => {
     const transformedItem = {
       _id: item._id,
       appointment_id: item.appointment_id ? item.appointment_id : "",
-      user_name: user.name,
+      user_name: user != "" ? user.name : "",
       user_address: user.address,
       user_email: user.email,
       user_mo_no: user.mo_no,
@@ -259,7 +259,7 @@ const transformAdminAppointmentData = (appointments) => {
       service_name: service.name,
       service_about: service.about,
       service_display_image: service.display_image,
-      app_date: moment(item.app_date).format("MMMM DD, YYYY"),
+      app_date: moment(item.app_date).format("DD MMMM, YYYY"),
       app_time: moment(parseInt(item.app_time)).format("hh:mm A"),
       amount: item.amount,
       status: item.status,

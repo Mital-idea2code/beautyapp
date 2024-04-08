@@ -16,15 +16,18 @@ import {
 } from "@coreui/react";
 import { Link } from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import CustomInput from "../../components/CustomInput";
-import { handleInputChange, handleFileInputChange } from "../../components/formUtils";
-import { AddBanner, updateBanners } from "../../ApiServices";
+import CustomSelectInput from "../../components/CustomSelectInput";
+import { handleFileInputChange } from "../../components/formUtils";
+import { addpromotionBanner, updatepromotionBanner, getAllBeautician, getBeauticianServices } from "../../ApiServices";
 import { toast } from "react-toastify";
 import noImg from "../../assets/images/avatars/no_img.png";
 
 const PromoBannerForm = () => {
   const { state } = useLocation();
+  const [beautician, setBeautician] = useState([]);
+  const [serviceOptions, setServiceOptions] = useState([]);
 
   const {
     register,
@@ -35,6 +38,7 @@ const PromoBannerForm = () => {
     clearErrors,
     setError,
     reset,
+    control,
   } = useForm();
   const navigate = useNavigate();
   var [isLoading, setIsLoading] = useState(false);
@@ -43,14 +47,30 @@ const PromoBannerForm = () => {
   var [defaultLoading, setdefaultLoading] = useState(true);
 
   useEffect(() => {
-    if (state) {
-      const { editdata, baseurl } = state;
-      setisupdate(editdata._id);
-      setValue("name", editdata.name);
-      setPreviewImage(baseurl + editdata.image);
-    }
-    setdefaultLoading(false);
-  }, []);
+    const fetchData = async () => {
+      const response = await getAllBeautician();
+      setBeautician(response.data.info.beautician);
+
+      if (state) {
+        const { editdata, baseurl } = state;
+        setisupdate(editdata._id);
+        setValue("name", editdata.name);
+        setValue("beautican_id", editdata.beautican_id);
+
+        const get_data = await getBeauticianServices(editdata.beautican_id);
+        if (get_data && get_data.data && get_data.data.info && get_data.data.info.service) {
+          setServiceOptions(get_data.data.info.service);
+        }
+
+        setValue("service_id", editdata.service_id);
+        setPreviewImage(baseurl + editdata.image);
+      }
+
+      setdefaultLoading(false);
+    };
+
+    fetchData(); // Call the async function
+  }, []); // Empty dependency array since it runs once on mount
 
   const onSubmit = (data) => {
     setIsLoading(false);
@@ -64,7 +84,7 @@ const PromoBannerForm = () => {
     });
 
     isupdate === ""
-      ? AddBanner(formData)
+      ? addpromotionBanner(formData)
           .then(() => {
             localStorage.setItem("redirectSuccess", "true");
             localStorage.setItem("redirectMessage", "Added successfully!");
@@ -86,7 +106,7 @@ const PromoBannerForm = () => {
             }
             setIsLoading(false);
           })
-      : updateBanners(formData, isupdate)
+      : updatepromotionBanner(formData, isupdate)
           .then(() => {
             localStorage.setItem("redirectSuccess", "true");
             localStorage.setItem("redirectMessage", "Updated successfully!");
@@ -140,6 +160,57 @@ const PromoBannerForm = () => {
                   onChange={(e) => handleFileInputChange(e, "image", { clearErrors, setValue, setPreviewImage })}
                 />
                 {previewImage ? <img src={previewImage} className="banner-img-preview" /> : ""}
+              </CCol>
+
+              <CCol md={6}>
+                <Controller
+                  name="beautican_id"
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: "Beautican is required" }}
+                  render={({ field }) => (
+                    <CustomSelectInput
+                      label="Beautican"
+                      options={beautician}
+                      // onChange={(value) => field.onChange(value)}
+                      onChange={async (value) => {
+                        field.onChange(value);
+                        const selectedBeautician = beautician.find((item) => item._id === value);
+                        if (selectedBeautician) {
+                          const all_data = await getBeauticianServices(selectedBeautician._id);
+                          const services = all_data.data.info.service;
+                          setServiceOptions(services); // Update service options
+                          // Update service_id if there are no services available
+                          if (services.length === 0) {
+                            setValue("service_id", ""); // or any other default value
+                          }
+                        }
+                      }}
+                      value={field.value}
+                      error={!!errors.beautican_id}
+                      helperText={errors.beautican_id && errors.beautican_id.message}
+                    />
+                  )}
+                />
+              </CCol>
+
+              <CCol md={6}>
+                <Controller
+                  name="service_id"
+                  control={control}
+                  defaultValue=""
+                  rules={{ required: "Service is required" }}
+                  render={({ field }) => (
+                    <CustomSelectInput
+                      label="Service"
+                      options={serviceOptions}
+                      onChange={(value) => field.onChange(value)}
+                      value={field.value}
+                      error={!!errors.service_id}
+                      helperText={errors.service_id && errors.service_id.message}
+                    />
+                  )}
+                />
               </CCol>
 
               <CCol xs={12}>

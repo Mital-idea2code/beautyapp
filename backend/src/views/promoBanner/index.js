@@ -97,6 +97,14 @@ const PromoBanners = () => {
       },
     },
     {
+      name: "service_name",
+      label: "Service",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
       name: "status",
       label: "STATUS",
       options: {

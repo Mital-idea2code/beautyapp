@@ -15,7 +15,7 @@ const CustomSelectInput = ({ label, options, onChange, value, error, helperText,
         <option value="">Choose Option....</option>
         {options.map((option) => (
           <option key={option._id} value={option._id}>
-            {option.title}
+            {option.name}
           </option>
         ))}
       </CFormSelect>
@@ -29,7 +29,7 @@ CustomSelectInput.propTypes = {
   options: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
     })
   ).isRequired,
   onChange: PropTypes.func.isRequired,

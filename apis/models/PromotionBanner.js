@@ -10,6 +10,10 @@ const PromotionBannerSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "beautician",
     },
+    service_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "services",
+    },
     status: {
       type: Boolean,
       default: true,

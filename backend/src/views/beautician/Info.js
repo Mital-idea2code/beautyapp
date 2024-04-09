@@ -22,7 +22,6 @@ const Info = () => {
     const workingDaysString = state.beauticianInfo.days;
 
     const workingDaysArray = state.beauticianInfo.days.map(Number);
-    console.log(workingDaysArray);
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const workingDaysNames = workingDaysArray.map((dayNumber) => daysOfWeek[dayNumber - 1]);
     setWDays(workingDaysNames.join(", "));

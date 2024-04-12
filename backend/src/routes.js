@@ -18,7 +18,6 @@ const categoryForm = React.lazy(() => import("./views/category/CategoryForm"));
 const categoryServices = React.lazy(() => import("./views/category/Services"));
 
 const service = React.lazy(() => import("./views/service"));
-const serviceForm = React.lazy(() => import("./views/service/ServiceForm"));
 
 const homeBanner = React.lazy(() => import("./views/homeBanner"));
 const homeBannerForm = React.lazy(() => import("./views/homeBanner/HomeBannerForm"));
@@ -75,12 +74,7 @@ const routes = [
   { path: "/appointments/completed", name: "Completed Apponitments", element: completedApp },
   { path: "/appointments/cancelled", name: "Cancelled Apponitments", element: cancelledApp },
   { path: "/appointments/info", name: "Apponitment Info", element: infoApp },
-  // { path: "/services", name: "Services", element: service },
-  // {
-  //   path: "/service/manage",
-  //   name: "Manage Service",
-  //   element: serviceForm,
-  // },
+  { path: "/services", name: "Services", element: service },
   { path: "/homebanners", name: "Home Banners", element: homeBanner },
   {
     path: "/homebanner/manage",

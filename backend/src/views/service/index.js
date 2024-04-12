@@ -1,4 +1,4 @@
-import { getAllCategory, deleteCategory, deleteMultCategory, updateCattatus } from "../../ApiServices";
+import { getAllService, updateServiceStatus } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
@@ -11,21 +11,31 @@ import Switch from "@mui/material/Switch";
 import { useUserState } from "../../context/UserContext";
 import PropTypes from "prop-types";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
+import GalleryDialog from "../beautician/GalleryDialog";
+import CIcon from "@coreui/icons-react";
+import { cilDollar } from "@coreui/icons";
 
-const Category = () => {
+const Service = () => {
   const [datatableData, setdatatableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [baseurl, setbaseurl] = useState([]);
   const { userRole } = useUserState();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+
+  const handleGalleryButtonClick = (images) => {
+    setSelectedImages(images);
+    setDialogOpen(true);
+  };
 
   const list = async () => {
     setIsLoading(true);
-    await getAllCategory()
+    await getAllService()
       .then((response) => {
         console.log(response);
         setIsLoading(false);
-        setdatatableData(response.data.info.cat);
+        setdatatableData(response.data.info.service);
         setbaseurl(response.data.info.baseUrl);
       })
       .catch((err) => {
@@ -61,18 +71,19 @@ const Category = () => {
   }, []);
   const columns = [
     {
-      name: "image",
+      name: "display_image",
       label: "Image",
       options: {
-        customBodyRender: (image) =>
-          image ? (
+        customBodyRender: (display_image) =>
+          display_image ? (
             <img
-              src={baseurl + `${image}`}
-              alt={image}
+              onClick={() => handleImageClick(baseurl + display_image)}
+              src={baseurl + `${display_image}`}
+              alt={display_image}
               style={{ height: "50px", width: "50px", borderRadius: "50%", textAlign: "center" }}
             />
           ) : (
-            ""
+            <img src={no_profile} alt={display_image} style={{ height: "50px", width: "50px", borderRadius: "50%" }} />
           ),
       },
     },
@@ -85,8 +96,49 @@ const Category = () => {
       },
     },
     {
+      name: "cat_name",
+      label: "Category",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "beautican_name",
+      label: "Beautican Name",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "beautican_email",
+      label: "Beautican Email",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "price",
+      label: "Price",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (price) => {
+          return (
+            <p>
+              <CIcon icon={cilDollar} />
+              {price}
+            </p>
+          );
+        },
+      },
+    },
+
+    {
       name: "status",
-      label: "Status",
+      label: "STATUS",
       options: {
         filter: true,
         sort: false,
@@ -98,7 +150,7 @@ const Category = () => {
               onChange={() => {
                 if (userRole == 1) {
                   const data = { id: _id, status: !status };
-                  updateCattatus(data, _id)
+                  updateServiceStatus(data, _id)
                     .then(() => {
                       toast.success("status changed successfully!", {
                         key: data._id,
@@ -123,120 +175,41 @@ const Category = () => {
     },
     {
       name: "_id",
-      label: "Action",
+      label: "ACTION",
       options: {
-        sort: false,
-        filter: false,
+        filter: true,
+        sort: true,
         customBodyRender: (value) => {
+          const rowData = datatableData.find((data) => data._id === value);
+          const gallary_img = rowData.work_images;
           return (
-            <div>
-              <Icons.Edit
-                className="editIcon"
-                onClick={() => {
-                  if (userRole == 1) {
-                    const editdata = datatableData.find((data) => data._id === value);
-                    navigate("/category/manage", {
-                      state: { editdata: editdata, baseurl: baseurl },
-                    });
-                  } else {
-                    toast.error(
-                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                    );
-                  }
-                }}
+            <>
+              {/* Gallery Images Button */}
+              <CButton
+                color="primary"
+                variant="outline"
+                className="action-btn mr-5"
+                onClick={() => handleGalleryButtonClick(gallary_img)}
+              >
+                Gallery Images
+              </CButton>
+
+              {/* Gallery Dialog */}
+              <GalleryDialog
+                open={dialogOpen}
+                handleClose={() => setDialogOpen(false)}
+                images={selectedImages}
+                baseurl={baseurl}
               />
-              <Icons.Delete
-                className="deleteIcon"
-                onClick={async () => {
-                  if (userRole == 1) {
-                    const confirm = await swal({
-                      title: "Are you sure?",
-                      text: "Are you sure that you want to delete this Service?",
-                      icon: "warning",
-                      buttons: ["No, cancel it!", "Yes, I am sure!"],
-                      dangerMode: true,
-                    });
-                    if (confirm) {
-                      deleteCategory(value)
-                        .then(() => {
-                          toast.success("deleted successfully!", {
-                            key: value,
-                          });
-                          list();
-                        })
-                        .catch(() => {
-                          toast.error("something went wrong!", {
-                            key: value,
-                          });
-                        });
-                    }
-                  } else {
-                    toast.error(
-                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                    );
-                  }
-                }}
-              />
-            </div>
+            </>
           );
         },
       },
     },
   ];
 
-  const deleteMultiple = async (index) => {
-    if (userRole == 1) {
-      const ids = index.data.map(
-        (index1) => datatableData.find((data, index2) => index2 === index1.dataIndex && data._id)._id
-      );
-      const confirm = await swal({
-        title: "Are you sure?",
-        text: "Are you sure that you want to delete this Service?",
-        icon: "warning",
-        buttons: ["No, cancel it!", "Yes, I am sure!"],
-        dangerMode: true,
-      });
-
-      if (confirm) {
-        deleteMultCategory(ids)
-          .then(() => {
-            list();
-            toast.success("Deleted successfully!", {
-              key: ids,
-            });
-          })
-          .catch(() => {
-            toast.error("Something went wrong!", {
-              key: ids,
-            });
-          });
-      }
-    } else {
-      toast.error(
-        "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-      );
-    }
-  };
-
-  const SelectedRowsToolbar = ({ selectedRows, data }) => {
-    return (
-      <div>
-        <IconButton onClick={() => deleteMultiple(selectedRows, data)}>
-          <Icons.Delete />
-        </IconButton>
-      </div>
-    );
-  };
-
   const options = {
-    customToolbarSelect: (selectedRows, data) => (
-      <SelectedRowsToolbar selectedRows={selectedRows} data={data} columns={columns} datatableTitle="test" />
-    ),
-  };
-
-  SelectedRowsToolbar.propTypes = {
-    selectedRows: PropTypes.object.isRequired,
-    data: PropTypes.object.isRequired,
+    selectableRows: false, // Disable checkbox selection
   };
 
   return (
@@ -249,22 +222,8 @@ const Category = () => {
               <CBreadcrumbItem>
                 <Link to="/dashboard">Home</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>Category</CBreadcrumbItem>
+              <CBreadcrumbItem active>Services</CBreadcrumbItem>
             </CBreadcrumb>
-            <CButton
-              className="theme-btn mt-minus-10"
-              onClick={() => {
-                if (userRole == 1) {
-                  navigate("/category/manage");
-                } else {
-                  toast.error(
-                    "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                  );
-                }
-              }}
-            >
-              Add Category
-            </CButton>
           </CContainer>
           {isLoading ? (
             <Grid item xs={12} style={{ textAlign: "center" }}>
@@ -279,4 +238,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default Service;

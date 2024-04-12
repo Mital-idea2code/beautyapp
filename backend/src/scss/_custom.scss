@@ -63,7 +63,7 @@ a.dropdown-item,
   background-color: #ea4c89;
 }
 .theme-color {
-  color: #ea4c89;
+  color: #ea4c89 !important;
 }
 .breadcrumb-item.active {
   color: #ea4c89;
@@ -156,14 +156,12 @@ a {
 }
 .beauti-role {
   background: #8a2be238;
-  width: 40%;
   padding: 10px 30px;
   text-align: center;
   text-transform: uppercase;
 }
 .user-role {
   background: #5f9ea04f;
-  width: 40%;
   padding: 10px 30px;
   text-align: center;
   text-transform: uppercase;
@@ -804,4 +802,109 @@ tbody {
 }
 .me-3 {
   padding: 0px !important;
+}
+//{
+// .card {
+//   width: 400px;
+//   margin: 20px;
+//   border: 1px solid #ccc;
+//   border-radius: 8px;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+// }
+.custom-header {
+  font-size: 20px;
+  margin-top: 20px;
+}
+.cardContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 9px 10px 0px 10px !important;
+}
+.card-shadow {
+  box-shadow: rgb(234 76 137 / 29%) 0px 25px 50px !important;
+}
+.leftContent {
+  width: 30%;
+}
+.contentWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.rightContent {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0px 10px;
+}
+.leftContent1 {
+  flex-basis: 60%; /* Set the width to 60% */
+}
+
+.rightContent1 {
+  flex-basis: 30%; /* Set the width to 30% */
+  text-align: right; /* Align text to the right */
+}
+.profileImg {
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+.dateTime {
+  margin-bottom: 10px;
+}
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px 0px 15px;
+  border: 1px solid #80808061;
+}
+
+.title {
+  flex-basis: 50%; /* Set the width to 50% */
+  text-align: left;
+}
+
+.dateTime {
+  flex-basis: 50%; /* Set the width to 50% */
+  text-align: right;
+}
+.mb-10 {
+  margin-bottom: 10px;
+}
+/* Media query for responsiveness */
+@media (max-width: 600px) {
+  .headerContent {
+    flex-direction: column; /* Stack elements vertically */
+  }
+
+  .title,
+  .dateTime {
+    flex-basis: auto; /* Reset the width to auto */
+    text-align: left; /* Align text to the left */
+    margin-bottom: 10px; /* Add space between elements */
+  }
+}
+.progress {
+  display: none;
+}
+.mt-22 {
+  margin-top: 22px;
+}
+.card-shadow {
+  box-shadow: rgb(234 76 137 / 29%) 0px 25px 50px;
+}
+.upcoming-header {
+  display: flex;
+  flex-wrap: inherit;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  background: #ea4c89;
+  color: white;
+  padding: 10px;
 }

@@ -64,14 +64,27 @@ const getBeauticianServices = async (req, res, next) => {
 //Get All Service
 const getAllService = async (req, res, next) => {
   try {
-    const services = await Service.find().populate("cat_id");
+    const services = await Service.find().populate([
+      {
+        path: "beautican_id",
+        model: "beautician",
+        select: { name: 1, email: 1 },
+      },
+      {
+        path: "cat_id",
+        model: "category",
+        select: { name: 1 },
+      },
+    ]);
     if (!services) return queryErrorRelatedResponse(req, res, 404, "Service not found.");
 
     const transformedData = [];
     for (const item of services) {
       transformedData.push({
         _id: item._id,
-        beautican_id: item.beautican_id,
+        beautican_id: item.beautican_id._id,
+        beautican_name: item.beautican_id.name,
+        beautican_email: item.beautican_id.email,
         name: item.name,
         cat_name: item.cat_id.name, // Extract category name from cat_id
         price: item.price,

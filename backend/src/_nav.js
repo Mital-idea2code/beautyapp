@@ -53,12 +53,12 @@ const _nav = [
     to: "/category",
     icon: <CIcon icon={cilBoltCircle} customClassName="nav-icon" />,
   },
-  // {
-  //   component: CNavItem,
-  //   name: "Services",
-  //   to: "/services",
-  //   icon: <CIcon icon={cilAsteriskCircle} customClassName="nav-icon" />,
-  // },
+  {
+    component: CNavItem,
+    name: "Services",
+    to: "/services",
+    icon: <CIcon icon={cilAsteriskCircle} customClassName="nav-icon" />,
+  },
   {
     component: CNavGroup,
     name: "Appointments",

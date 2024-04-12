@@ -696,8 +696,15 @@ tbody {
 .f-15 {
   font-size: 15px !important;
 }
+
+.f-14 {
+  font-size: 14px !important;
+}
 .mt-25 {
   margin-top: 25px !important;
+}
+.mb-15 {
+  margin-bottom: 15px !important;
 }
 .top-counts {
   color: #ea4c89;
@@ -819,7 +826,7 @@ tbody {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 9px 10px 0px 10px !important;
+  padding: 9px 10px 10px 10px !important;
 }
 .card-shadow {
   box-shadow: rgb(234 76 137 / 29%) 0px 25px 50px !important;
@@ -907,4 +914,12 @@ tbody {
   background: #ea4c89;
   color: white;
   padding: 10px;
+}
+.top-user {
+  width: 150px;
+  height: 150px;
+  margin: 20px;
+  border-radius: 50%;
+  border: 2px solid #ea4c89;
+  padding: 15px;
 }

@@ -9,6 +9,7 @@ const userRouter = require("../admin/user");
 const beauticianRouter = require("../admin/beautician");
 const serviceRouter = require("../admin/service");
 const apponitmentRouter = require("../admin/apponitment");
+const dashboardRouter = require("../admin/dashboard");
 
 // Use router in index
 router.use("/admin", adminRouter);
@@ -21,5 +22,6 @@ router.use("/admin/user", userRouter);
 router.use("/admin/beautician", beauticianRouter);
 router.use("/admin/service", serviceRouter);
 router.use("/admin/appointment", apponitmentRouter);
+router.use("/admin/dashboard", dashboardRouter);
 
 module.exports = router;

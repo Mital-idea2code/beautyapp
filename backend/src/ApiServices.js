@@ -384,3 +384,27 @@ export const AppInfo = (id) =>
   axios.get(`${mainUrl}/admin/appointment/AppInfo/${id}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
+
+//Get Dashboard Count
+export const getDashboardCount = () =>
+  axios.get(`${mainUrl}/admin/dashboard/getDashboardCount`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get Top Beautician Data
+export const getTopBeauticianData = () =>
+  axios.get(`${mainUrl}/admin/dashboard/getTopBeauticianData`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get Top User Data
+export const getTopUserData = () =>
+  axios.get(`${mainUrl}/admin/dashboard/getTopUserData`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get Top 2 Upcoming Appointments
+export const topUpcomingAppList = () =>
+  axios.get(`${mainUrl}/admin/dashboard/topUpcomingAppList`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });

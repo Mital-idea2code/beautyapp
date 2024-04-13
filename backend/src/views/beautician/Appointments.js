@@ -1,18 +1,21 @@
-import { getAllReviews, deleteReview } from "../../ApiServices";
+import { beauticianAppList } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import { Grid, IconButton } from "@mui/material";
-import { useUserState } from "../../context/UserContext";
-import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
-import no_profile from "../../assets/images/avatars/no_profile.jpeg";
-import star from "../../assets/images/logo/star.png";
 import * as Icons from "@mui/icons-material";
+import { useNavigate, Link, useLocation } from "react-router-dom";
+import { Grid, IconButton } from "@mui/material";
+import swal from "sweetalert";
+import Switch from "@mui/material/Switch";
+import { useUserState } from "../../context/UserContext";
+import PropTypes from "prop-types";
+import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
+import CIcon from "@coreui/icons-react";
+import { cilDollar } from "@coreui/icons";
 import { CSpinner } from "@coreui/react";
 
-const Reviews = () => {
+const Appointments = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
 
@@ -26,18 +29,13 @@ const Reviews = () => {
   const beautician_id = state.beautician_id;
   const beautician_name = state.beautician_name;
 
-  const handleGalleryButtonClick = (images) => {
-    setSelectedImages(images);
-    setDialogOpen(true);
-  };
-
   const list = async () => {
     setIsLoading(true);
-    await getAllReviews(beautician_id)
+    await beauticianAppList(beautician_id)
       .then((response) => {
         setIsLoading(false);
-        setdatatableData(response.data.info.reviews);
-        setbaseurl(response.data.info.baseUrl);
+        setdatatableData(response.data.info.appointments);
+        setbaseurl(response.data.info.baseUrl_user_profile);
       })
       .catch((err) => {
         if (!err.response.data.isSuccess) {
@@ -70,60 +68,115 @@ const Reviews = () => {
     }
     list();
   }, []);
-
-  const handleImageClick = (imageUrl) => {
-    window.open(imageUrl, "_blank");
-  };
   const columns = [
     {
-      name: "user_image",
-      label: "Image",
+      name: "appointment_id",
+      label: "Appointment ID",
       options: {
-        customBodyRender: (user_image) =>
-          user_image ? (
-            <img
-              onClick={() => handleImageClick(baseurl + user_image)}
-              src={baseurl + `${user_image}`}
-              alt={user_image}
-              style={{ height: "50px", width: "50px", borderRadius: "50%", textAlign: "center" }}
-            />
-          ) : (
-            <img src={no_profile} alt={image} style={{ height: "50px", width: "50px", borderRadius: "50%" }} />
-          ),
+        filter: true,
+        sort: true,
+        customBodyRender: (appointment_id) => {
+          return <p className="appid-div">#{appointment_id}</p>;
+        },
       },
     },
     {
       name: "user_name",
-      label: "Name",
+      label: "USER",
       options: {
         filter: true,
         sort: true,
       },
     },
     {
-      name: "rate",
-      label: "Rate",
+      name: "beautician_name",
+      label: "BEAUTICIAN",
       options: {
         filter: true,
         sort: true,
-        customBodyRender: (value, tableMeta, updateValue) => {
+      },
+    },
+    {
+      name: "category_name",
+      label: "CATEGORY",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "service_name",
+      label: "SERVICE",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "app_date",
+      label: "Appointment Date",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "app_time",
+      label: "Appointment Time",
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: "amount",
+      label: "Amount",
+      options: {
+        filter: true,
+        sort: true,
+        customBodyRender: (price) => {
           return (
-            <div>
-              <p className="pb-0">
-                {value}&nbsp;
-                <img src={star} />
-              </p>
-            </div>
+            <p>
+              <CIcon icon={cilDollar} />
+              {price}
+            </p>
           );
         },
       },
     },
     {
-      name: "review",
-      label: "Reviews",
+      name: "status",
+      label: "STATUS",
       options: {
         filter: true,
-        sort: true,
+        sort: false,
+        customBodyRender: (_, { rowIndex }) => {
+          const { status } = datatableData[rowIndex];
+          return (
+            <div>
+              {status === 0 && (
+                <p className="pending_app">
+                  <b>PENDING</b>
+                </p>
+              )}
+              {status === 1 && (
+                <p className="completed_app">
+                  <b>COMPLETED</b>
+                </p>
+              )}
+              {status === 2 && (
+                <p className="cancelled_app">
+                  <b>CANCELLED</b>
+                </p>
+              )}
+              {status === 3 && (
+                <p className="accepted_app">
+                  <b>ACCEPTED</b>
+                </p>
+              )}
+            </div>
+          );
+        },
       },
     },
     {
@@ -135,36 +188,14 @@ const Reviews = () => {
         customBodyRender: (value) => {
           return (
             <div>
-              <Icons.Delete
-                className="deleteIcon"
-                onClick={async () => {
-                  if (userRole == 1) {
-                    const confirm = await swal({
-                      title: "Are you sure?",
-                      text: "Are you sure that you want to delete this Review?",
-                      icon: "warning",
-                      buttons: ["No, cancel it!", "Yes, I am sure!"],
-                      dangerMode: true,
-                    });
-                    if (confirm) {
-                      deleteReview(value)
-                        .then(() => {
-                          toast.success("deleted successfully!", {
-                            key: value,
-                          });
-                          list();
-                        })
-                        .catch(() => {
-                          toast.error("something went wrong!", {
-                            key: value,
-                          });
-                        });
-                    }
-                  } else {
-                    toast.error(
-                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
-                    );
-                  }
+              {" "}
+              <Icons.RemoveRedEye
+                className="viewIcon"
+                onClick={() => {
+                  const appointmentData = datatableData.find((data) => data.id === value);
+                  navigate("/appointments/info", {
+                    state: { app_id: value },
+                  });
                 }}
               />
             </div>
@@ -191,7 +222,7 @@ const Reviews = () => {
               <CBreadcrumbItem>
                 <Link to="/beauticians">Beauticians</Link>
               </CBreadcrumbItem>
-              <CBreadcrumbItem active>{beautician_name}'s Reviews</CBreadcrumbItem>
+              <CBreadcrumbItem active>{beautician_name}'s Appointments</CBreadcrumbItem>
             </CBreadcrumb>
           </CContainer>
           {isLoading ? (
@@ -204,4 +235,4 @@ const Reviews = () => {
     </div>
   );
 };
-export default Reviews;
+export default Appointments;

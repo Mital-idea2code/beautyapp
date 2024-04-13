@@ -385,6 +385,12 @@ export const AppInfo = (id) =>
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
 
+//Get Beautician Appointment List
+export const beauticianAppList = (id) =>
+  axios.get(`${mainUrl}/admin/appointment/beauticianAppList/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
 //Get Dashboard Count
 export const getDashboardCount = () =>
   axios.get(`${mainUrl}/admin/dashboard/getDashboardCount`, {

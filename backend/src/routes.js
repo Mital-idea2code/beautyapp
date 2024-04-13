@@ -12,6 +12,7 @@ const beauticianForm = React.lazy(() => import("./views/beautician/BeauticianFor
 const beauticianServices = React.lazy(() => import("./views/beautician/Services"));
 const beauticianReviews = React.lazy(() => import("./views/beautician/Reviews"));
 const beauticianInfo = React.lazy(() => import("./views/beautician/Info"));
+const beauticianApp = React.lazy(() => import("./views/beautician/Appointments"));
 
 const category = React.lazy(() => import("./views/category"));
 const categoryForm = React.lazy(() => import("./views/category/CategoryForm"));
@@ -60,6 +61,7 @@ const routes = [
   { path: "/beauticians/services", name: "Beautician Services", element: beauticianServices },
   { path: "/beauticians/reviews", name: "Beautician Reviews", element: beauticianReviews },
   { path: "/beauticians/info", name: "Beautician Info", element: beauticianInfo },
+  { path: "/beauticians/appointments", name: "Beautician Appointments", element: beauticianApp },
   { path: "/category", name: "Category", element: category },
   {
     path: "/category/manage",

@@ -136,7 +136,7 @@ const getAllBeautician = async (req, res, next) => {
 
     const baseUrl =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
-
+    const finaldata = [];
     // Iterate through each beautician object
     for (const beautician of beauticians) {
       // Convert open_time to a human-readable format
@@ -157,10 +157,18 @@ const getAllBeautician = async (req, res, next) => {
         averageRating = beautician.totalRatings / beautician.totalReviews;
         beautician.averageRating = parseFloat(averageRating.toFixed(1));
       }
+
+      const appointmentCount = await Appointment.countDocuments({ beautican_id: beautician._id });
+
+      // Add the appointmentCount and averageRating (if calculated) to the current beautician object and push it to finaldata
+      finaldata.push({
+        ...beautician.toObject(), // Convert to plain object to avoid Mongoose metadata
+        appointmentCount,
+      });
     }
 
     const AllData = {
-      beautician: beauticians,
+      beautician: finaldata,
       baseUrl: baseUrl,
     };
 

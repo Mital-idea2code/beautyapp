@@ -201,7 +201,7 @@ const Beautician = () => {
             <div>
               <CButton
                 variant="outline"
-                className="action-btn mr-5 info-btn"
+                className="action-btn mr-5 info-btn mt-2"
                 onClick={() => {
                   if (userRole == 1) {
                     navigate("/beauticians/info", {
@@ -252,7 +252,7 @@ const Beautician = () => {
 
               <CButton
                 variant="outline"
-                className="action-btn mr-5 service-btn"
+                className="action-btn mr-5 service-btn  mt-2"
                 onClick={() => {
                   if (userRole == 1) {
                     navigate("/beauticians/services", {
@@ -267,9 +267,10 @@ const Beautician = () => {
               >
                 Services ({rowData.services.length})
               </CButton>
+
               <CButton
                 variant="outline"
-                className="action-btn review-btn"
+                className="action-btn review-btn mr-5 mt-2"
                 onClick={() => {
                   if (userRole == 1) {
                     navigate("/beauticians/reviews", {
@@ -282,7 +283,24 @@ const Beautician = () => {
                   }
                 }}
               >
-                Reviews({rowData.totalReviews})
+                Reviews ({rowData.totalReviews})
+              </CButton>
+              <CButton
+                variant="outline"
+                className="action-btn app-btn mr-5  mt-2"
+                onClick={() => {
+                  if (userRole == 1) {
+                    navigate("/beauticians/appointments", {
+                      state: { beautician_id: rowData._id, beautician_name: rowData.name },
+                    });
+                  } else {
+                    toast.error(
+                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
+                    );
+                  }
+                }}
+              >
+                Appointments ({rowData.appointmentCount})
               </CButton>
             </div>
           );

@@ -11,6 +11,7 @@ const {
   checkOtp,
   resetPassword,
   updateProfile,
+  getProfileData,
 } = require("../../../controllers/App/beautician/authController");
 
 router.post("/signup", signupBeautician);
@@ -29,4 +30,6 @@ router.post(
   ]),
   updateProfile
 );
+router.get("/getProfileData", verifyToken, getProfileData);
+
 module.exports = router;

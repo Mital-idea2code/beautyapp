@@ -4,12 +4,13 @@ import MUIDataTable from "mui-datatables";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { Grid, CircularProgress, IconButton } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import { useUserState } from "../../context/UserContext";
 import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react";
 import no_profile from "../../assets/images/avatars/no_profile.jpeg";
 import star from "../../assets/images/logo/star.png";
 import * as Icons from "@mui/icons-material";
+import { CSpinner } from "@coreui/react";
 
 const Services = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -194,9 +195,7 @@ const Services = () => {
             </CBreadcrumb>
           </CContainer>
           {isLoading ? (
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <CircularProgress size={26} fullWidth />
-            </Grid>
+            <CSpinner className="theme-spinner-color" />
           ) : (
             <MUIDataTable data={datatableData} columns={columns} options={options} />
           )}

@@ -53,7 +53,7 @@ const getTopBeauticianData = async (req, res, next) => {
       },
       {
         $group: {
-          _id: "$beautician_id",
+          _id: "$beautican_id",
           count: { $sum: 1 },
         },
       },
@@ -134,9 +134,8 @@ const getTopUserData = async (req, res, next) => {
       counts.Cancelled = await Appointment.countDocuments({ status: 2, user_id: topUserId });
     }
 
-    const baseUrl = `${req.protocol}://${req.get("host")}${process.env.BASE_URL_PUBLIC_PATH}${
-      process.env.BASE_URL_BEAUTICIAN_PATH
-    }`;
+    const baseUrl =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
 
     const result = {
       _id: user._id || "",

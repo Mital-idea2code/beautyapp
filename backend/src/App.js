@@ -2,12 +2,8 @@ import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "./scss/style.scss";
 import { useUserState } from "./context/UserContext";
-
-const loading = (
-  <div className="pt-3 text-center">
-    <div className="sk-spinner sk-spinner-pulse"></div>
-  </div>
-);
+import { CSpinner } from "@coreui/react";
+const loading = <CSpinner className="theme-spinner-color" />;
 
 // Containers
 const DefaultLayout = React.lazy(() => import("./layout/DefaultLayout"));

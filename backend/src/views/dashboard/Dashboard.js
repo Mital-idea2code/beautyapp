@@ -4,7 +4,7 @@ import { CCardHeader, CCol, CRow, CWidgetStatsF, CWidgetStatsC, CLink, CContaine
 import { cilArrowRight } from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import { useNavigate, Link } from "react-router-dom";
-import { Box, Typography, Grid, Paper, Card, CardContent, CircularProgress } from "@mui/material";
+import { Box, Typography, Grid, Paper, Card, CardContent } from "@mui/material";
 import { CChartDoughnut } from "@coreui/react-chartjs";
 import user from "../../assets/icons/user.svg";
 import beautician from "../../assets/icons/beautition.svg";
@@ -15,7 +15,8 @@ import accepted from "../../assets/icons/accepted.svg";
 import completed from "../../assets/icons/completed.svg";
 import cancelled from "../../assets/icons/cancelled.svg";
 import no_profile from "../../assets/images/avatars/no_profile.jpeg";
-import default_img from "../../assets/images/avatars/default.jpg";
+import default_img from "../../assets/images/avatars/no_image.jpg";
+import { CSpinner } from "@coreui/react";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -113,15 +114,13 @@ const Dashboard = () => {
         <CCol xs={12} md={9}>
           <Box mb={3}>
             {topBeautiLoading ? (
-              <Grid item xs={12} style={{ textAlign: "center" }}>
-                <CircularProgress size={26} fullWidth />
-              </Grid>
+              <CSpinner className="theme-spinner-color" />
             ) : (
               <Paper variant="outlined" className="top-performer-banner">
                 <Box p={3} display="flex" alignItems="center" justifyContent="space-between">
                   {topBeautician ? (
                     <Grid container spacing={3} style={{ flexWrap: "wrap" }}>
-                      {topUser && topUser.length > 0 ? (
+                      {topBeautician && topBeautician.topCount > 0 ? (
                         <>
                           <Grid item xs={12} sm={6} md={4} className="user-image-container">
                             <img
@@ -137,7 +136,7 @@ const Dashboard = () => {
                         <Typography variant="body2" className="color-white"></Typography>
                       )}
                       <Grid item xs={12} sm={6} md={8} className="user-info-container">
-                        {topUser && topUser.length > 0 ? (
+                        {topBeautician && topBeautician.topCount > 0 ? (
                           <>
                             <Typography className="color-white f-30 ">
                               Meet <b>{topBeautician.name}</b>, our top-performing beautician!
@@ -189,9 +188,7 @@ const Dashboard = () => {
         </CCol>
         <CCol xs={12} md={3}>
           {countLoading ? (
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <CircularProgress size={26} fullWidth />
-            </Grid>
+            <CSpinner className="theme-spinner-color" />
           ) : (
             <Box mb={3} className="dchart-style">
               <CCardHeader className="text-center">
@@ -218,9 +215,7 @@ const Dashboard = () => {
         </CCol>
       </CRow>
       {countLoading ? (
-        <Grid item xs={12} style={{ textAlign: "center" }}>
-          <CircularProgress size={26} fullWidth />
-        </Grid>
+        <CSpinner className="theme-spinner-color" />
       ) : (
         <CRow>
           <CCol xs={12} sm={6} lg={3}>
@@ -319,9 +314,7 @@ const Dashboard = () => {
                 </CLink>
               </CContainer>{" "}
               {upcomingLoading ? (
-                <Grid item xs={12} style={{ textAlign: "center" }}>
-                  <CircularProgress size={26} fullWidth />
-                </Grid>
+                <CSpinner className="theme-spinner-color" />
               ) : upcoming && upcoming.length > 0 ? (
                 upcoming.map((appointment) => (
                   <Card key={appointment._id} className="mb-10 card-shadow">
@@ -383,9 +376,7 @@ const Dashboard = () => {
         </CCol>
         <CCol xs={12} md={4} className="mt-22">
           {countLoading ? (
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <CircularProgress size={26} fullWidth />
-            </Grid>
+            <CSpinner className="theme-spinner-color" />
           ) : (
             <CRow>
               <CCol sm={6} md={6}>
@@ -425,9 +416,7 @@ const Dashboard = () => {
         </CCol>
         <CCol xs={12} md={4}>
           {topUserLoading ? (
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <CircularProgress size={26} fullWidth />
-            </Grid>
+            <CSpinner className="theme-spinner-color" />
           ) : (
             <Card className="mb-10 mt-2 card-shadow">
               <CardContent className="text-center">
@@ -435,17 +424,21 @@ const Dashboard = () => {
                 <Typography variant="body1" component="div" className="mb-15">
                   {topUser.email}
                 </Typography>
-
-                <>
-                  <Typography variant="h5" component="div" className="mb-15">
-                    Meet <b className="theme-color">{topUser.name}</b>, Our Most Engaged User!
+                {topUser && topUser.topCount > 0 ? (
+                  <>
+                    <Typography variant="h5" component="div" className="mb-15">
+                      Meet <b className="theme-color">{topUser.name}</b>, Our Most Engaged User!
+                    </Typography>
+                    <Typography variant="body1">
+                      {topUser.name} has clinched the top spot by diligently scheduling and completing the most
+                      appointments on Glam Spot!
+                    </Typography>
+                  </>
+                ) : (
+                  <Typography variant="body2" className="theme-color text-center">
+                    No Data Found
                   </Typography>
-                  <Typography variant="body1">
-                    {topUser.name} has clinched the top spot by diligently scheduling and completing the most
-                    appointments on Glam Spot!
-                  </Typography>
-                </>
-
+                )}
                 <br />
               </CardContent>
             </Card>

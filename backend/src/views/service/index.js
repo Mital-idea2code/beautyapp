@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Icons from "@mui/icons-material";
 import { useNavigate, Link } from "react-router-dom";
-import { Grid, CircularProgress, IconButton } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import swal from "sweetalert";
 import Switch from "@mui/material/Switch";
 import { useUserState } from "../../context/UserContext";
@@ -14,6 +14,7 @@ import { CBreadcrumb, CBreadcrumbItem, CContainer, CButton } from "@coreui/react
 import GalleryDialog from "../beautician/GalleryDialog";
 import CIcon from "@coreui/icons-react";
 import { cilDollar } from "@coreui/icons";
+import { CSpinner } from "@coreui/react";
 
 const Service = () => {
   const [datatableData, setdatatableData] = useState([]);
@@ -226,9 +227,7 @@ const Service = () => {
             </CBreadcrumb>
           </CContainer>
           {isLoading ? (
-            <Grid item xs={12} style={{ textAlign: "center" }}>
-              <CircularProgress size={26} fullWidth />
-            </Grid>
+            <CSpinner className="theme-spinner-color" />
           ) : (
             <MUIDataTable data={datatableData} columns={columns} options={options} />
           )}

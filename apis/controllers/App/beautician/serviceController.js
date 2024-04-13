@@ -117,7 +117,40 @@ const updateService = async (req, res, next) => {
 
     if (req.files.work_images) {
       deleteFiles("service/" + service.work_images);
-      updatedData.work_images = req.files.work_images.map((file) => file.filename);
+      updatedData.work_images = service.work_images.concat(req.files.work_images.map((file) => file.filename));
+    }
+
+    const isUpdate = await Service.findByIdAndUpdate(req.params.id, { $set: updatedData });
+    if (!isUpdate) return queryErrorRelatedResponse(req, res, 401, "Something Went wrong!!");
+
+    const result = await Service.findById(req.params.id);
+
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const AllData = {
+      services: result,
+      baseUrl_service: baseUrl_service,
+    };
+
+    return successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
+
+//Delete Service Work Image
+const deleteWorkImage = async (req, res, next) => {
+  try {
+    const service = await Service.findById(req.params.id);
+    if (!service) return queryErrorRelatedResponse(req, res, 404, "Service not found.");
+
+    const updatedData = req.body;
+
+    // Handle deletion of a specific image from the array and folder
+    if (req.body.work_image && typeof req.body.work_image === "string") {
+      deleteFiles("service/" + req.body.work_image);
+      updatedData.work_images = service.work_images.filter((image) => image !== req.body.work_image);
     }
 
     const isUpdate = await Service.findByIdAndUpdate(req.params.id, { $set: updatedData });
@@ -144,4 +177,5 @@ module.exports = {
   serviceList,
   updateServiceStatus,
   updateService,
+  deleteWorkImage,
 };

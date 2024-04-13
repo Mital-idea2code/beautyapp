@@ -7,6 +7,7 @@ const {
   serviceList,
   updateServiceStatus,
   updateService,
+  deleteWorkImage,
 } = require("../../../controllers/App/beautician/serviceController");
 
 router.post(
@@ -30,5 +31,6 @@ router.put(
   ]),
   updateService
 );
+router.put("/deleteWorkImage/:id", verifyToken, deleteWorkImage);
 
 module.exports = router;

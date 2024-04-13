@@ -71,7 +71,6 @@ const signinBeautician = async (req, res, next) => {
     beautician.fcm_token = req.body.fcm_token;
     const output = await beautician.save();
 
-    console.log(beautician.services.length);
     const baseUrl =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
     // Assuming you have a `baseUrl` variable
@@ -317,6 +316,45 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
+//Get Beautician Profile Data
+const getProfileData = async (req, res, next) => {
+  try {
+    //Check Beautician exist or not
+    const beautician = await Beautician.findById(req.beautician._id);
+    if (!beautician) return queryErrorRelatedResponse(req, res, 401, "Invalid Beautician!!");
+
+    const baseUrl =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+    // Assuming you have a `baseUrl` variable
+    const beauticianWithBaseUrl = {
+      _id: beautician._id,
+      name: beautician.name,
+      email: beautician.email,
+      address: beautician.address,
+      lat: beautician.lat,
+      lng: beautician.lng,
+      city: beautician.city,
+      days: beautician.days,
+      duration: beautician.duration,
+      open_time: moment(parseInt(beautician.open_time)).format("hh:mm A"),
+      close_time: moment(parseInt(beautician.close_time)).format("hh:mm A"),
+      image: beautician.image,
+      banner: beautician.banner,
+      averageRating: beautician.averageRating,
+      totalReviews: beautician.totalReviews,
+      totalRatings: beautician.totalRatings,
+      noti_status: beautician.noti_status,
+      serviceFlag: beautician.services.length > 0 ? 1 : 0,
+      baseUrl: baseUrl,
+      remember_token: beautician.remember_token,
+    };
+
+    successResponse(res, beauticianWithBaseUrl);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   signupBeautician,
   signinBeautician,
@@ -326,4 +364,5 @@ module.exports = {
   checkOtp,
   resetPassword,
   updateProfile,
+  getProfileData,
 };

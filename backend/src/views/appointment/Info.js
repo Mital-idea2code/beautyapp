@@ -1,73 +1,16 @@
 import { AppInfo } from "../../ApiServices";
 import React, { useEffect, useState } from "react";
-import MUIDataTable from "mui-datatables";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import * as Icons from "@mui/icons-material";
-import { useNavigate, Link, useLocation } from "react-router-dom";
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCardImage,
-  CCardTitle,
-  CCardText,
-  CCardHeader,
-  CCol,
-  CForm,
-  CRow,
-  CFormLabel,
-  CSpinner,
-  CFormCheck,
-  CAccordion,
-  CAccordionBody,
-  CAccordionHeader,
-  CAccordionItem,
-} from "@coreui/react";
-import {
-  cilArrowCircleRight,
-  cilArrowCircleTop,
-  cilArrowRight,
-  cilAsteriskCircle,
-  cilCalendar,
-  cilCircle,
-  cilDollar,
-  cilEnvelopeClosed,
-  cilHandPointRight,
-  cilLocationPin,
-  cilMap,
-  cilMobile,
-  cilMoney,
-  cilMoon,
-  cilPhone,
-  cilPin,
-  cilPlus,
-  cilStar,
-  cilSun,
-  cilUser,
-  cilUserFemale,
-  cilWatch,
-} from "@coreui/icons";
-import {
-  Grid,
-  CircularProgress,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  CardActions,
-  Rating,
-  Divider,
-} from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
+import { CCard, CCardBody, CCardImage, CCardTitle, CCardText, CCol, CRow, CSpinner } from "@coreui/react";
+import { cilCalendar, cilDollar, cilHandPointRight, cilMoney, cilWatch } from "@coreui/icons";
+import { Rating } from "@mui/material";
 import CIcon from "@coreui/icons-react";
-import swal from "sweetalert";
-import Switch from "@mui/material/Switch";
 import { useUserState } from "../../context/UserContext";
 import no_profile from "../../assets/images/avatars/no_profile.jpeg";
 import noImg from "../../assets/images/avatars/no_img.png";
 
 const Accepted = () => {
-  const [datatableData, setdatatableData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   var [defaultLoading, setdefaultLoading] = useState(true);
   const navigate = useNavigate();

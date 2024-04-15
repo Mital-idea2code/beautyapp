@@ -152,6 +152,7 @@ const User = () => {
         sort: false,
         filter: false,
         customBodyRender: (value) => {
+          const rowData = datatableData.find((data) => data._id === value);
           return (
             <div>
               <Icons.Edit
@@ -169,6 +170,23 @@ const User = () => {
                   }
                 }}
               />
+              <CButton
+                variant="outline"
+                className="action-btn app-btn mr-5"
+                onClick={() => {
+                  if (userRole == 1) {
+                    navigate("/user/appointments", {
+                      state: { user_id: rowData._id, user_name: rowData.name },
+                    });
+                  } else {
+                    toast.error(
+                      "Sorry, you do not have permission to access this feature.Please contact your administrator for assistance."
+                    );
+                  }
+                }}
+              >
+                Appointments ({rowData.appointmentCount})
+              </CButton>
               {/* <Icons.Delete
                   className="deleteIcon" 
                 onClick={async () => {

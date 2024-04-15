@@ -423,6 +423,59 @@ const beauticianAppList = async (req, res, next) => {
     next(err);
   }
 };
+
+//Get  Appointment list From User ID
+const userAppList = async (req, res, next) => {
+  try {
+    const app = await Appointment.find({
+      user_id: req.params.id,
+    }).populate([
+      {
+        path: "beautican_id",
+        model: "beautician",
+        select: { name: 1, image: 1, email: 1 },
+      },
+      {
+        path: "user_id",
+        model: "user",
+        select: { name: 1, address: 1, image: 1, email: 1, mo_no: 1 },
+      },
+      {
+        path: "cat_id",
+        model: "category",
+        select: { name: 1 },
+      },
+      {
+        path: "service_id",
+        model: "services",
+        select: { name: 1, about: 1, display_image: 1 },
+      },
+    ]);
+    if (!app) return queryErrorRelatedResponse(req, res, 404, "Appointments not found.");
+
+    const transformedInfo = transformAdminAppointmentData(app);
+
+    const baseUrl_user_profile =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+
+    const baseUrl_service =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+
+    const baseUrl_beautician =
+      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+
+    const AllData = {
+      appointments: transformedInfo,
+      baseUrl_user_profile: baseUrl_user_profile,
+      baseUrl_service: baseUrl_service,
+      baseUrl_beautician: baseUrl_beautician,
+    };
+
+    return successResponse(res, AllData);
+  } catch (err) {
+    next(err);
+  }
+};
 module.exports = {
   pendingAppList,
   completedAppList,
@@ -431,4 +484,5 @@ module.exports = {
   acceptedAppList,
   AppInfo,
   beauticianAppList,
+  userAppList,
 };

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const mainUrl = process.env.NODE_ENV === "development" ? "http://localhost:5057" : "http://167.71.227.102:5057";
+const mainUrl =
+  process.env.NODE_ENV === "development" ? "http://localhost:5057" : "https://idea2codeinfotech.com/glamspot/apis";
 
 axios.interceptors.response.use(
   (response) => response,
@@ -388,6 +389,12 @@ export const AppInfo = (id) =>
 //Get Beautician Appointment List
 export const beauticianAppList = (id) =>
   axios.get(`${mainUrl}/admin/appointment/beauticianAppList/${id}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  });
+
+//Get User Appointment List
+export const userAppList = (id) =>
+  axios.get(`${mainUrl}/admin/appointment/userAppList/${id}`, {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
   });
 

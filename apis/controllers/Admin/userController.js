@@ -106,17 +106,27 @@ const deleteMultUser = async (req, res, next) => {
 //Get All User
 const getAllUser = async (req, res, next) => {
   try {
-    const user = await User.find(
+    const users = await User.find(
       {},
       "name email password address city mo_no image status noti_status createdAt updatedAt"
     );
-    if (!user) return queryErrorRelatedResponse(req, res, 404, "User not found.");
+    if (!users) return queryErrorRelatedResponse(req, res, 404, "User not found.");
 
     const baseUrl =
       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
 
+    const finaldata = [];
+    for (const user of users) {
+      const appointmentCount = await Appointment.countDocuments({ user_id: user._id });
+
+      // Add the appointmentCount and averageRating (if calculated) to the current beautician object and push it to finaldata
+      finaldata.push({
+        ...user.toObject(), // Convert to plain object to avoid Mongoose metadata
+        appointmentCount,
+      });
+    }
     const AllData = {
-      user: user,
+      user: finaldata,
       baseUrl: baseUrl,
     };
 

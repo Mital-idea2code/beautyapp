@@ -6,6 +6,7 @@ const ChangePassword = React.lazy(() => import("./views/auth/ChangePassword"));
 
 const user = React.lazy(() => import("./views/user"));
 const userForm = React.lazy(() => import("./views/user/UserForm"));
+const userApp = React.lazy(() => import("./views/user/Appointments"));
 
 const beautician = React.lazy(() => import("./views/beautician"));
 const beauticianForm = React.lazy(() => import("./views/beautician/BeauticianForm"));
@@ -52,6 +53,8 @@ const routes = [
     name: "Manage User",
     element: userForm,
   },
+  { path: "/user/appointments", name: "User Appointments", element: userApp },
+
   { path: "/beauticians", name: "Beauticians", element: beautician },
   {
     path: "/beautician/manage",

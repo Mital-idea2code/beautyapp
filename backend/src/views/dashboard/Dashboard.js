@@ -139,7 +139,18 @@ const Dashboard = () => {
                         {topBeautician && topBeautician.topCount > 0 ? (
                           <>
                             <Typography className="color-white f-30 ">
-                              Meet <b>{topBeautician.name}</b>, our top-performing beautician!
+                              Meet{" "}
+                              <CLink
+                                className="cursor-pointer"
+                                onClick={() =>
+                                  navigate("/beauticians/appointments", {
+                                    state: { beautician_id: topBeautician._id, beautician_name: topBeautician.name },
+                                  })
+                                }
+                              >
+                                <b className="color-white">{topBeautician.name}</b>
+                              </CLink>
+                              , our top-performing beautician!
                             </Typography>
                             <Typography variant="body2" className="banner-text color-white f-15">
                               With an exceptional record of completing and accepting appointments, {topBeautician.name}{" "}
@@ -305,7 +316,7 @@ const Dashboard = () => {
               <CContainer fluid className="upcoming-header">
                 <b>Upcoming Appointments</b>
                 <CLink
-                  className="color-white"
+                  className="color-white cursor-pointer"
                   onClick={() => {
                     navigate("/appointments/upcoming");
                   }}
@@ -427,7 +438,18 @@ const Dashboard = () => {
                 {topUser && topUser.topCount > 0 ? (
                   <>
                     <Typography variant="h5" component="div" className="mb-15">
-                      Meet <b className="theme-color">{topUser.name}</b>, Our Most Engaged User!
+                      Meet{" "}
+                      <CLink
+                        className="cursor-pointer"
+                        onClick={() =>
+                          navigate("/user/appointments", {
+                            state: { user_id: topUser._id, user_name: topUser.name },
+                          })
+                        }
+                      >
+                        <b className="theme-color">{topUser.name}</b>
+                      </CLink>
+                      , Our Most Engaged User!
                     </Typography>
                     <Typography variant="body1">
                       {topUser.name} has clinched the top spot by diligently scheduling and completing the most

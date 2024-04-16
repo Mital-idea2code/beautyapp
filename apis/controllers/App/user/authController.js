@@ -273,6 +273,32 @@ const updateProfile = async (req, res, next) => {
   }
 };
 
+//Get User Profile
+const getUserProfile = async (req, res, next) => {
+  try {
+    //Check user exist or not
+    const user = await User.findById(req.user._id);
+    if (!user) return queryErrorRelatedResponse(req, res, 401, "Invalid User!!");
+
+    const baseUrl =
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
+
+    const userWithBaseUrl = {
+      user: user,
+      baseUrl: baseUrl,
+    };
+
+    successResponse(res, userWithBaseUrl);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   signupUser,
   signinUser,
@@ -282,4 +308,5 @@ module.exports = {
   checkOtp,
   resetPassword,
   updateProfile,
+  getUserProfile,
 };

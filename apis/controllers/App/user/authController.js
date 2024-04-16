@@ -34,7 +34,12 @@ const signupUser = async (req, res, next) => {
 
     const refresh_token = User.generateRefreshToken(req.body.email);
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
     const userWithBaseUrl = {
       ...newUser.toObject(),
       baseUrl: baseUrl,
@@ -68,7 +73,12 @@ const signinUser = async (req, res, next) => {
     const output = await user.save();
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
     // Assuming you have a `baseUrl` variable
     const userWithBaseUrl = {
       ...user.toObject(),
@@ -88,7 +98,12 @@ const socialLogin = async (req, res, next) => {
     const accessToken = User.generateAuthToken(req.body.email);
     const refresh_token = User.generateRefreshToken(req.body.email);
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const user = await User.findOne({ email: req.body.email });
 
@@ -240,7 +255,12 @@ const updateProfile = async (req, res, next) => {
     const updatedUser = await User.findById(req.user._id);
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const userWithBaseUrl = {
       ...updatedUser.toObject(),

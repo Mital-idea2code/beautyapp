@@ -113,7 +113,12 @@ const getAllUser = async (req, res, next) => {
     if (!users) return queryErrorRelatedResponse(req, res, 404, "User not found.");
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const finaldata = [];
     for (const user of users) {

@@ -46,7 +46,12 @@ const addService = async (req, res, next) => {
     await cat.save();
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const AllData = {
       service: result,
@@ -66,7 +71,12 @@ const serviceList = async (req, res, next) => {
     if (!services) return queryErrorRelatedResponse(req, res, 404, "Services not found.");
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const AllData = {
       services: services,
@@ -89,7 +99,12 @@ const updateServiceStatus = async (req, res, next) => {
     const result = await service.save();
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const AllData = {
       services: result,
@@ -126,7 +141,12 @@ const updateService = async (req, res, next) => {
     const result = await Service.findById(req.params.id);
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const AllData = {
       services: result,
@@ -159,7 +179,12 @@ const deleteWorkImage = async (req, res, next) => {
     const result = await Service.findById(req.params.id);
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const AllData = {
       services: result,

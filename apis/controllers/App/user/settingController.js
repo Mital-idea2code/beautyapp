@@ -44,10 +44,20 @@ const getBanners = async (req, res, next) => {
     const mergedBanners = getBanners.concat(getProBanners);
     if (mergedBanners && mergedBanners.length > 0) {
       const baseUrl_banner =
-        req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BANNER_PATH;
+        req.protocol +
+        "://" +
+        req.get("host") +
+        process.env.BASE_URL_API_FOLDER +
+        process.env.BASE_URL_PUBLIC_PATH +
+        process.env.BASE_URL_BANNER_PATH;
 
       const baseUrl_category =
-        req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_CATEGORY_PATH;
+        req.protocol +
+        "://" +
+        req.get("host") +
+        process.env.BASE_URL_API_FOLDER +
+        process.env.BASE_URL_PUBLIC_PATH +
+        process.env.BASE_URL_CATEGORY_PATH;
 
       const baseUrl_profile =
         req.protocol +
@@ -57,7 +67,12 @@ const getBanners = async (req, res, next) => {
         process.env.BASE_URL_BEAUTICIAN_PATH;
 
       const baseUrl_service =
-        req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+        req.protocol +
+        "://" +
+        req.get("host") +
+        process.env.BASE_URL_API_FOLDER +
+        process.env.BASE_URL_PUBLIC_PATH +
+        process.env.BASE_URL_SERVICE_PATH;
 
       const AllData = {
         banners: mergedBanners,

@@ -53,13 +53,28 @@ const upcomingAppList = async (req, res, next) => {
     const transformedInfo = transformAdminAppointmentData(app);
 
     const baseUrl_user_profile =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const baseUrl_beautician =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const AllData = {
       appointments: transformedInfo,
@@ -107,13 +122,28 @@ const pendingAppList = async (req, res, next) => {
     const transformedInfo = transformAdminAppointmentData(app);
 
     const baseUrl_user_profile =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const baseUrl_beautician =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const AllData = {
       appointments: transformedInfo,
@@ -161,13 +191,28 @@ const acceptedAppList = async (req, res, next) => {
     const transformedInfo = transformAdminAppointmentData(app);
 
     const baseUrl_user_profile =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const baseUrl_beautician =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const AllData = {
       appointments: transformedInfo,
@@ -215,13 +260,28 @@ const completedAppList = async (req, res, next) => {
     const transformedInfo = transformAdminAppointmentData(app);
 
     const baseUrl_user_profile =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const baseUrl_beautician =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const AllData = {
       appointments: transformedInfo,
@@ -269,13 +329,28 @@ const cancelledAppList = async (req, res, next) => {
     const transformedInfo = transformAdminAppointmentData(app);
 
     const baseUrl_user_profile =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const baseUrl_beautician =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const AllData = {
       appointments: transformedInfo,
@@ -350,13 +425,28 @@ const AppInfo = async (req, res, next) => {
     };
 
     const baseUrl_user_profile =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const baseUrl_beautician =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const AllData = {
       appointments: transformedData,
@@ -403,13 +493,28 @@ const beauticianAppList = async (req, res, next) => {
     const transformedInfo = transformAdminAppointmentData(app);
 
     const baseUrl_user_profile =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const baseUrl_beautician =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const AllData = {
       appointments: transformedInfo,
@@ -456,13 +561,28 @@ const userAppList = async (req, res, next) => {
     const transformedInfo = transformAdminAppointmentData(app);
 
     const baseUrl_user_profile =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const baseUrl_beautician =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const AllData = {
       appointments: transformedInfo,

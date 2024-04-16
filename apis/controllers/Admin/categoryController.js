@@ -109,7 +109,12 @@ const getAllCategory = async (req, res, next) => {
     if (!cat) return queryErrorRelatedResponse(req, res, 404, "Category not found.");
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_CATEGORY_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_CATEGORY_PATH;
 
     const AllData = {
       cat: cat,
@@ -147,10 +152,20 @@ const getCategoryServices = async (req, res, next) => {
     }
 
     const baseUrl_service =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_SERVICE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_SERVICE_PATH;
 
     const baseUrl_user =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const AllData = {
       service: transformedData,

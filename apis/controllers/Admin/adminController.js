@@ -43,7 +43,12 @@ const LoginAdmin = async (req, res, next) => {
     const refresh_token = admin.generateRefreshToken({ email: req.body.email });
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const output = await admin.save();
     const tokens = {
@@ -105,7 +110,8 @@ const CheckEmailId = async (req, res, next) => {
       htmlFile: "./emailTemplate/forgotPass.html",
       extraData: {
         OTP: otp,
-        reset_link: process.env.BACKEND_URL + `/glamspot/reset-password/${resetCode}/${admin._id}`,
+        reset_link:
+          req.protocol + "://" + req.get("host") + `/glamspot/backend/reset-password/${resetCode}/${admin._id}`,
         logo_url: process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_LOGO_PATH + "white-logo.svg",
       },
     });
@@ -172,7 +178,12 @@ const UpdateProfile = async (req, res, next) => {
     const result = await admin.save();
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const latestRes = {
       admin: result,

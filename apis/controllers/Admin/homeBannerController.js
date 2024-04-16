@@ -58,7 +58,7 @@ const {
 //     const isUpdate = await HomeBanner.findByIdAndUpdate(req.body.id, { $set: req.body });
 
 //     const baseUrl =
-//       req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BANNER_PATH;
+//       req.protocol + "://" + req.get("host") + process.env.BASE_URL_API_FOLDER + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BANNER_PATH;
 
 //     return successResponseOfFiles(res, "Banners Updated!", baseUrl);
 //   } catch (err) {
@@ -134,7 +134,12 @@ const getAllBanner = async (req, res, next) => {
     if (!banner) return queryErrorRelatedResponse(req, res, 404, "promotion Banner not found.");
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BANNER_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BANNER_PATH;
 
     const AllData = {
       banner: banner,

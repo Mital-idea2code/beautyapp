@@ -2,7 +2,7 @@
   "name": "glamspot",
   "version": "1.0.0",
   "description": "glamspot",
-  "homepage": "http://167.71.227.102/glamspot/backend",
+  "homepage": "https://idea2codeinfotech.com/glamspot/backend",
   "scripts": {
     "build": "react-scripts build",
     "eject": "react-scripts eject",

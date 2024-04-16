@@ -135,7 +135,12 @@ const getAllBeautician = async (req, res, next) => {
     if (!beauticians) return queryErrorRelatedResponse(req, res, 404, "Beautician not found.");
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
     const finaldata = [];
     // Iterate through each beautician object
     for (const beautician of beauticians) {
@@ -203,7 +208,12 @@ const getAllReviews = async (req, res, next) => {
     }
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_PROFILE_PATH;
 
     const AllData = {
       reviews: convertedData,

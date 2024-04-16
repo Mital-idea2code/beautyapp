@@ -35,7 +35,12 @@ const signupBeautician = async (req, res, next) => {
 
     const refresh_token = Beautician.generateRefreshToken(req.body.email);
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
     const beauticianWithBaseUrl = {
       _id: newBeautician._id,
       name: newBeautician.name,
@@ -72,7 +77,12 @@ const signinBeautician = async (req, res, next) => {
     const output = await beautician.save();
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
     // Assuming you have a `baseUrl` variable
     const beauticianWithBaseUrl = {
       _id: beautician._id,
@@ -111,7 +121,12 @@ const socialLogin = async (req, res, next) => {
     const accessToken = Beautician.generateAuthToken(req.body.email);
     const refresh_token = Beautician.generateRefreshToken(req.body.email);
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_PROFILE_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const beautician = await Beautician.findOne({ email: req.body.email });
 
@@ -303,7 +318,12 @@ const updateProfile = async (req, res, next) => {
     const updatedBeautician = await Beautician.findById(req.beautician._id);
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
 
     const beauticianWithBaseUrl = {
       ...updatedBeautician.toObject(),
@@ -324,7 +344,12 @@ const getProfileData = async (req, res, next) => {
     if (!beautician) return queryErrorRelatedResponse(req, res, 401, "Invalid Beautician!!");
 
     const baseUrl =
-      req.protocol + "://" + req.get("host") + process.env.BASE_URL_PUBLIC_PATH + process.env.BASE_URL_BEAUTICIAN_PATH;
+      req.protocol +
+      "://" +
+      req.get("host") +
+      process.env.BASE_URL_API_FOLDER +
+      process.env.BASE_URL_PUBLIC_PATH +
+      process.env.BASE_URL_BEAUTICIAN_PATH;
     // Assuming you have a `baseUrl` variable
     const beauticianWithBaseUrl = {
       _id: beautician._id,

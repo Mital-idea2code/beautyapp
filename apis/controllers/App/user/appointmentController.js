@@ -46,7 +46,7 @@ const addReview = async (req, res, next) => {
       return queryErrorRelatedResponse(
         req,
         res,
-        404,
+        200,
         "You've already provided feedback, you won't be able to do so again."
       );
 

@@ -3,6 +3,7 @@ const Faqs = require("../../../models/Faqs");
 const HomeBanner = require("../../../models/HomeBanner");
 const User = require("../../../models/User");
 const promotionBanner = require("../../../models/PromotionBanner");
+const Notification = require("../../../models/Notification");
 const {
   createResponse,
   successResponse,
@@ -141,6 +142,18 @@ const getFaqs = async (req, res, next) => {
   }
 };
 
+//Get All Notifications
+const getAllNotifications = async (req, res, next) => {
+  try {
+    const allNoti = await Notification.find({ role: 1, user_id: req.user._id });
+    if (!allNoti) return queryErrorRelatedResponse(req, res, 404, "Category not found.");
+
+    successResponse(res, allNoti);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getGeneralSettings,
   getSupportData,
@@ -148,4 +161,5 @@ module.exports = {
   changePassword,
   updateNotitatus,
   getFaqs,
+  getAllNotifications,
 };

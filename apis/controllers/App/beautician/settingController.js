@@ -3,6 +3,7 @@ const Faqs = require("../../../models/Faqs");
 const Beautician = require("../../../models/Beautician");
 const Category = require("../../../models/Category");
 const Favourite = require("../../../models/Favourite");
+const Notification = require("../../../models/Notification");
 const {
   createResponse,
   successResponse,
@@ -161,6 +162,18 @@ const likeMe = async (req, res, next) => {
   }
 };
 
+//Get All Notifications
+const getAllNotifications = async (req, res, next) => {
+  try {
+    const allNoti = await Notification.find({ role: 2, user_id: req.beautician._id });
+    if (!allNoti) return queryErrorRelatedResponse(req, res, 404, "Category not found.");
+
+    successResponse(res, allNoti);
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getGeneralSettings,
   getSupportData,
@@ -169,4 +182,5 @@ module.exports = {
   getFaqs,
   getAllCategory,
   likeMe,
+  getAllNotifications,
 };

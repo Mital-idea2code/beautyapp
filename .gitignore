@@ -1,5 +1,6 @@
 apis/node_modules
 apis/public/images
 
+
 backend/node_modules
 backend/build*

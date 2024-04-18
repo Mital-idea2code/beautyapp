@@ -3,6 +3,7 @@ const Appointment = require("../../../models/Appointment");
 const ReviewRating = require("../../../models/ReviewRating");
 const Beautician = require("../../../models/Beautician");
 const Favourite = require("../../../models/Favourite");
+const Notification = require("../../../models/Notification");
 const {
   createResponse,
   successResponse,
@@ -14,9 +15,19 @@ const moment = require("moment-timezone");
 const { generateUniqueID } = require("../../../helper/uniqueId");
 const { transformUserAppointmentData } = require("../../../helper/commonServices");
 
+const firebaseadmin = require("firebase-admin");
+const serviceAccount = require("../../../config/rnfitness-app-firebase-admin.json"); // Replace with your service account key
+
+firebaseadmin.initializeApp({
+  credential: firebaseadmin.credential.cert(serviceAccount),
+});
+
 //Add Appointment
 const bookAppointment = async (req, res, next) => {
   try {
+    const beautician = await Beautician.findOne({ _id: req.body.beautican_id });
+    if (!beautician) return queryErrorRelatedResponse(req, res, 404, "Beautician not found.");
+
     const addedApp = req.body;
 
     req.body.app_time = moment(req.body.app_time, "h:mm A").valueOf(); //HH:mm
@@ -25,6 +36,31 @@ const bookAppointment = async (req, res, next) => {
     const newApp = await new Appointment(addedApp);
 
     const result = await newApp.save();
+
+    const title = "New Appointment Received!";
+    const description =
+      "Exciting news! You've received a new appointment. Appointment ID is " +
+      req.body.appointment_id +
+      ". Please check the details and confirm your availability.";
+
+    const newNoti = await Notification.create({
+      title: title,
+      description: description,
+      user_id: req.body.beautican_id,
+      role: 2,
+    });
+    await newNoti.save();
+
+    // const message = {
+    //   notification: {
+    //     title: title,
+    //     body: description,
+    //   },
+    //   token: beautician.fcm_token,
+    // };
+
+    // await admin.messaging().send(message);
+
     return createResponse(res, result);
   } catch (err) {
     next(err);

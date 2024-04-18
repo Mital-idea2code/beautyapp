@@ -1,6 +1,7 @@
 const express = require("express");
 const Appointment = require("../../../models/Appointment");
 const ReviewRating = require("../../../models/ReviewRating");
+const Notification = require("../../../models/Notification");
 const {
   createResponse,
   successResponse,
@@ -10,6 +11,9 @@ const {
 const { transformAppointmentData } = require("../../../helper/commonServices");
 const mongoose = require("mongoose");
 const moment = require("moment-timezone");
+
+const firebaseadmin = require("firebase-admin");
+const serviceAccount = require("../../../config/rnfitness-app-firebase-admin.json"); // Replace with your service account key
 
 //Get Home Counts
 const getHomeCount = async (req, res, next) => {
@@ -327,6 +331,53 @@ const updateApptatus = async (req, res, next) => {
     app.cancel_reason = req.body.cancel_reason;
 
     const result = await app.save();
+
+    // firebaseadmin.initializeApp({
+    //   credential: firebaseadmin.credential.cert(serviceAccount),
+    // });
+
+    let title = "";
+    let description = "";
+    if (req.body.status == 1) {
+      title = "Congratulations! Appointment Completed!";
+      description =
+        "Congratulations! Your appointment has been completed. Here's your appointment ID: " +
+        app.appointment_id +
+        ". We hope you had a positive experience and look forward to serving you again in the future.";
+    } else if (req.body.status == 2) {
+      title = "Sorry, Appointment Cancellation Notice";
+      description =
+        "We regret to inform you that your appointment with appointment ID " +
+        app.appointment_id +
+        " has been canceled due to " +
+        req.body.cancel_reason +
+        ". We apologize for any inconvenience this may cause and appreciate your understanding.Please feel free to reschedule at your convenience.";
+    } else if (req.body.status == 3) {
+      title = "Hooray! Appointment Accepted!";
+      description =
+        "Great news! Your appointment has been accepted. Here's your appointment ID: " +
+        app.appointment_id +
+        ". Looking forward to seeing you there!";
+    }
+
+    const newNoti = await Notification.create({
+      title: title,
+      description: description,
+      user_id: app.user_id,
+      role: 1,
+    });
+    await newNoti.save();
+
+    // const message = {
+    //   notification: {
+    //     title: title,
+    //     body: description,
+    //   },
+    //   token: beautician.fcm_token,
+    // };
+
+    // await admin.messaging().send(message);
+
     return successResponse(res, result);
   } catch (err) {
     next(err);

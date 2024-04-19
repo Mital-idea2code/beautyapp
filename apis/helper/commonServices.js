@@ -140,6 +140,7 @@ const transformAppointmentData = (appointments) => {
     const transformedItem = {
       _id: item._id,
       appointment_id: item.appointment_id ? item.appointment_id : "",
+      user_id: user._id,
       user_name: user.name,
       user_address: user.address,
       user_email: user.email,

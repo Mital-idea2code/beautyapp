@@ -193,6 +193,11 @@ const getUpcomingApp = async (req, res, next) => {
         },
       },
       {
+        path: "cat_id",
+        model: "category",
+        select: { name: 1 },
+      },
+      {
         path: "service_id",
         model: "services",
         select: { name: 1, about: 1, display_image: 1 },
@@ -300,6 +305,11 @@ const getCompletedApp = async (req, res, next) => {
           path: "reviews",
           select: { review: 1, rate: 1, user_id: 1 },
         },
+      },
+      {
+        path: "cat_id",
+        model: "category",
+        select: { name: 1 },
       },
       {
         path: "service_id",
@@ -412,6 +422,11 @@ const getCancelledApp = async (req, res, next) => {
         },
       },
       {
+        path: "cat_id",
+        model: "category",
+        select: { name: 1 },
+      },
+      {
         path: "service_id",
         model: "services",
         select: { name: 1, about: 1, display_image: 1 },
@@ -468,6 +483,11 @@ const getPendingApp = async (req, res, next) => {
           path: "reviews",
           select: { review: 1, rate: 1, user_id: 1 },
         },
+      },
+      {
+        path: "cat_id",
+        model: "category",
+        select: { name: 1 },
       },
       {
         path: "service_id",

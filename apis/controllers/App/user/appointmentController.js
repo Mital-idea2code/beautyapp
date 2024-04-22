@@ -16,7 +16,7 @@ const { generateUniqueID } = require("../../../helper/uniqueId");
 const { transformUserAppointmentData } = require("../../../helper/commonServices");
 
 const firebaseadmin = require("firebase-admin");
-const serviceAccount = require("../../../config/rnfitness-app-firebase-admin.json"); // Replace with your service account key
+const serviceAccount = require("../../../config/glamspot-firebase.json"); // Replace with your service account key
 
 firebaseadmin.initializeApp({
   credential: firebaseadmin.credential.cert(serviceAccount),
@@ -51,15 +51,15 @@ const bookAppointment = async (req, res, next) => {
     });
     await newNoti.save();
 
-    // const message = {
-    //   notification: {
-    //     title: title,
-    //     body: description,
-    //   },
-    //   token: beautician.fcm_token,
-    // };
+    const message = {
+      notification: {
+        title: title,
+        body: description,
+      },
+      token: beautician.fcm_token,
+    };
 
-    // await admin.messaging().send(message);
+    await admin.messaging().send(message);
 
     return createResponse(res, result);
   } catch (err) {

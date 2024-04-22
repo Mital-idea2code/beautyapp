@@ -13,7 +13,7 @@ const mongoose = require("mongoose");
 const moment = require("moment-timezone");
 
 const firebaseadmin = require("firebase-admin");
-const serviceAccount = require("../../../config/rnfitness-app-firebase-admin.json"); // Replace with your service account key
+const serviceAccount = require("../../../config/glamspot-firebase.json"); // Replace with your service account key
 
 //Get Home Counts
 const getHomeCount = async (req, res, next) => {
@@ -332,9 +332,9 @@ const updateApptatus = async (req, res, next) => {
 
     const result = await app.save();
 
-    // firebaseadmin.initializeApp({
-    //   credential: firebaseadmin.credential.cert(serviceAccount),
-    // });
+    firebaseadmin.initializeApp({
+      credential: firebaseadmin.credential.cert(serviceAccount),
+    });
 
     let title = "";
     let description = "";
@@ -368,15 +368,15 @@ const updateApptatus = async (req, res, next) => {
     });
     await newNoti.save();
 
-    // const message = {
-    //   notification: {
-    //     title: title,
-    //     body: description,
-    //   },
-    //   token: beautician.fcm_token,
-    // };
+    const message = {
+      notification: {
+        title: title,
+        body: description,
+      },
+      token: beautician.fcm_token,
+    };
 
-    // await admin.messaging().send(message);
+    await admin.messaging().send(message);
 
     return successResponse(res, result);
   } catch (err) {

@@ -193,6 +193,9 @@ const transformUserAppointmentData = (getApp, req) => {
       }));
     }
 
+    totalReviews = 0;
+    averageRating = 0;
+    totalRatings = 0;
     if (transformedReviews && transformedReviews.length > 0) {
       totalReviews = transformedReviews.length;
       totalRatings = transformedReviews.reduce((sum, review) => sum + review.rate, 0);

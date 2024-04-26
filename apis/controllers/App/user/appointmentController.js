@@ -59,7 +59,7 @@ const bookAppointment = async (req, res, next) => {
       token: beautician.fcm_token,
     };
 
-    await admin.messaging().send(message);
+    await firebaseadmin.messaging().send(message);
 
     return createResponse(res, result);
   } catch (err) {

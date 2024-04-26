@@ -376,7 +376,7 @@ const updateApptatus = async (req, res, next) => {
       token: beautician.fcm_token,
     };
 
-    await admin.messaging().send(message);
+    await firebaseadmin.messaging().send(message);
 
     return successResponse(res, result);
   } catch (err) {

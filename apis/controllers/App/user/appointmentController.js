@@ -51,15 +51,15 @@ const bookAppointment = async (req, res, next) => {
     });
     await newNoti.save();
 
-    const message = {
-      notification: {
-        title: title,
-        body: description,
-      },
-      token: beautician.fcm_token,
-    };
+    // const message = {
+    //   notification: {
+    //     title: title,
+    //     body: description,
+    //   },
+    //   token: beautician.fcm_token,
+    // };
 
-    await firebaseadmin.messaging().send(message);
+    // await firebaseadmin.messaging().send(message);
 
     return createResponse(res, result);
   } catch (err) {
